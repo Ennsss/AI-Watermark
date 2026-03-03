@@ -1,0 +1,16 @@
+__pycache__/
+*.pyc
+*.pyo
+venv/
+.venv/
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+*.csv
+*.png
+*.jpg
+*.jpeg
+!tests/fixtures/*
+.env
+evaluation_output/

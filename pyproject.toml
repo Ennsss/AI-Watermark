@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "frequency-watermark"
+version = "0.1.0"
+description = "Frequency-domain steganographic watermarking for digital art provenance"
+requires-python = ">=3.10"
+dependencies = [
+    "numpy>=1.24",
+    "opencv-python>=4.8",
+    "Pillow>=10.0",
+    "PyWavelets>=1.4",
+    "imagehash>=4.3",
+    "reedsolo>=1.7",
+    "pycryptodome>=3.19",
+    "scikit-image>=0.21",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=7.4"]
+
+[project.scripts]
+watermark = "cli.main:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
