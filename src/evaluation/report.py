@@ -101,7 +101,15 @@ class ReportGenerator:
             caption="Embedding quality: PSNR and SSIM between original and watermarked images (no attack).",
             label="tab:embedding_quality",
         )
-        md = format_markdown_table(headers, data)
+        md_data = []
+        for r in rows:
+            md_data.append([
+                r.group_key,
+                _fmt_metric_md(r.psnr),
+                _fmt_metric_md(r.ssim, precision=4),
+                str(r.n_total),
+            ])
+        md = format_markdown_table(headers, md_data)
         return latex, md
 
     # ------------------------------------------------------------------

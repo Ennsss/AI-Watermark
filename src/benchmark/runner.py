@@ -14,7 +14,7 @@ from skimage.metrics import structural_similarity as ssim
 from attacks.suite import AttackResult, get_default_attacks
 from watermark.embedding import embed_watermark, extract_watermark
 from watermark.extraction import compute_ber, extract_from_image
-from watermark.masking import build_delta_map
+from watermark.masking import build_delta_map, detect_sparse_subbands
 from watermark.payload import (
     decode_payload_bits,
     derive_seed,
@@ -172,10 +172,15 @@ def embed_image(
 
     seed = derive_seed(config.key)
 
+    # Detect sparse subbands (line art) and use LL2 fallback
+    sparse = detect_sparse_subbands(y_padded, wavelet=config.wavelet)
+    target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+
     # Embed
     wm_y = embed_watermark(
         y_padded, bits, seed=seed, delta=config.delta,
         wavelet=config.wavelet, delta_map=delta_map,
+        target_subbands=target_subbands,
     )
 
     # Reconstruct
@@ -206,18 +211,24 @@ def extract_and_measure(
 
     # Build delta map if adaptive (from the attacked image)
     delta_map = None
+    ycbcr_att = rgb_to_ycbcr(attacked_image)
+    y_att = extract_y_channel(ycbcr_att)
+    y_att_padded, _ = pad_to_multiple(y_att, 4)
+
     if config.adaptive:
-        ycbcr_att = rgb_to_ycbcr(attacked_image)
-        y_att = extract_y_channel(ycbcr_att)
-        y_att_padded, _ = pad_to_multiple(y_att, 4)
         delta_map = build_delta_map(
             y_att_padded, wavelet=config.wavelet,
             delta_min=config.delta_min, delta_max=config.delta_max,
         )
 
+    # Detect sparse subbands (line art) and use LL2 fallback
+    sparse = detect_sparse_subbands(y_att_padded, wavelet=config.wavelet)
+    target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+
     extracted_bits, confidence = extract_from_image(
         attacked_image, num_bits=num_bits, seed=seed,
         delta=config.delta, wavelet=config.wavelet, delta_map=delta_map,
+        target_subbands=target_subbands,
     )
 
     ber = compute_ber(original_bits, extracted_bits)

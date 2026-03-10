@@ -15,7 +15,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from attacks.suite import AttackResult, get_default_attacks
+from attacks.suite import AttackResult, get_default_attacks, resize_attack
 from benchmark.runner import BenchmarkConfig, embed_image, extract_and_measure
 from evaluation.configs import EvalConfig
 from evaluation.image_corpus import IMAGE_CATEGORIES, ImageCorpus
@@ -48,6 +48,21 @@ for _s in [2, 5, 10]:
     ATTACK_CATEGORIES[f"noise_sigma{_s}"] = "noise"
 ATTACK_CATEGORIES["combined_chain"] = "combined"
 ATTACK_CATEGORIES["none"] = "none"
+ATTACK_CATEGORIES["resize_256"] = "scaling"
+ATTACK_CATEGORIES["resize_384"] = "scaling"
+
+
+def get_evaluation_attacks() -> list[tuple]:
+    """Extend default attacks with small-target resize attacks for evaluation.
+
+    The default resize targets (1080, 1440, 2048) are larger than the 512x512
+    test corpus, so they are no-ops. This adds 256 and 384 targets that
+    actually trigger downscaling.
+    """
+    attacks = get_default_attacks()
+    attacks.append(("resize_256", resize_attack, {"max_dim": 256}))
+    attacks.append(("resize_384", resize_attack, {"max_dim": 384}))
+    return attacks
 
 
 @dataclass
@@ -275,7 +290,7 @@ def run_single_config(
         List of EvalResult instances.
     """
     if attacks is None:
-        attacks = get_default_attacks()
+        attacks = get_evaluation_attacks()
     if stochastic_seeds is None:
         stochastic_seeds = [0]
 
