@@ -87,6 +87,7 @@ def _compute_confidence(
     """
     from watermark.embedding import (
         _get_embedding_locations,
+        _get_ll2_safe_locations,
         dwt2_decompose,
     )
 
@@ -94,7 +95,7 @@ def _compute_confidence(
 
     if target_subbands == ("ll2",):
         ll2 = coeffs[0]
-        locs = _get_embedding_locations(ll2.shape, num_bits, seed)
+        locs = _get_ll2_safe_locations(ll2, num_bits, seed, delta, level)
         confident_count = 0
         for _i, (r, c) in enumerate(locs):
             coeff = ll2[r, c]

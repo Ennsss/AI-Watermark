@@ -79,13 +79,39 @@ def _get_embedding_locations(
     subband_shape: tuple[int, int],
     num_bits: int,
     seed: int,
+    subband_data: np.ndarray | None = None,
+    min_magnitude: float = 20.0,
+    sparsity_threshold: float = 0.5,
 ) -> np.ndarray:
     """Generate pseudo-random embedding locations via PRNG.
+
+    When *subband_data* is provided **and** the subband is sparse (more than
+    *sparsity_threshold* fraction of coefficients have magnitude < 1.0),
+    magnitude thresholding is applied: only locations where
+    ``abs(coefficient) >= min_magnitude`` are eligible.  This avoids
+    embedding into near-zero DWT coefficients (common in line art) that
+    are fragile under JPEG compression.
+
+    For non-sparse subbands (natural images) the filter is skipped entirely,
+    preserving the original location-selection behaviour and guaranteeing
+    that embedder and extractor agree on locations even after QIM modifies
+    coefficient values.
+
+    If filtering is active but not enough locations pass, the threshold is
+    halved repeatedly (floor 0) until enough are found.
 
     Args:
         subband_shape: (H, W) of the target subband.
         num_bits: Number of bits to embed.
         seed: PRNG seed (derived from secret key).
+        subband_data: Optional (H, W) array of coefficient values used for
+                      magnitude thresholding.  When *None*, no filtering is
+                      performed regardless of other parameters.
+        min_magnitude: Minimum ``abs(coefficient)`` required for a location
+                       to be eligible when the subband is sparse.
+        sparsity_threshold: Fraction of near-zero coefficients (magnitude
+                            < 1.0) above which the subband is considered
+                            sparse and magnitude filtering is activated.
 
     Returns:
         (num_bits, 2) array of (row, col) indices into the subband.
@@ -96,11 +122,95 @@ def _get_embedding_locations(
             f"Payload ({num_bits} bits) exceeds available coefficients "
             f"({total_coeffs}) in subband {subband_shape}"
         )
+
     rng = np.random.default_rng(seed)
-    flat_indices = rng.choice(total_coeffs, size=num_bits, replace=False)
-    flat_indices.sort()  # Sorted for deterministic access order
-    rows = flat_indices // subband_shape[1]
-    cols = flat_indices % subband_shape[1]
+    # Generate a full random permutation so the order is deterministic
+    all_indices = rng.permutation(total_coeffs)
+
+    # Decide whether magnitude filtering should be applied.
+    # Only activate for sparse subbands (e.g. line art) where a large
+    # fraction of coefficients are near zero.
+    use_filtering = False
+    if subband_data is not None:
+        sparsity = float(np.mean(np.abs(subband_data) < 1.0))
+        if sparsity > sparsity_threshold:
+            use_filtering = True
+
+    if not use_filtering:
+        # Original behaviour: pick first num_bits from permutation
+        chosen = np.sort(all_indices[:num_bits])
+        rows = chosen // subband_shape[1]
+        cols = chosen % subband_shape[1]
+        return np.stack([rows, cols], axis=1)
+
+    # Magnitude thresholding for sparse subbands
+    perm_rows = all_indices // subband_shape[1]
+    perm_cols = all_indices % subband_shape[1]
+    magnitudes = np.abs(subband_data[perm_rows, perm_cols])
+
+    threshold = min_magnitude
+    while True:
+        if threshold <= 0:
+            # Floor reached — take first num_bits without filtering
+            chosen = np.sort(all_indices[:num_bits])
+            rows = chosen // subband_shape[1]
+            cols = chosen % subband_shape[1]
+            return np.stack([rows, cols], axis=1)
+
+        mask = magnitudes >= threshold
+        passing = all_indices[mask]
+
+        if len(passing) >= num_bits:
+            chosen = np.sort(passing[:num_bits])
+            rows = chosen // subband_shape[1]
+            cols = chosen % subband_shape[1]
+            return np.stack([rows, cols], axis=1)
+
+        # Not enough — halve threshold and retry
+        threshold /= 2.0
+        if threshold < 0.5:
+            threshold = 0.0
+
+
+def _get_ll2_safe_locations(
+    ll2: np.ndarray,
+    num_bits: int,
+    seed: int,
+    delta: float,
+    level: int = 2,
+) -> np.ndarray:
+    """Generate embedding locations for LL2, skipping saturated coefficients.
+
+    LL2 coefficients near 0 or the maximum (255 * 2^level) can cause QIM
+    to produce values that clip after IDWT -> uint8 -> DWT roundtrip, flipping
+    bits. This selects only coefficients with enough headroom.
+
+    Args:
+        ll2: 2D float64 LL2 subband array.
+        num_bits: Number of bits to embed.
+        seed: PRNG seed.
+        delta: QIM step size.
+        level: DWT decomposition level.
+
+    Returns:
+        (num_bits, 2) array of (row, col) indices.
+    """
+    max_coeff = 255.0 * (2 ** level)
+    margin = delta
+
+    safe_mask = (ll2 >= margin) & (ll2 <= max_coeff - margin)
+    safe_indices = np.flatnonzero(safe_mask.ravel())
+
+    if len(safe_indices) < num_bits:
+        safe_indices = np.arange(ll2.size)
+
+    rng = np.random.default_rng(seed)
+    chosen = rng.choice(len(safe_indices), size=num_bits, replace=False)
+    chosen.sort()
+    flat_indices = safe_indices[chosen]
+
+    rows = flat_indices // ll2.shape[1]
+    cols = flat_indices % ll2.shape[1]
     return np.stack([rows, cols], axis=1)
 
 
@@ -141,8 +251,9 @@ def embed_watermark(
 
     if target_subbands == ("ll2",):
         # LL2 fallback: embed all bits into approximation subband
+        # Use safe locations to avoid saturation clipping
         ll2 = coeffs[0]
-        locs = _get_embedding_locations(ll2.shape, num_bits, seed)
+        locs = _get_ll2_safe_locations(ll2, num_bits, seed, delta, level)
         for i, (r, c) in enumerate(locs):
             ll2[r, c] = qim_embed_bit(ll2[r, c], int(bits[i]), delta)
         coeffs[0] = ll2
@@ -198,7 +309,7 @@ def extract_watermark(
 
     if target_subbands == ("ll2",):
         ll2 = coeffs[0]
-        locs = _get_embedding_locations(ll2.shape, num_bits, seed)
+        locs = _get_ll2_safe_locations(ll2, num_bits, seed, delta, level)
         extracted = np.zeros(num_bits, dtype=np.uint8)
         for i, (r, c) in enumerate(locs):
             extracted[i] = qim_extract_bit(ll2[r, c], delta)

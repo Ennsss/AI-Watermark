@@ -42,6 +42,7 @@ class BenchmarkConfig:
     key: bytes = b"benchmark_secret_key_32bytes!!"
     timestamp: int = 1709337600
     repetitions: int = 1
+    sparse_delta_boost: float = 2.0
 
 
 @dataclass
@@ -172,13 +173,14 @@ def embed_image(
 
     seed = derive_seed(config.key)
 
-    # Detect sparse subbands (line art) and use LL2 fallback
+    # Detect sparse subbands (line art) and apply delta boost
     sparse = detect_sparse_subbands(y_padded, wavelet=config.wavelet)
     target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+    effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
 
     # Embed
     wm_y = embed_watermark(
-        y_padded, bits, seed=seed, delta=config.delta,
+        y_padded, bits, seed=seed, delta=effective_delta,
         wavelet=config.wavelet, delta_map=delta_map,
         target_subbands=target_subbands,
     )
@@ -221,13 +223,14 @@ def extract_and_measure(
             delta_min=config.delta_min, delta_max=config.delta_max,
         )
 
-    # Detect sparse subbands (line art) and use LL2 fallback
+    # Detect sparse subbands (line art) and use LL2 fallback + delta boost
     sparse = detect_sparse_subbands(y_att_padded, wavelet=config.wavelet)
     target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+    effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
 
     extracted_bits, confidence = extract_from_image(
         attacked_image, num_bits=num_bits, seed=seed,
-        delta=config.delta, wavelet=config.wavelet, delta_map=delta_map,
+        delta=effective_delta, wavelet=config.wavelet, delta_map=delta_map,
         target_subbands=target_subbands,
     )
 
