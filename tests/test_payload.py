@@ -15,6 +15,7 @@ from watermark.payload import (
     decode_repetition_coding,
     derive_seed,
     encode_payload,
+    generate_fixed_payload,
     rs_decode,
     rs_encode,
     verify_artist_id,
@@ -176,6 +177,21 @@ class TestDeriveSeed:
         s1 = derive_seed(b"key1")
         s2 = derive_seed(b"key2")
         assert s1 != s2
+
+
+class TestMainExperimentPayload:
+    def test_fixed_payload_is_128_bits_by_default(self):
+        bits = generate_fixed_payload()
+        assert bits.shape == (128,)
+        assert bits.dtype == np.uint8
+        assert set(bits.tolist()) <= {0, 1}
+
+    def test_fixed_payload_is_deterministic(self):
+        a = generate_fixed_payload(seed=42)
+        b = generate_fixed_payload(seed=42)
+        c = generate_fixed_payload(seed=43)
+        assert np.array_equal(a, b)
+        assert not np.array_equal(a, c)
 
 
 class TestFullPipeline:

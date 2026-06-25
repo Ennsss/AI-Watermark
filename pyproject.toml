@@ -1,11 +1,11 @@
 [build-system]
 requires = ["setuptools>=68.0", "wheel"]
-build-backend = "setuptools.backends._legacy:_Backend"
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "frequency-watermark"
 version = "0.1.0"
-description = "Frequency-domain steganographic watermarking for digital art provenance"
+description = "DWT-QIM classical and CNN-assisted watermark extraction research pipeline"
 requires-python = ">=3.10"
 dependencies = [
     "numpy>=1.24",
@@ -20,6 +20,8 @@ dependencies = [
 
 [project.optional-dependencies]
 dev = ["pytest>=7.4"]
+ml = ["tensorflow>=2.15"]
+stats = ["scipy>=1.11"]
 
 [project.scripts]
 watermark = "cli.main:main"

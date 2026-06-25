@@ -1,380 +1,262 @@
-# Frequency-Domain Image Watermarking
+# DWT-Based Classical-Neural Watermarking for Digital Art Provenance in Social Media-Degraded Images
 
 ![Python 3.10+](https://img.shields.io/badge/python-3.10%2B-blue.svg)
-![License: MIT](https://img.shields.io/badge/license-MIT-green.svg)
 
 ## Overview
 
-This project implements a blind, non-interactive steganographic watermarking
-system that embeds invisible provenance signatures into digital artwork using
-frequency-domain signal processing. The watermark encodes artist identity,
-a timestamp, and a perceptual hash of the original image, enabling artists to
-prove ownership of their work after it has been reposted, cropped, compressed,
-or used without authorization to train generative AI models.
+This repository implements a research pipeline for comparing classical
+DWT-QIM extraction with CNN-assisted bit prediction for invisible watermark
+recovery in non-photorealistic digital illustrations.
 
-The core technique operates in the YCbCr color space, embedding data into
-the luminance (Y) channel via a two-level Discrete Wavelet Transform (DWT).
-Quantization Index Modulation (QIM) is applied to mid-frequency detail
-subbands (LH2/HL2), which are chosen for their resilience to JPEG compression.
-An adaptive perceptual masking scheme modulates embedding strength based on
-local variance, increasing robustness in textured regions while preserving
-visual quality in flat areas.
+The main experiment embeds a fixed 128-bit ownership payload into the LH2 and
+HL2 subbands of the Y luminance channel using two-level DWT and binary QIM.
+The embedding pipeline remains classical. The CNN, when enabled, operates only
+during extraction and predicts the embedded bitstream from degraded LH2/HL2
+coefficient maps.
 
-The payload is protected by AES-256 encryption and Reed-Solomon error
-correction coding. A seeded PRNG spread-spectrum mapping distributes embedded
-bits across wavelet coefficients, providing resistance to detection and
-localized removal. The entire pipeline is deterministic, runs on CPU only,
-and requires no internet connectivity.
+This is not a deployed copyright enforcement tool, anti-scraping system,
+platform DRM mechanism, or full anti-AI-training protection system. It is a
+controlled experiment for measuring raw watermark bit recovery under selected
+social-media-like degradations.
 
-## Features
+## Main Experiment
 
-- **Invisible watermark embedding** in the frequency domain (DWT + QIM)
-- **Provenance payload** containing artist ID, UTC timestamp, and perceptual hash
-- **AES-256 encryption** of the embedded payload
-- **Reed-Solomon error correction** for recovery under degradation
-- **Spread-spectrum PRNG mapping** for coefficient selection
-- **Adaptive perceptual masking** via local variance heuristic
-- **Tiled embedding** for crop resistance across spatial regions
-- **Social media attack simulation** (JPEG, resize, crop, noise, format conversion, combined chains)
-- **Robustness benchmarking** with BER and SSIM measurement and CSV export
-- **Thesis evaluation framework** with configurable parameter sweeps and LaTeX table generation
-- **False positive rate analysis** for verifying detector specificity
-- **Fully offline, CPU-only** operation with deterministic reproducibility
+Classical embedding:
 
-## Architecture
-
-### Embedding Pipeline
-
-```
-Input Image (RGB)
-      |
-      v
-  RGB -> YCbCr conversion
-      |
-      v
-  Extract Y (luminance) channel
-      |
-      v
-  Pad dimensions to multiple of 4
-      |
-      v
-  Build provenance payload
-  (artist ID + timestamp + pHash)
-      |
-      v
-  Reed-Solomon ECC encoding
-      |
-      v
-  AES-256 encryption
-      |
-      v
-  Spread-spectrum PRNG coefficient mapping
-      |
-      v
-  2-level DWT (Haar or db4)
-      |
-      v
-  QIM embedding into LH2/HL2 subbands
-  (with optional adaptive delta from local variance)
-      |
-      v
-  Inverse DWT reconstruction
-      |
-      v
-  Recombine Y' + Cb + Cr -> YCbCr -> RGB
-      |
-      v
-  Output watermarked PNG (lossless)
+```text
+RGB image
+-> YCbCr
+-> Y channel
+-> two-level DWT, Haar, symmetric mode
+-> deterministic LH2/HL2 coefficient selection
+-> binary QIM embedding of fixed 128-bit payload
+-> inverse DWT
+-> recombine Y with Cb/Cr
+-> RGB watermarked image
 ```
 
-### Extraction Pipeline
+Classical extraction:
 
-```
-Watermarked Image (possibly degraded)
-      |
-      v
-  RGB -> YCbCr -> Extract Y channel -> Pad
-      |
-      v
-  2-level DWT decomposition
-      |
-      v
-  PRNG-guided coefficient lookup
-      |
-      v
-  QIM bit reading (with adaptive delta if enabled)
-      |
-      v
-  AES-256 decryption
-      |
-      v
-  Reed-Solomon error correction decoding
-      |
-      v
-  Payload validation + confidence score
-      |
-      v
-  Recovered provenance (artist ID, timestamp, pHash)
+```text
+Degraded watermarked RGB image
+-> YCbCr
+-> Y channel
+-> two-level DWT
+-> same LH2/HL2 coefficient locations
+-> QIM grid decision
+-> recovered 128-bit payload
+-> BER
 ```
 
-## Quick Start
+CNN-assisted extraction:
 
-### Installation
-
-```bash
-# Clone the repository
-git clone <repository-url>
-cd AI-watermark
-
-# Create a virtual environment (recommended)
-python -m venv venv
-source venv/bin/activate   # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install -r requirements.txt
-
-# Or install as a package
-pip install -e ".[dev]"
+```text
+Degraded watermarked RGB image
+-> YCbCr
+-> Y channel
+-> two-level DWT
+-> stack LH2 and HL2 as 128 x 128 x 2 tensor
+-> shallow CNN decoder
+-> predicted 128-bit payload
+-> BER
 ```
 
-### Embed a Watermark
+Only the extraction bit-decision stage changes between the classical and CNN
+branches.
 
-```bash
-python -m cli.main embed artwork.png \
-    --artist-id "Jane Doe" \
-    --key "my_secret_key_32bytes!!!!!!!!" \
-    --wavelet haar \
-    --delta 60.0 \
-    -o artwork_watermarked.png
-```
+## Paper-Aligned Defaults
 
-With adaptive perceptual masking:
+- Image size: `512 x 512` expected by the main experiment data pipeline
+- Wavelet: Haar
+- DWT level: 2
+- DWT boundary mode: symmetric
+- Target subbands: LH2 and HL2
+- Payload: fixed raw 128-bit ownership payload
+- Delta calibration candidates: `8`, `16`, `24`, `32`
+- Main degradation suite:
+  - JPEG: QF `90`, `70`, `50`
+  - Resize: `75%`, `50%`, `25%`
+  - Crop: mild `5-10%`, moderate `20-30%`, severe `40-50%`
+  - Re-encoding: `1x`, `2x`, `3x`
 
-```bash
-python -m cli.main embed artwork.png \
-    --artist-id "Jane Doe" \
-    --key "my_secret_key_32bytes!!!!!!!!" \
-    --adaptive \
-    --delta-min 20.0 \
-    --delta-max 80.0 \
-    -o artwork_watermarked.png
-```
+The current main experiment config is in
+[`configs/main_experiment.yaml`](configs/main_experiment.yaml).
 
-### Extract a Watermark
+## Optional Or Legacy Modules
 
-```bash
-python -m cli.main extract artwork_watermarked.png \
-    --key "my_secret_key_32bytes!!!!!!!!" \
-    --num-bits 2216 \
-    --wavelet haar \
-    --delta 60.0 \
-    --verify-artist "Jane Doe"
-```
+The repo still contains useful older modules, but they are not part of the
+main controlled comparison unless explicitly enabled:
 
-### Run Robustness Benchmark
+- AES-256 payload encryption
+- Reed-Solomon ECC
+- repetition coding
+- adaptive perceptual masking
+- tiled embedding and synchronization
+- Gaussian noise attacks
+- screenshot simulation
+- combined attack chains
+- false positive analysis
+- broad parameter sweeps
 
-```bash
-python -m cli.main benchmark test_images/ \
-    --delta 60.0 \
-    --wavelet haar \
-    -o results.csv
-```
-
-## Evaluation Framework
-
-The project includes a thesis-grade evaluation framework that runs configurable
-parameter sweeps across the full attack suite and generates LaTeX-formatted
-result tables.
-
-### Prepare the Image Corpus
-
-```bash
-python -m evaluation prepare --size 512
-```
-
-### Run the Full Evaluation
-
-```bash
-python -m evaluation run \
-    --configs full \
-    --output-dir evaluation_output \
-    --seeds 0,1,2
-```
-
-Available config sweeps: `baseline`, `delta`, `wavelet`, `repetition`,
-`tiling`, `adaptive`, `full`.
-
-### Generate Report Tables
-
-```bash
-python -m evaluation report \
-    --csv evaluation_output/results/full_evaluation.csv \
-    --output-dir evaluation_output
-```
-
-This produces LaTeX and Markdown tables in `evaluation_output/reports/`.
-
-### False Positive Rate Analysis
-
-```bash
-python -m evaluation fpr \
-    --trials 1000 \
-    --size 512 \
-    --delta 60.0 \
-    --output-dir evaluation_output
-```
+These features can support future work or ablation studies, but main reported
+BER should be raw 128-bit recovery without ECC, encryption, or checksum
+correction.
 
 ## Project Structure
 
-```
+```text
 src/
   watermark/
-    preprocessor.py       RGB/YCbCr conversion, Y channel extraction, padding
-    payload.py            Payload construction, Reed-Solomon coding, AES-256 encryption
-    embedding.py          DWT decomposition, QIM embedding, spread-spectrum mapping
-    extraction.py         DWT decomposition, QIM bit reading, decryption, RS decoding
-    masking.py            Local variance computation, adaptive delta map
-    reconstruction.py     Inverse DWT, channel recombination, RGB output
-    tiling.py             Tiled embedding/extraction for crop resistance
-    sync.py               Synchronization support for tiled extraction
+    preprocessor.py       RGB/YCbCr helpers, Y-channel extraction, padding
+    payload.py            Main raw payload helper plus optional legacy payload tools
+    embedding.py          DWT decomposition, QIM embedding, classical extraction
+    extraction.py         Classical extraction wrapper and BER
+    cnn_extraction.py     LH2/HL2 CNN input prep and bit prediction
+    train_cnn.py          Optional CNN training helper
+    models/
+      cnn_decoder.py      Shallow baseline CNN decoder
+    masking.py            Optional adaptive masking
+    tiling.py             Optional tiled embedding
+    sync.py               Optional crop synchronization
   attacks/
-    suite.py              JPEG, resize, crop, noise, format conversion, combined chains
+    suite.py              Main degradations plus optional stress attacks
   benchmark/
-    runner.py             Batch BER/SSIM measurement, CSV export
+    runner.py             Classical raw-BER benchmark
   evaluation/
-    __main__.py           Evaluation CLI (prepare, run, report, fpr)
-    configs.py            Parameter sweep configurations
-    image_corpus.py       Test image corpus builder
-    runner.py             Full evaluation sweep executor
-    metrics.py            BER, SSIM, false positive rate computation
-    aggregator.py         Result aggregation across seeds and images
-    report.py             LaTeX and Markdown table generation
-  cli/
-    main.py               CLI with embed, extract, benchmark subcommands
-tests/
-  test_preprocessor.py    Unit tests for image preprocessing
-  test_payload.py         Unit tests for payload encoding and decoding
-  test_embedding.py       Unit tests for DWT embedding and QIM
-  test_extraction.py      Unit tests for watermark extraction
-  test_masking.py         Unit tests for adaptive perceptual masking
-  test_attacks.py         Unit tests for attack simulation suite
-  test_benchmark.py       Unit tests for benchmark runner
-  test_roundtrip.py       End-to-end embed -> attack -> extract integration tests
-  test_sync.py            Unit tests for synchronization module
-  conftest.py             Shared pytest fixtures
+    configs.py            Main and optional evaluation configs
+    runner.py             Classical extraction evaluation runner
+    statistical_analysis.py Wilcoxon and Holm-Bonferroni helpers
 ```
 
-## Technical Details
+## Usage
 
-### Discrete Wavelet Transform (DWT)
-
-The image luminance channel is decomposed using a two-level DWT with either
-the Haar or Daubechies-4 (db4) wavelet basis. This produces four subbands at
-each level: LL (approximation), LH (horizontal detail), HL (vertical detail),
-and HH (diagonal detail). Embedding targets the LH2 and HL2 subbands at
-level 2, which capture mid-frequency content that survives JPEG quantization
-better than high-frequency subbands (HH) while remaining less perceptually
-significant than the low-frequency approximation (LL2).
-
-### Quantization Index Modulation (QIM)
-
-Each bit is embedded by quantizing a selected wavelet coefficient to one of
-two interleaved uniform grids separated by a step size (delta). To embed a 0,
-the coefficient is rounded to the nearest multiple of delta; to embed a 1,
-it is rounded to the nearest multiple of delta offset by delta/2. Extraction
-determines which grid a coefficient is closest to, recovering the embedded
-bit. The delta parameter controls the trade-off between robustness (higher
-delta) and visual quality (lower delta).
-
-### Adaptive Perceptual Masking
-
-Local variance of wavelet coefficients drives spatially varying embedding
-strength. In high-variance (textured) regions, a larger delta is used for
-greater robustness. In low-variance (flat or smooth) regions, a smaller
-delta avoids visible banding artifacts. The delta map is computed from the
-level-2 detail subbands and interpolated to match coefficient positions.
-
-### Reed-Solomon Error Correction
-
-The payload is encoded with Reed-Solomon codes that add configurable
-redundancy symbols (default: 128). This allows recovery of the original
-payload even when a significant fraction of embedded bits are corrupted by
-image processing operations. The number of correctable symbol errors is
-nsym / 2.
-
-### Spread-Spectrum PRNG Mapping
-
-A seeded Mersenne Twister PRNG generates a pseudorandom permutation that maps
-payload bits to wavelet coefficient positions. This distributes the watermark
-across the spatial extent of the image, preventing localized removal and
-making the watermark statistically difficult to detect without the secret key.
-
-### Tiled Embedding
-
-For resistance to cropping attacks, the payload can be redundantly embedded
-into independent spatial tiles of configurable size. Each tile contains a
-complete copy of the watermark. During extraction, tiles are independently
-decoded, and the best result (by confidence score) is selected.
-
-## Success Metrics
-
-| Metric                   | Target                                    |
-|--------------------------|-------------------------------------------|
-| Watermark BER (pre-ECC)  | < 25% after JPEG Q70 + resize             |
-| Perfect Recovery Rate    | >= 90% after RS decoding across attack suite |
-| Visual Quality (SSIM)    | >= 0.97 original vs. watermarked           |
-| Perceptual Transparency  | Zero visible artifacts in blind A/B test   |
-| Embedding Speed          | < 2 s for 4K image on mid-range CPU        |
-| Extraction Speed         | < 3 s including ECC decoding               |
-| Payload Capacity         | >= 64 bits actual provenance data           |
-| Compression Resilience   | Survives 3x sequential JPEG Q75            |
-
-## Running Tests
+Install the classical pipeline:
 
 ```bash
-# Run the full test suite
+pip install -r requirements.txt
+pip install -e ".[dev]"
+```
+
+Embed a raw 128-bit payload:
+
+```bash
+python -m cli.main embed artwork.png \
+  --delta 16 \
+  --payload-bits 128 \
+  --payload-seed 42 \
+  --coefficient-seed 42 \
+  -o artwork_watermarked.png
+```
+
+Extract raw bits with the classical branch:
+
+```bash
+python -m cli.main extract artwork_watermarked.png \
+  --num-bits 128 \
+  --delta 16 \
+  --coefficient-seed 42
+```
+
+Run the classical baseline benchmark:
+
+```bash
+python -m cli.main benchmark tests/fixtures \
+  --delta 16 \
+  -o results.csv
+```
+
+Run the evaluation CLI:
+
+```bash
+python -m evaluation run \
+  --configs baseline \
+  --output-dir evaluation_output
+```
+
+## CNN Branch
+
+CNN support is intentionally optional. Install TensorFlow only when training or
+running the CNN-assisted extractor:
+
+```bash
+pip install -e ".[ml]"
+```
+
+The baseline decoder is defined in
+[`src/watermark/models/cnn_decoder.py`](src/watermark/models/cnn_decoder.py).
+CNN inputs are prepared by
+[`src/watermark/cnn_extraction.py`](src/watermark/cnn_extraction.py) as
+`128 x 128 x 2` LH2/HL2 tensors for `512 x 512` images.
+
+## Metrics
+
+Primary metric:
+
+- BER: Hamming distance between recovered bits and original embedded bits,
+  divided by payload length.
+
+Supporting metrics:
+
+- SSIM
+- PSNR
+- inference time
+- memory usage and CPU utilization when collected by the evaluation harness
+
+SSIM/PSNR evaluate visual fidelity of the fixed classical embedding. The CNN
+does not improve SSIM directly because it does not change the embedder.
+
+## Optional Dependency Sets
+
+Not every team member needs every dependency:
+
+- `.[dev]` is for running tests and normal development.
+- `.[ml]` is only needed for CNN training or CNN-assisted extraction.
+- `.[stats]` is only needed for Wilcoxon/effect-size analysis.
+
+Examples:
+
+```bash
+pip install -e ".[dev]"
+pip install -e ".[dev,ml]"
+pip install -e ".[dev,stats]"
+pip install -e ".[dev,ml,stats]"
+```
+
+The CNN/evaluation lead can install all extras. Teammates working only on the
+classical baseline, preprocessing handoff, or documentation do not need the ML
+stack.
+
+## Experiment Logging
+
+Use [`docs/experiment_log.md`](docs/experiment_log.md) to record benchmark,
+calibration, CNN training, and final evaluation runs. These notes should feed
+Chapter 4 results and discussion.
+
+## Codebase Guide
+
+Use [`docs/codebase_guide.md`](docs/codebase_guide.md) for a module-by-module
+map of the repository, important functions, testing commands, and what each
+team member needs to understand first.
+
+## Dataset Status
+
+Danbooru/Safebooru acquisition and dataset split construction are not yet
+implemented in this repository. The current preprocessing module is intentionally
+left mostly untouched while the dataset member completes that part.
+
+Target split for the paper-aligned dataset:
+
+- Training: 10,000 images
+- Validation: 1,000 images
+- Held-out test: 500 images
+- Optional small curated qualitative inspection set
+
+## Testing
+
+```bash
 pytest tests/
-
-# Run with verbose output
-pytest tests/ -v
-
-# Run a specific test module
-pytest tests/test_roundtrip.py -v
-
-# Run tests with coverage (requires pytest-cov)
-pytest tests/ --cov=src --cov-report=term-missing
 ```
 
-## Dependencies
-
-| Package          | Purpose                                |
-|------------------|----------------------------------------|
-| numpy >= 1.24    | Array operations and seeded PRNG       |
-| opencv-python >= 4.8 | Image I/O and color space conversion |
-| Pillow >= 10.0   | Image format handling                  |
-| PyWavelets >= 1.4 | Discrete Wavelet Transform            |
-| imagehash >= 4.3 | Perceptual hashing (pHash)             |
-| reedsolo >= 1.7  | Reed-Solomon error correction          |
-| pycryptodome >= 3.19 | AES-256 encryption                 |
-| scikit-image >= 0.21 | SSIM computation                   |
-| pytest >= 7.4    | Test framework (dev dependency)        |
-
-## License
-
-This project is licensed under the MIT License. See `LICENSE` for details.
-
-## Citation
-
-If you use this work in academic research, please cite:
-
-```bibtex
-@thesis{frequency_watermark_2026,
-    title     = {Frequency-Domain Steganographic Watermarking for
-                 Digital Art Provenance},
-    author    = {TODO: Author Name},
-    year      = {2026},
-    school    = {TODO: Institution},
-    type      = {TODO: Thesis Type},
-    note      = {Software available at TODO: repository URL}
-}
-```
+The tests cover classical DWT/QIM behavior, BER, attack suite behavior, and
+CNN input/output utility shape checks. TensorFlow is not required for the
+default test suite.

@@ -7,3 +7,9 @@ reedsolo>=1.7
 pycryptodome>=3.19
 scikit-image>=0.21
 pytest>=7.4
+
+# Optional for CNN-assisted extraction:
+# tensorflow>=2.15
+#
+# Optional for Wilcoxon/statistical analysis:
+# scipy>=1.11

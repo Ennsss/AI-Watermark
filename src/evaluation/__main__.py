@@ -2,9 +2,9 @@
 
 Usage:
     python -m evaluation prepare   # Build and verify image corpus
-    python -m evaluation run       # Run full evaluation sweep
+    python -m evaluation run       # Run the main classical baseline evaluation
     python -m evaluation report    # Generate tables from CSV
-    python -m evaluation fpr       # Run false positive rate analysis
+    python -m evaluation fpr       # Optional legacy false positive analysis
 """
 
 from __future__ import annotations
@@ -160,7 +160,7 @@ def cmd_fpr(args: argparse.Namespace) -> None:
 def main() -> None:
     parser = argparse.ArgumentParser(
         prog="evaluation",
-        description="Thesis-grade watermark evaluation framework",
+        description="Controlled DWT-QIM watermark evaluation framework",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -171,7 +171,7 @@ def main() -> None:
 
     # run
     p_run = subparsers.add_parser("run", help="Run evaluation sweep")
-    p_run.add_argument("--configs", default="full",
+    p_run.add_argument("--configs", default="baseline",
                        choices=["baseline", "delta", "wavelet", "repetition",
                                 "tiling", "adaptive", "full"])
     p_run.add_argument("--output-dir", default=DEFAULT_OUTPUT_DIR)

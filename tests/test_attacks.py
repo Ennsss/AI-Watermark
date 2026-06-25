@@ -5,11 +5,16 @@ import pytest
 
 from attacks.suite import (
     combined_chain,
+    crop_severity,
     format_conversion,
     gaussian_noise,
+    get_all_attacks,
     get_default_attacks,
+    get_optional_attacks,
     jpeg_compression,
     random_crop,
+    reencode_jpeg,
+    resize_scale,
     resize_attack,
     run_attack,
     screenshot_simulation,
@@ -47,6 +52,11 @@ class TestResize:
         result = resize_attack(test_image, max_dim=1080)
         assert result.image.shape == test_image.shape
 
+    def test_resize_scale_preserves_output_shape(self, test_image):
+        result = resize_scale(test_image, scale=0.5)
+        assert result.image.shape == test_image.shape
+        assert result.image.dtype == np.uint8
+
 
 class TestCrop:
     def test_reduces_size(self, test_image):
@@ -59,6 +69,10 @@ class TestCrop:
         r2 = random_crop(test_image, crop_ratio=0.2, seed=42)
         assert np.array_equal(r1.image, r2.image)
 
+    def test_crop_severity_runs(self, test_image):
+        result = crop_severity(test_image, severity="mild", seed=42)
+        assert result.image.ndim == 3
+
 
 class TestScreenshot:
     def test_output_shape(self, test_image):
@@ -69,6 +83,10 @@ class TestScreenshot:
 class TestFormatConversion:
     def test_output_shape(self, test_image):
         result = format_conversion(test_image)
+        assert result.image.shape == test_image.shape
+
+    def test_reencode_output_shape(self, test_image):
+        result = reencode_jpeg(test_image, passes=2)
         assert result.image.shape == test_image.shape
 
 
@@ -91,13 +109,23 @@ class TestCombinedChain:
 
 
 class TestDefaultAttacks:
-    def test_all_attacks_run(self, test_image):
+    def test_main_attacks_are_paper_aligned(self, test_image):
         attacks = get_default_attacks()
-        assert len(attacks) >= 15
+        names = [name for name, _fn, _kwargs in attacks]
+        assert names == [
+            "jpeg_q90", "jpeg_q70", "jpeg_q50",
+            "resize_75pct", "resize_50pct", "resize_25pct",
+            "crop_mild", "crop_moderate", "crop_severe",
+            "reencode_1x", "reencode_2x", "reencode_3x",
+        ]
         for name, fn, kwargs in attacks:
             result = fn(test_image, **kwargs)
             assert result.image.ndim == 3
             assert result.image.dtype == np.uint8
+
+    def test_optional_attacks_are_separate(self, test_image):
+        assert len(get_optional_attacks()) > 0
+        assert len(get_all_attacks()) > len(get_default_attacks())
 
 
 class TestRunAttack:

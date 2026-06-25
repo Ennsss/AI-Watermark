@@ -1,5 +1,12 @@
 # Machine Learning Enhancements for Frequency-Domain Watermarking: A Research Survey
 
+> Current alignment note: this document is retained as background research only.
+> It is not the main experiment specification. The current study uses fixed
+> classical DWT-QIM embedding and compares classical QIM bit decisions against
+> a CNN-assisted extraction branch. AES/ECC, learned masking, adversarial
+> training, CPU-only deployment claims, and broad attack suites are optional or
+> future-work topics unless explicitly reintroduced.
+
 ## Abstract
 
 This document surveys lightweight machine learning techniques applicable to enhancing the robustness, imperceptibility, and adaptability of frequency-domain image watermarking systems. Our baseline system employs a classical pipeline of Discrete Wavelet Transform (DWT) with Quantization Index Modulation (QIM), Reed-Solomon error correction, and AES-256 encryption. We investigate five areas of ML enhancement: (1) learned perceptual masking for adaptive embedding strength, (2) neural network-based extraction decoders, (3) adversarial training with differentiable distortion layers, (4) lightweight deployment under CPU-only constraints, and (5) training pipeline design for hybrid classical-neural architectures. We compare six state-of-the-art deep watermarking systems against our classical approach and propose a phased implementation roadmap. All recommendations target CPU-only inference under 500ms for 1024x1024 images.

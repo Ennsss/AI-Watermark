@@ -1,4 +1,4 @@
-"""F8: CLI interface — embed, extract, benchmark subcommands."""
+"""CLI interface for the DWT-QIM experiment and optional legacy tools."""
 
 from __future__ import annotations
 
@@ -28,16 +28,24 @@ def cmd_embed(args: argparse.Namespace) -> int:
     image = load_image(args.input)
     print(f"  Size: {image.shape[1]}x{image.shape[0]}")
 
-    key = args.key.encode("utf-8")
-    timestamp = args.timestamp
+    key = args.key.encode("utf-8") if args.key else b""
 
-    # Encode payload
-    print(f"Building payload for artist: {args.artist_id}")
-    bits = encode_payload(
-        args.artist_id, image, key,
-        timestamp=timestamp, rs_nsym=args.rs_nsym,
-        repetitions=args.repetitions,
-    )
+    if args.legacy_secure_payload:
+        if not args.artist_id or not args.key:
+            print("Error: --legacy-secure-payload requires --artist-id and --key")
+            return 1
+        print(f"Building legacy provenance payload for artist: {args.artist_id}")
+        bits = encode_payload(
+            args.artist_id, image, key,
+            timestamp=args.timestamp, rs_nsym=args.rs_nsym,
+            repetitions=args.repetitions,
+        )
+        seed = derive_seed(key)
+    else:
+        from watermark.payload import generate_fixed_payload
+        print(f"Building fixed raw payload: {args.payload_bits} bits")
+        bits = generate_fixed_payload(args.payload_bits, args.payload_seed)
+        seed = args.coefficient_seed
     print(f"  Payload: {len(bits)} bits ({len(bits) // 8} bytes)")
 
     # Pre-process
@@ -54,8 +62,6 @@ def cmd_embed(args: argparse.Namespace) -> int:
             y_padded, wavelet=args.wavelet,
             delta_min=args.delta_min, delta_max=args.delta_max,
         )
-
-    seed = derive_seed(key)
 
     # Embed
     t0 = time.perf_counter()
@@ -101,7 +107,7 @@ def cmd_extract(args: argparse.Namespace) -> int:
     image = load_image(args.input)
     print(f"  Size: {image.shape[1]}x{image.shape[0]}")
 
-    key = args.key.encode("utf-8")
+    key = args.key.encode("utf-8") if args.key else b""
 
     # Build delta map if adaptive
     delta_map = None
@@ -114,7 +120,7 @@ def cmd_extract(args: argparse.Namespace) -> int:
             delta_min=args.delta_min, delta_max=args.delta_max,
         )
 
-    seed = derive_seed(key)
+    seed = derive_seed(key) if args.legacy_secure_payload else args.coefficient_seed
 
     t0 = time.perf_counter()
     extracted_bits, confidence = extract_from_image(
@@ -126,23 +132,29 @@ def cmd_extract(args: argparse.Namespace) -> int:
     print(f"  Extracted {len(extracted_bits)} bits in {elapsed:.3f}s")
     print(f"  Confidence: {confidence:.4f}")
 
-    # Try to decode payload
-    try:
-        prov = decode_payload_bits(
-            extracted_bits, key, rs_nsym=args.rs_nsym,
-            repetitions=args.repetitions,
-        )
-        print(f"\n  Provenance recovered successfully:")
-        print(f"    Artist ID hash: {prov.artist_id}")
-        print(f"    Timestamp:      {prov.timestamp}")
-        print(f"    pHash:          {prov.phash:#018x}")
+    if args.legacy_secure_payload:
+        if not args.key:
+            print("Error: --legacy-secure-payload requires --key")
+            return 1
+        try:
+            prov = decode_payload_bits(
+                extracted_bits, key, rs_nsym=args.rs_nsym,
+                repetitions=args.repetitions,
+            )
+            print(f"\n  Legacy provenance recovered successfully:")
+            print(f"    Artist ID hash: {prov.artist_id}")
+            print(f"    Timestamp:      {prov.timestamp}")
+            print(f"    pHash:          {prov.phash:#018x}")
 
-        if args.verify_artist:
-            match = verify_artist_id(args.verify_artist, prov)
-            print(f"    Artist match:   {'YES' if match else 'NO'} ({args.verify_artist})")
-    except Exception as e:
-        print(f"\n  Payload recovery FAILED: {e}")
-        return 1
+            if args.verify_artist:
+                match = verify_artist_id(args.verify_artist, prov)
+                print(f"    Artist match:   {'YES' if match else 'NO'} ({args.verify_artist})")
+        except Exception as e:
+            print(f"\n  Payload recovery FAILED: {e}")
+            return 1
+    else:
+        print("\n  Raw payload bits:")
+        print("  " + "".join(str(int(bit)) for bit in extracted_bits))
 
     return 0
 
@@ -201,7 +213,7 @@ def build_parser() -> argparse.ArgumentParser:
     """Build the CLI argument parser."""
     parser = argparse.ArgumentParser(
         prog="watermark",
-        description="Frequency-domain steganographic watermarking for digital art provenance.",
+        description="DWT-QIM classical watermarking experiment.",
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
 
@@ -209,11 +221,16 @@ def build_parser() -> argparse.ArgumentParser:
     p_embed = subparsers.add_parser("embed", help="Embed a watermark into an image.")
     p_embed.add_argument("input", help="Input image path")
     p_embed.add_argument("-o", "--output", help="Output PNG path (default: <input>_watermarked.png)")
-    p_embed.add_argument("--artist-id", required=True, help="Artist identifier (name, email, UUID)")
-    p_embed.add_argument("--key", required=True, help="Secret key for encryption and PRNG")
+    p_embed.add_argument("--artist-id", help="Legacy provenance artist identifier")
+    p_embed.add_argument("--key", help="Legacy secure payload key")
+    p_embed.add_argument("--legacy-secure-payload", action="store_true",
+                         help="Use optional AES/RS provenance payload instead of raw 128-bit payload")
+    p_embed.add_argument("--payload-bits", type=int, default=128, help="Raw payload length")
+    p_embed.add_argument("--payload-seed", type=int, default=42, help="Raw payload seed")
+    p_embed.add_argument("--coefficient-seed", type=int, default=42, help="Coefficient selection seed")
     p_embed.add_argument("--timestamp", type=int, default=None, help="UTC epoch timestamp (default: now)")
     p_embed.add_argument("--wavelet", default="haar", choices=["haar", "db4"], help="Wavelet basis")
-    p_embed.add_argument("--delta", type=float, default=60.0, help="Base QIM delta (default: 60.0)")
+    p_embed.add_argument("--delta", type=float, default=16.0, help="Base QIM delta")
     p_embed.add_argument("--adaptive", action="store_true", help="Use adaptive perceptual masking")
     p_embed.add_argument("--delta-min", type=float, default=20.0, help="Min delta for adaptive mode")
     p_embed.add_argument("--delta-max", type=float, default=80.0, help="Max delta for adaptive mode")
@@ -226,11 +243,14 @@ def build_parser() -> argparse.ArgumentParser:
     # --- extract ---
     p_extract = subparsers.add_parser("extract", help="Extract a watermark from an image.")
     p_extract.add_argument("input", help="Input watermarked image path")
-    p_extract.add_argument("--key", required=True, help="Secret key (must match embedding)")
-    p_extract.add_argument("--num-bits", type=int, required=True, help="Expected number of payload bits")
+    p_extract.add_argument("--key", help="Legacy secure payload key")
+    p_extract.add_argument("--legacy-secure-payload", action="store_true",
+                           help="Decode optional AES/RS provenance payload")
+    p_extract.add_argument("--num-bits", type=int, default=128, help="Expected number of payload bits")
+    p_extract.add_argument("--coefficient-seed", type=int, default=42, help="Coefficient selection seed")
     p_extract.add_argument("--verify-artist", help="Artist ID to verify against extracted payload")
     p_extract.add_argument("--wavelet", default="haar", choices=["haar", "db4"], help="Wavelet basis")
-    p_extract.add_argument("--delta", type=float, default=60.0, help="Base QIM delta")
+    p_extract.add_argument("--delta", type=float, default=16.0, help="Base QIM delta")
     p_extract.add_argument("--adaptive", action="store_true", help="Use adaptive perceptual masking")
     p_extract.add_argument("--delta-min", type=float, default=20.0, help="Min delta for adaptive mode")
     p_extract.add_argument("--delta-max", type=float, default=80.0, help="Max delta for adaptive mode")
@@ -247,7 +267,7 @@ def build_parser() -> argparse.ArgumentParser:
     p_bench.add_argument("--artist-id", default="benchmark_artist", help="Artist ID for test payloads")
     p_bench.add_argument("--key", default="benchmark_key_32bytes!!!!!!!!!", help="Secret key")
     p_bench.add_argument("--wavelet", default="haar", choices=["haar", "db4"], help="Wavelet basis")
-    p_bench.add_argument("--delta", type=float, default=60.0, help="Base QIM delta")
+    p_bench.add_argument("--delta", type=float, default=16.0, help="Base QIM delta")
     p_bench.add_argument("--adaptive", action="store_true", help="Use adaptive masking")
     p_bench.add_argument("--delta-min", type=float, default=20.0, help="Min adaptive delta")
     p_bench.add_argument("--delta-max", type=float, default=80.0, help="Max adaptive delta")

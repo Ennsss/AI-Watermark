@@ -1,4 +1,4 @@
-"""F3: DWT embedding engine — 2-level DWT, QIM into LH2/HL2, spread-spectrum."""
+"""DWT-QIM embedding and classical bit-decision extraction."""
 
 from __future__ import annotations
 
@@ -6,34 +6,48 @@ import numpy as np
 import pywt
 
 
-def dwt2_decompose(y_channel: np.ndarray, wavelet: str = "haar", level: int = 2) -> list:
+DEFAULT_DWT_MODE = "symmetric"
+
+
+def dwt2_decompose(
+    y_channel: np.ndarray,
+    wavelet: str = "haar",
+    level: int = 2,
+    mode: str = DEFAULT_DWT_MODE,
+) -> list:
     """Perform multi-level 2D DWT decomposition on the Y channel.
 
     Args:
         y_channel: (H, W) float64 luminance array. Dimensions must be
                    divisible by 2^level.
-        wavelet: Wavelet name ('haar' or 'db4').
+        wavelet: Wavelet name. The main experiment uses 'haar'.
         level: Decomposition levels (default 2).
+        mode: DWT signal extension mode. The main experiment uses symmetric.
 
     Returns:
         PyWavelets coefficient list: [cA_n, (cH_n, cV_n, cD_n), ..., (cH_1, cV_1, cD_1)]
         where cH=LH (horizontal detail), cV=HL (vertical detail), cD=HH (diagonal).
     """
-    coeffs = pywt.wavedec2(y_channel, wavelet=wavelet, level=level)
+    coeffs = pywt.wavedec2(y_channel, wavelet=wavelet, level=level, mode=mode)
     return coeffs
 
 
-def dwt2_reconstruct(coeffs: list, wavelet: str = "haar") -> np.ndarray:
+def dwt2_reconstruct(
+    coeffs: list,
+    wavelet: str = "haar",
+    mode: str = DEFAULT_DWT_MODE,
+) -> np.ndarray:
     """Reconstruct Y channel from DWT coefficients via inverse DWT.
 
     Args:
         coeffs: PyWavelets coefficient list from dwt2_decompose.
         wavelet: Must match the wavelet used for decomposition.
+        mode: Must match the mode used for decomposition.
 
     Returns:
         (H, W) float64 reconstructed luminance array.
     """
-    return pywt.waverec2(coeffs, wavelet=wavelet)
+    return pywt.waverec2(coeffs, wavelet=wavelet, mode=mode)
 
 
 def qim_embed_bit(coefficient: float, bit: int, delta: float) -> float:
@@ -178,6 +192,7 @@ def _get_ll2_safe_locations(
     seed: int,
     delta: float,
     level: int = 2,
+    mode: str = DEFAULT_DWT_MODE,
 ) -> np.ndarray:
     """Generate embedding locations for LL2, skipping saturated coefficients.
 
@@ -221,6 +236,7 @@ def embed_watermark(
     delta: float = 60.0,
     wavelet: str = "haar",
     level: int = 2,
+    mode: str = DEFAULT_DWT_MODE,
     delta_map: np.ndarray | None = None,
     target_subbands: tuple[str, ...] = ("lh2", "hl2"),
 ) -> np.ndarray:
@@ -237,6 +253,7 @@ def embed_watermark(
         delta: Base QIM quantization step. Ignored if delta_map provided.
         wavelet: Wavelet basis ('haar' or 'db4').
         level: DWT decomposition levels.
+        mode: DWT signal extension mode.
         delta_map: Optional per-coefficient delta arrays as a dict-like
                    with keys 'lh2' and 'hl2', each shaped to match
                    the respective subband. If None, uniform delta is used.
@@ -246,7 +263,7 @@ def embed_watermark(
     Returns:
         (H, W) float64 watermarked luminance array.
     """
-    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level)
+    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level, mode=mode)
     num_bits = len(bits)
 
     if target_subbands == ("ll2",):
@@ -277,7 +294,7 @@ def embed_watermark(
 
         coeffs[1] = (lh2, hl2, hh2)
 
-    return dwt2_reconstruct(coeffs, wavelet=wavelet)
+    return dwt2_reconstruct(coeffs, wavelet=wavelet, mode=mode)
 
 
 def extract_watermark(
@@ -287,6 +304,7 @@ def extract_watermark(
     delta: float = 60.0,
     wavelet: str = "haar",
     level: int = 2,
+    mode: str = DEFAULT_DWT_MODE,
     delta_map: np.ndarray | None = None,
     target_subbands: tuple[str, ...] = ("lh2", "hl2"),
 ) -> np.ndarray:
@@ -299,13 +317,14 @@ def extract_watermark(
         delta: Base QIM quantization step. Ignored if delta_map provided.
         wavelet: Wavelet basis (must match embedding).
         level: DWT decomposition levels.
+        mode: DWT signal extension mode.
         delta_map: Optional per-coefficient delta map (must match embedding).
         target_subbands: Must match embedding. ("ll2",) for LL2 fallback.
 
     Returns:
         1D uint8 array of extracted bits (0s and 1s).
     """
-    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level)
+    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level, mode=mode)
 
     if target_subbands == ("ll2",):
         ll2 = coeffs[0]

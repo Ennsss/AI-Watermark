@@ -1,4 +1,4 @@
-"""F7: Robustness benchmark runner — batch BER/SSIM measurement, CSV export."""
+"""Classical baseline benchmark runner for the main experiment."""
 
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ from watermark.payload import (
     decode_payload_bits,
     derive_seed,
     encode_payload,
+    generate_fixed_payload,
 )
 from watermark.preprocessor import (
     extract_y_channel,
@@ -33,8 +34,13 @@ class BenchmarkConfig:
     """Configuration for a benchmark run."""
 
     wavelet: str = "haar"
-    delta: float = 60.0
+    delta: float = 16.0
+    payload_bits: int = 128
+    payload_seed: int = 42
+    coefficient_seed: int = 42
     adaptive: bool = False
+    allow_ll2_fallback: bool = False
+    use_legacy_secure_payload: bool = False
     delta_min: float = 20.0
     delta_max: float = 80.0
     rs_nsym: int = 128
@@ -150,12 +156,16 @@ def embed_image(
     """
     t0 = time.perf_counter()
 
-    # Encode payload
-    bits = encode_payload(
-        config.artist_id, image, config.key,
-        timestamp=config.timestamp, rs_nsym=config.rs_nsym,
-        repetitions=config.repetitions,
-    )
+    if config.use_legacy_secure_payload:
+        bits = encode_payload(
+            config.artist_id, image, config.key,
+            timestamp=config.timestamp, rs_nsym=config.rs_nsym,
+            repetitions=config.repetitions,
+        )
+        seed = derive_seed(config.key)
+    else:
+        bits = generate_fixed_payload(config.payload_bits, config.payload_seed)
+        seed = config.coefficient_seed
 
     # Pre-process
     ycbcr = rgb_to_ycbcr(image)
@@ -171,12 +181,12 @@ def embed_image(
             delta_min=config.delta_min, delta_max=config.delta_max,
         )
 
-    seed = derive_seed(config.key)
-
-    # Detect sparse subbands (line art) and apply delta boost
-    sparse = detect_sparse_subbands(y_padded, wavelet=config.wavelet)
-    target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
-    effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
+    target_subbands = ("lh2", "hl2")
+    effective_delta = config.delta
+    if config.allow_ll2_fallback:
+        sparse = detect_sparse_subbands(y_padded, wavelet=config.wavelet)
+        target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+        effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
 
     # Embed
     wm_y = embed_watermark(
@@ -208,7 +218,7 @@ def extract_and_measure(
         Tuple of (ber, recovery_success, confidence, extract_time).
     """
     t0 = time.perf_counter()
-    seed = derive_seed(config.key)
+    seed = derive_seed(config.key) if config.use_legacy_secure_payload else config.coefficient_seed
     num_bits = len(original_bits)
 
     # Build delta map if adaptive (from the attacked image)
@@ -223,10 +233,12 @@ def extract_and_measure(
             delta_min=config.delta_min, delta_max=config.delta_max,
         )
 
-    # Detect sparse subbands (line art) and use LL2 fallback + delta boost
-    sparse = detect_sparse_subbands(y_att_padded, wavelet=config.wavelet)
-    target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
-    effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
+    target_subbands = ("lh2", "hl2")
+    effective_delta = config.delta
+    if config.allow_ll2_fallback:
+        sparse = detect_sparse_subbands(y_att_padded, wavelet=config.wavelet)
+        target_subbands = ("ll2",) if sparse else ("lh2", "hl2")
+        effective_delta = config.delta * config.sparse_delta_boost if sparse else config.delta
 
     extracted_bits, confidence = extract_from_image(
         attacked_image, num_bits=num_bits, seed=seed,
@@ -236,16 +248,18 @@ def extract_and_measure(
 
     ber = compute_ber(original_bits, extracted_bits)
 
-    # Try full payload decode
-    recovery_success = False
-    try:
-        _prov = decode_payload_bits(
-            extracted_bits, config.key, rs_nsym=config.rs_nsym,
-            repetitions=config.repetitions,
-        )
-        recovery_success = True
-    except Exception:
-        pass
+    if config.use_legacy_secure_payload:
+        recovery_success = False
+        try:
+            _prov = decode_payload_bits(
+                extracted_bits, config.key, rs_nsym=config.rs_nsym,
+                repetitions=config.repetitions,
+            )
+            recovery_success = True
+        except Exception:
+            pass
+    else:
+        recovery_success = ber == 0.0
 
     elapsed = time.perf_counter() - t0
     return ber, recovery_success, confidence, elapsed

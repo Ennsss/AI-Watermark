@@ -1,4 +1,4 @@
-"""F5: Watermark extractor — DWT decomposition, QIM reading, payload recovery."""
+"""Classical DWT-QIM extraction and raw BER measurement."""
 
 from __future__ import annotations
 
@@ -19,6 +19,7 @@ def extract_from_image(
     delta: float = 60.0,
     wavelet: str = "haar",
     level: int = 2,
+    mode: str = "symmetric",
     delta_map: np.ndarray | None = None,
     target_subbands: tuple[str, ...] = ("lh2", "hl2"),
 ) -> tuple[np.ndarray, float]:
@@ -33,6 +34,7 @@ def extract_from_image(
         delta: Base QIM step size (must match embedding).
         wavelet: Wavelet basis (must match embedding).
         level: DWT decomposition levels.
+        mode: DWT signal extension mode.
         delta_map: Optional adaptive delta map (must match embedding).
         target_subbands: Must match embedding. ("ll2",) for LL2 fallback.
 
@@ -53,13 +55,14 @@ def extract_from_image(
         delta=delta,
         wavelet=wavelet,
         level=level,
+        mode=mode,
         delta_map=delta_map,
         target_subbands=target_subbands,
     )
 
     # Compute confidence based on QIM decision margins
     confidence = _compute_confidence(
-        y_padded, num_bits, seed, delta, wavelet, level, delta_map,
+        y_padded, num_bits, seed, delta, wavelet, level, mode, delta_map,
         target_subbands,
     )
 
@@ -73,6 +76,7 @@ def _compute_confidence(
     delta: float,
     wavelet: str,
     level: int,
+    mode: str,
     delta_map: np.ndarray | None,
     target_subbands: tuple[str, ...] = ("lh2", "hl2"),
 ) -> float:
@@ -91,7 +95,7 @@ def _compute_confidence(
         dwt2_decompose,
     )
 
-    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level)
+    coeffs = dwt2_decompose(y_channel, wavelet=wavelet, level=level, mode=mode)
 
     if target_subbands == ("ll2",):
         ll2 = coeffs[0]

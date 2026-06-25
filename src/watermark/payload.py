@@ -1,4 +1,9 @@
-"""F2: Provenance payload builder — artist ID, timestamp, pHash, RS coding, AES-256."""
+"""Payload helpers.
+
+The main controlled experiment uses a fixed raw 128-bit ownership payload so
+BER reflects extractor performance directly. The provenance/AES/RS helpers are
+kept for optional legacy experiments and are not used by the default benchmark.
+"""
 
 from __future__ import annotations
 
@@ -15,6 +20,7 @@ from reedsolo import RSCodec
 # Default Reed-Solomon symbol count — corrects up to nsym/2 symbol errors.
 # With nsym=128 on a 24-byte message → 152 bytes total, corrects 64 symbol errors (42%).
 DEFAULT_RS_NSYM = 128
+DEFAULT_MAIN_PAYLOAD_BITS = 128
 
 
 class ProvenanceData(NamedTuple):
@@ -38,6 +44,22 @@ def derive_seed(key: bytes) -> int:
     """
     digest = hashlib.sha256(key).digest()
     return struct.unpack(">Q", digest[:8])[0]
+
+
+def generate_fixed_payload(num_bits: int = DEFAULT_MAIN_PAYLOAD_BITS, seed: int = 42) -> np.ndarray:
+    """Generate a deterministic raw ownership payload for the main experiment.
+
+    Args:
+        num_bits: Number of raw payload bits. The paper-aligned default is 128.
+        seed: Reproducibility seed, not a tuning parameter.
+
+    Returns:
+        1D uint8 array of 0s and 1s.
+    """
+    if num_bits <= 0:
+        raise ValueError(f"num_bits must be positive, got {num_bits}")
+    rng = np.random.default_rng(seed)
+    return rng.integers(0, 2, size=num_bits, dtype=np.uint8)
 
 
 def compute_phash(image: np.ndarray) -> int:

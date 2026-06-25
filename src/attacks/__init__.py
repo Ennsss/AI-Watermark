@@ -1,1 +1,1 @@
-"""Social media attack simulation suite."""
+"""Paper-aligned degradation suite plus optional stress attacks."""

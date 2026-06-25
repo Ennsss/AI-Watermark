@@ -1,8 +1,8 @@
-"""Multi-configuration evaluation orchestrator.
+"""Classical extraction evaluation orchestrator.
 
-Drives the full evaluation sweep: for each config × image × attack,
-embeds a watermark, applies the attack, extracts, and measures all metrics.
-Saves incremental CSV after each config for crash recovery.
+This runner remains focused on the classical DWT-QIM branch. The paired
+classical-vs-CNN comparison is built by running the same degradations and
+payloads through the CNN extraction utilities as a second extraction method.
 """
 
 from __future__ import annotations
@@ -15,7 +15,7 @@ from pathlib import Path
 import cv2
 import numpy as np
 
-from attacks.suite import AttackResult, get_default_attacks, resize_attack
+from attacks.suite import AttackResult, get_default_attacks
 from benchmark.runner import BenchmarkConfig, embed_image, extract_and_measure
 from evaluation.configs import EvalConfig
 from evaluation.image_corpus import IMAGE_CATEGORIES, ImageCorpus
@@ -36,33 +36,20 @@ from watermark.tiling import embed_watermark_tiled, extract_watermark_tiled
 # ---------------------------------------------------------------------------
 
 ATTACK_CATEGORIES: dict[str, str] = {}
-for _q in [50, 60, 70, 80, 85, 90]:
+for _q in [90, 70, 50]:
     ATTACK_CATEGORIES[f"jpeg_q{_q}"] = "compression"
-for _d in [1080, 1440, 2048]:
-    ATTACK_CATEGORIES[f"resize_{_d}"] = "scaling"
-for _r in [10, 20, 30, 40]:
-    ATTACK_CATEGORIES[f"crop_{_r}pct"] = "cropping"
-ATTACK_CATEGORIES["screenshot"] = "screenshot"
-ATTACK_CATEGORIES["format_chain"] = "format_conversion"
-for _s in [2, 5, 10]:
-    ATTACK_CATEGORIES[f"noise_sigma{_s}"] = "noise"
-ATTACK_CATEGORIES["combined_chain"] = "combined"
+for _pct in [75, 50, 25]:
+    ATTACK_CATEGORIES[f"resize_{_pct}pct"] = "scaling"
+for _severity in ["mild", "moderate", "severe"]:
+    ATTACK_CATEGORIES[f"crop_{_severity}"] = "cropping"
+for _passes in [1, 2, 3]:
+    ATTACK_CATEGORIES[f"reencode_{_passes}x"] = "reencoding"
 ATTACK_CATEGORIES["none"] = "none"
-ATTACK_CATEGORIES["resize_256"] = "scaling"
-ATTACK_CATEGORIES["resize_384"] = "scaling"
 
 
 def get_evaluation_attacks() -> list[tuple]:
-    """Extend default attacks with small-target resize attacks for evaluation.
-
-    The default resize targets (1080, 1440, 2048) are larger than the 512x512
-    test corpus, so they are no-ops. This adds 256 and 384 targets that
-    actually trigger downscaling.
-    """
-    attacks = get_default_attacks()
-    attacks.append(("resize_256", resize_attack, {"max_dim": 256}))
-    attacks.append(("resize_384", resize_attack, {"max_dim": 384}))
-    return attacks
+    """Return the paper-aligned degradation suite."""
+    return get_default_attacks()
 
 
 @dataclass
@@ -75,6 +62,7 @@ class EvalResult:
     attack_name: str
     attack_category: str
     config_label: str
+    extraction_method: str
     # Config params
     wavelet: str
     delta: float
@@ -152,6 +140,7 @@ class EvalRun:
                     attack_name=row["attack_name"],
                     attack_category=row["attack_category"],
                     config_label=row["config_label"],
+                    extraction_method=row.get("extraction_method", "classical"),
                     wavelet=row["wavelet"],
                     delta=float(row["delta"]),
                     adaptive=row["adaptive"] == "True",
@@ -319,6 +308,7 @@ def run_single_config(
             attack_name="none",
             attack_category="none",
             config_label=config.label,
+            extraction_method="classical",
             wavelet=config.wavelet,
             delta=config.delta,
             adaptive=config.adaptive,
@@ -413,6 +403,7 @@ def run_single_config(
                         attack_name=atk_name,
                         attack_category=_get_attack_category(atk_name),
                         config_label=config.label,
+                        extraction_method="classical",
                         wavelet=config.wavelet,
                         delta=config.delta,
                         adaptive=config.adaptive,
@@ -442,6 +433,7 @@ def run_single_config(
                         attack_name=atk_name,
                         attack_category=_get_attack_category(atk_name),
                         config_label=config.label,
+                        extraction_method="classical",
                         wavelet=config.wavelet,
                         delta=config.delta,
                         adaptive=config.adaptive,

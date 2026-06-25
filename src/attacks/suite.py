@@ -1,4 +1,10 @@
-"""F6: Social media attack suite — 7 attack types, parameterized pipeline."""
+"""Social-media-like degradation suite for the controlled experiment.
+
+The default suite is intentionally narrow and paper-aligned:
+JPEG compression, downscaling, cropping, and repeated re-encoding. Older
+stress tests such as Gaussian noise and combined chains remain available via
+``get_optional_attacks`` but are not part of the main comparison.
+"""
 
 from __future__ import annotations
 
@@ -60,6 +66,28 @@ def resize_attack(image: np.ndarray, max_dim: int = 1080) -> AttackResult:
     return AttackResult(image=rgb, name=f"resize_{max_dim}px")
 
 
+def resize_scale(image: np.ndarray, scale: float = 0.75) -> AttackResult:
+    """Downscale then restore an image by a fractional scale.
+
+    The controlled experiment reports resizing as 75%, 50%, and 25%. This
+    function applies that downscale and then returns to the original dimensions
+    so coefficient-aligned extractors receive a fixed-size input.
+    """
+    if not (0 < scale <= 1):
+        raise ValueError(f"scale must be in (0, 1], got {scale}")
+
+    h, w = image.shape[:2]
+    new_w = max(1, int(round(w * scale)))
+    new_h = max(1, int(round(h * scale)))
+
+    bgr = cv2.cvtColor(image, cv2.COLOR_RGB2BGR)
+    down = cv2.resize(bgr, (new_w, new_h), interpolation=cv2.INTER_AREA)
+    restored = cv2.resize(down, (w, h), interpolation=cv2.INTER_LANCZOS4)
+    rgb = cv2.cvtColor(restored, cv2.COLOR_BGR2RGB)
+    pct = int(round(scale * 100))
+    return AttackResult(image=rgb, name=f"resize_{pct}pct")
+
+
 def random_crop(image: np.ndarray, crop_ratio: float = 0.2, seed: int = 0) -> AttackResult:
     """Randomly crop a percentage of the image from edges.
 
@@ -92,6 +120,28 @@ def random_crop(image: np.ndarray, crop_ratio: float = 0.2, seed: int = 0) -> At
     cropped = image[top : h - bottom, left : w - right].copy()
     pct = int(crop_ratio * 100)
     return AttackResult(image=cropped, name=f"crop_{pct}pct")
+
+
+def crop_severity(image: np.ndarray, severity: str = "mild", seed: int = 0) -> AttackResult:
+    """Apply a paper-aligned crop severity range.
+
+    Severity ranges:
+    - mild: 5-10%
+    - moderate: 20-30%
+    - severe: 40-50%
+    """
+    ranges = {
+        "mild": (0.05, 0.10),
+        "moderate": (0.20, 0.30),
+        "severe": (0.40, 0.50),
+    }
+    if severity not in ranges:
+        raise ValueError(f"Unknown crop severity: {severity}. Options: {list(ranges)}")
+    rng = np.random.default_rng(seed)
+    lo, hi = ranges[severity]
+    ratio = float(rng.uniform(lo, hi))
+    result = random_crop(image, crop_ratio=ratio, seed=seed)
+    return AttackResult(image=result.image, name=f"crop_{severity}")
 
 
 def screenshot_simulation(image: np.ndarray, quality: int = 85) -> AttackResult:
@@ -152,6 +202,17 @@ def format_conversion(image: np.ndarray) -> AttackResult:
     return AttackResult(image=rgb, name="format_chain_png_jpg_webp_jpg")
 
 
+def reencode_jpeg(image: np.ndarray, passes: int = 1, quality: int = 85) -> AttackResult:
+    """Repeated JPEG re-encoding for format-conversion degradation."""
+    if passes < 1:
+        raise ValueError(f"passes must be >= 1, got {passes}")
+
+    result = image.copy()
+    for _ in range(passes):
+        result = jpeg_compression(result, quality=quality).image
+    return AttackResult(image=result, name=f"reencode_{passes}x_q{quality}")
+
+
 def gaussian_noise(image: np.ndarray, sigma: float = 5.0, seed: int = 0) -> AttackResult:
     """Add Gaussian noise to simulate sensor/capture noise.
 
@@ -201,40 +262,51 @@ def combined_chain(
 # ---------------------------------------------------------------------------
 
 def get_default_attacks() -> list[tuple[str, Callable[..., AttackResult], dict]]:
-    """Return the default parameterized attack suite.
+    """Return the main paper-aligned degradation suite.
 
     Returns:
-        List of (name, attack_fn, kwargs) tuples covering all 7 attack types
-        with standard social media parameters.
+        List of (name, attack_fn, kwargs) tuples for the controlled
+        classical-vs-CNN comparison.
     """
     attacks = []
 
     # JPEG compression
-    for q in [50, 60, 70, 80, 85, 90]:
+    for q in [90, 70, 50]:
         attacks.append((f"jpeg_q{q}", jpeg_compression, {"quality": q}))
 
-    # Resize
-    for dim in [1080, 1440, 2048]:
-        attacks.append((f"resize_{dim}", resize_attack, {"max_dim": dim}))
+    # Resizing / scaling
+    for scale in [0.75, 0.50, 0.25]:
+        pct = int(round(scale * 100))
+        attacks.append((f"resize_{pct}pct", resize_scale, {"scale": scale}))
 
-    # Random crop
-    for ratio in [0.1, 0.2, 0.3, 0.4]:
-        attacks.append((f"crop_{int(ratio*100)}pct", random_crop, {"crop_ratio": ratio}))
+    # Cropping severity bands
+    for severity in ["mild", "moderate", "severe"]:
+        attacks.append((f"crop_{severity}", crop_severity, {"severity": severity}))
 
-    # Screenshot simulation
+    # Re-encoding / format conversion
+    for passes in [1, 2, 3]:
+        attacks.append((f"reencode_{passes}x", reencode_jpeg, {"passes": passes}))
+
+    return attacks
+
+
+def get_optional_attacks() -> list[tuple[str, Callable[..., AttackResult], dict]]:
+    """Return extra stress tests outside the main experimental configuration."""
+    attacks = []
+
     attacks.append(("screenshot", screenshot_simulation, {}))
-
-    # Format conversion chain
     attacks.append(("format_chain", format_conversion, {}))
 
-    # Gaussian noise
     for sigma in [2, 5, 10]:
         attacks.append((f"noise_sigma{sigma}", gaussian_noise, {"sigma": sigma}))
 
-    # Combined chain
     attacks.append(("combined_chain", combined_chain, {}))
-
     return attacks
+
+
+def get_all_attacks() -> list[tuple[str, Callable[..., AttackResult], dict]]:
+    """Return main degradations plus optional stress tests."""
+    return get_default_attacks() + get_optional_attacks()
 
 
 def run_attack(image: np.ndarray, attack_name: str, **kwargs) -> AttackResult:
@@ -242,8 +314,9 @@ def run_attack(image: np.ndarray, attack_name: str, **kwargs) -> AttackResult:
 
     Args:
         image: (H, W, 3) uint8 RGB.
-        attack_name: One of 'jpeg', 'resize', 'crop', 'screenshot',
-                     'format', 'noise', 'chain'.
+        attack_name: One of 'jpeg', 'resize', 'resize_scale', 'crop',
+                     'crop_severity', 'reencode', 'screenshot', 'format',
+                     'noise', 'chain'.
         **kwargs: Attack-specific parameters.
 
     Returns:
@@ -252,7 +325,10 @@ def run_attack(image: np.ndarray, attack_name: str, **kwargs) -> AttackResult:
     dispatch = {
         "jpeg": jpeg_compression,
         "resize": resize_attack,
+        "resize_scale": resize_scale,
         "crop": random_crop,
+        "crop_severity": crop_severity,
+        "reencode": reencode_jpeg,
         "screenshot": screenshot_simulation,
         "format": format_conversion,
         "noise": gaussian_noise,

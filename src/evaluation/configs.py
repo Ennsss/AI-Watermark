@@ -1,7 +1,8 @@
-"""Configuration sweep definitions for systematic evaluation.
+"""Experiment configuration definitions.
 
-Provides EvalConfig dataclass and factory functions for one-at-a-time
-parameter sweeps used in thesis evaluation tables.
+The main comparison keeps one fixed DWT-QIM setup for both classical and
+CNN-assisted extraction. Delta candidates are retained only for calibration,
+not broad optimization.
 """
 
 from __future__ import annotations
@@ -17,7 +18,9 @@ class EvalConfig:
 
     label: str
     wavelet: str = "haar"
-    delta: float = 60.0
+    delta: float = 16.0
+    payload_bits: int = 128
+    seed: int = 42
     adaptive: bool = False
     delta_min: float = 20.0
     delta_max: float = 80.0
@@ -25,17 +28,22 @@ class EvalConfig:
     repetitions: int = 1
     tiled: bool = False
     tile_size: int = 256
+    use_legacy_secure_payload: bool = False
 
     def to_benchmark_config(self) -> BenchmarkConfig:
         """Convert to BenchmarkConfig for use with embed_image/extract_and_measure."""
         return BenchmarkConfig(
             wavelet=self.wavelet,
             delta=self.delta,
+            payload_bits=self.payload_bits,
+            payload_seed=self.seed,
+            coefficient_seed=self.seed,
             adaptive=self.adaptive,
             delta_min=self.delta_min,
             delta_max=self.delta_max,
             rs_nsym=self.rs_nsym,
             repetitions=self.repetitions,
+            use_legacy_secure_payload=self.use_legacy_secure_payload,
         )
 
 
@@ -44,20 +52,20 @@ class EvalConfig:
 # ---------------------------------------------------------------------------
 
 def get_baseline_config() -> EvalConfig:
-    """Default baseline configuration."""
-    return EvalConfig(label="baseline_haar_d60")
+    """Paper-aligned main configuration."""
+    return EvalConfig(label="main_haar_d16_raw128")
 
 
 def get_delta_sweep() -> list[EvalConfig]:
-    """Delta parameter sweep: 30, 40, 50, 60, 70, 80."""
+    """Delta calibration candidates: 8, 16, 24, 32."""
     return [
         EvalConfig(label=f"delta_{int(d)}", delta=d)
-        for d in [30.0, 40.0, 50.0, 60.0, 70.0, 80.0]
+        for d in [8.0, 16.0, 24.0, 32.0]
     ]
 
 
 def get_wavelet_comparison() -> list[EvalConfig]:
-    """Haar vs db4 wavelet comparison."""
+    """Optional wavelet comparison outside the main experiment."""
     return [
         EvalConfig(label="wavelet_haar", wavelet="haar"),
         EvalConfig(label="wavelet_db4", wavelet="db4"),
@@ -65,15 +73,15 @@ def get_wavelet_comparison() -> list[EvalConfig]:
 
 
 def get_repetition_comparison() -> list[EvalConfig]:
-    """Repetition coding R=1 vs R=3."""
+    """Legacy repetition comparison outside the main experiment."""
     return [
         EvalConfig(label="rep_1", repetitions=1),
-        EvalConfig(label="rep_3", repetitions=3),
+        EvalConfig(label="rep_3", repetitions=3, use_legacy_secure_payload=True),
     ]
 
 
 def get_tiling_comparison() -> list[EvalConfig]:
-    """Tiled vs non-tiled embedding."""
+    """Legacy tiling comparison outside the main experiment."""
     return [
         EvalConfig(label="no_tiling", tiled=False),
         EvalConfig(label="tiled_256", tiled=True, tile_size=256),
@@ -81,7 +89,7 @@ def get_tiling_comparison() -> list[EvalConfig]:
 
 
 def get_adaptive_comparison() -> list[EvalConfig]:
-    """Uniform vs adaptive masking."""
+    """Optional adaptive masking comparison outside the main experiment."""
     return [
         EvalConfig(label="uniform", adaptive=False),
         EvalConfig(label="adaptive", adaptive=True),
@@ -89,11 +97,7 @@ def get_adaptive_comparison() -> list[EvalConfig]:
 
 
 def get_full_sweep() -> list[EvalConfig]:
-    """All configurations deduplicated (~15 configs).
-
-    Combines delta sweep + wavelet + repetition + tiling + adaptive
-    with duplicates removed by label.
-    """
+    """Legacy broad sweep retained for optional exploratory work."""
     configs: dict[str, EvalConfig] = {}
 
     for config_list in [
