@@ -1,0 +1,86 @@
+{
+  "seed": 0,
+  "quotas": {
+    "train": 10000,
+    "val": 1000,
+    "test": 500
+  },
+  "counts": {
+    "train": 10000,
+    "val": 1000,
+    "test": 500
+  },
+  "candidate_limit": 18400,
+  "scanned": 76245,
+  "drops": {
+    "rating": 0,
+    "mimetype": 228,
+    "dimensions": 1479,
+    "aspect": 1480,
+    "blacklist": 2239,
+    "whitelist": 3640,
+    "artist": 48779
+  },
+  "download_stats": {
+    "requested": 18400,
+    "downloaded": 18400,
+    "resumed": 0,
+    "missing": 0,
+    "corrupt": 6,
+    "processed": 18394
+  },
+  "removed_exact": 0,
+  "removed_near": 278,
+  "filter": {
+    "min_width": 512,
+    "min_height": 512,
+    "aspect": [
+      0.5,
+      2.0
+    ],
+    "ratings": [
+      "general",
+      "safe"
+    ],
+    "mimetypes": [
+      "image/jpeg",
+      "image/png"
+    ],
+    "require_artist": true,
+    "whitelist": [
+      "1boy",
+      "1girl",
+      "1other",
+      "2boys",
+      "2girls",
+      "3boys",
+      "3girls",
+      "4boys",
+      "4girls",
+      "5boys",
+      "5girls",
+      "6+boys",
+      "6+girls",
+      "cel_shading",
+      "flat_color",
+      "illustration",
+      "line_art",
+      "monochrome",
+      "multiple_boys",
+      "multiple_girls",
+      "multiple_others",
+      "no_humans",
+      "original",
+      "scenery"
+    ],
+    "blacklist": [
+      "3d",
+      "comic",
+      "multiple_views",
+      "photo",
+      "realistic",
+      "screenshot",
+      "text_focus"
+    ]
+  }
+}
