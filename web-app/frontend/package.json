@@ -2,6 +2,9 @@
   "name": "watermark-app",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=18 <23"
+  },
   "dependencies": {
     "axios": "^1.6.2",
     "lucide-react": "^0.294.0",
@@ -9,7 +12,9 @@
     "react-dom": "^18.2.0"
   },
   "scripts": {
+    "prestart": "node -e \"const v=process.versions.node.split('.') ; const major=Number(v[0]); if(major<18||major>=23){ console.warn('Warning: Unsupported Node.js version '+process.versions.node+'. Recommended: 18, 20, or 22.'); } \"",
     "start": "react-scripts start",
+    "prebuild": "node -e \"const v=process.versions.node.split('.') ; const major=Number(v[0]); if(major<18||major>=23){ console.warn('Warning: Unsupported Node.js version '+process.versions.node+'. Recommended: 18, 20, or 22.'); } \"",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

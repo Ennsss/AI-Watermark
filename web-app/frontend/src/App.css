@@ -367,6 +367,22 @@ body {
   transform: translateY(-1px);
 }
 
+.result-actions {
+  display: flex;
+  gap: 0.75rem;
+  flex-wrap: wrap;
+}
+
+.secondary-button {
+  background: var(--bg-white);
+  color: var(--primary);
+  border: 1px solid var(--primary);
+}
+
+.secondary-button:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
 .extraction-results {
   display: flex;
   flex-direction: column;

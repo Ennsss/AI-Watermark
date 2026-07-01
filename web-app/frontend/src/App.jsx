@@ -1,19 +1,26 @@
-import React, { useState } from 'react';
-import { Upload, Download, Zap, Info, AlertCircle } from 'lucide-react';
+import React from 'react';
+import {
+  Upload,
+  Download,
+  Zap,
+  Info,
+  AlertCircle,
+} from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import './App.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export default function App() {
-  const [activeTab, setActiveTab] = useState('embed');
-  const [imageFile, setImageFile] = useState(null);
-  const [imagePreview, setImagePreview] = useState(null);
-  const [loading, setLoading] = useState(false);
-  const [result, setResult] = useState(null);
-  const [error, setError] = useState(null);
-  const [delta, setDelta] = useState(16);
-  const [payload, setPayload] = useState('');
+  const fileInputRef = React.useRef(null);
+  const [activeTab, setActiveTab] = React.useState('embed');
+  const [imageFile, setImageFile] = React.useState(null);
+  const [imagePreview, setImagePreview] = React.useState(null);
+  const [loading, setLoading] = React.useState(false);
+  const [result, setResult] = React.useState(null);
+  const [error, setError] = React.useState(null);
+  const [delta, setDelta] = React.useState(16);
+  const [payload, setPayload] = React.useState('');
 
   const handleImageSelect = (e) => {
     const file = e.target.files?.[0];
@@ -72,6 +79,8 @@ export default function App() {
         type: 'embed',
         data: response.data,
         imageBase64: response.data.image,
+        requestedDelta: delta,
+        requestedPayload: payload || 'a'.repeat(32),
       });
     } catch (err) {
       setError(
@@ -132,10 +141,20 @@ export default function App() {
     link.click();
   };
 
+  const handleEmbedAnother = () => {
+    setImageFile(null);
+    setImagePreview(null);
+    setResult(null);
+    setError(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+  };
+
   return (
     <div className="app">
       <header className="header">
-        <h1>🎨 AI Watermark</h1>
+        <h1>AI Watermark</h1>
         <p>DWT-QIM Watermarking for Digital Art</p>
       </header>
 
@@ -147,14 +166,14 @@ export default function App() {
             onClick={() => setActiveTab('embed')}
           >
             <Zap size={18} />
-            Embed Watermark
+            Embed
           </button>
           <button
             className={`tab ${activeTab === 'extract' ? 'active' : ''}`}
             onClick={() => setActiveTab('extract')}
           >
             <Download size={18} />
-            Extract Watermark
+            Extract
           </button>
         </div>
 
@@ -169,6 +188,7 @@ export default function App() {
                 onChange={handleImageSelect}
                 disabled={loading}
                 className="file-input"
+                ref={fileInputRef}
               />
               <label htmlFor="image-input" className="upload-label">
                 <Upload size={32} />
@@ -245,12 +265,12 @@ export default function App() {
             ) : activeTab === 'embed' ? (
               <>
                 <Zap size={20} />
-                Embed Watermark
+                Embed
               </>
             ) : (
               <>
                 <Download size={20} />
-                Extract Watermark
+                Extract
               </>
             )}
           </button>
@@ -267,10 +287,16 @@ export default function App() {
                   <div className="result-image">
                     <img src={`data:image/png;base64,${result.imageBase64}`} alt="Watermarked" />
                   </div>
-                  <button className="download-button" onClick={downloadImage}>
-                    <Download size={18} />
-                    Download Image
-                  </button>
+                  <div className="result-actions">
+                    <button className="download-button" onClick={downloadImage}>
+                      <Download size={18} />
+                      Download Image
+                    </button>
+                    <button className="download-button secondary-button" onClick={handleEmbedAnother}>
+                      <Upload size={18} />
+                      Embed Another Image
+                    </button>
+                  </div>
                 </>
               )}
 
@@ -298,9 +324,15 @@ export default function App() {
                   <Info size={16} /> Parameters Used
                 </h4>
                 <ul>
+                  {result.requestedDelta !== undefined && (
+                    <li>Requested Delta (UI): {result.requestedDelta}</li>
+                  )}
                   <li>Wavelet: {result.data.parameters.wavelet}</li>
                   <li>DWT Level: {result.data.parameters.dwt_level}</li>
                   <li>Delta: {result.data.parameters.delta}</li>
+                  {result.data.parameters.payload_hex && (
+                    <li>Payload: {result.data.parameters.payload_hex}</li>
+                  )}
                 </ul>
               </div>
             </section>
@@ -309,7 +341,7 @@ export default function App() {
       </main>
 
       <footer className="footer">
-        <p>🔒 DWT-QIM Watermarking | Research Implementation</p>
+        <p>DWT-QIM Watermarking | Research Implementation</p>
       </footer>
     </div>
   );

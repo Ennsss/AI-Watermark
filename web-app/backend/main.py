@@ -6,7 +6,7 @@ import base64
 from pathlib import Path
 from typing import Optional
 
-from fastapi import FastAPI, File, UploadFile, HTTPException, BackgroundTasks
+from fastapi import FastAPI, File, Form, UploadFile, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from PIL import Image
@@ -45,7 +45,7 @@ DEFAULT_PARAMS = {
     "wavelet": "haar",
     "dwt_level": 2,
     "target_subbands": ["LH2", "HL2"],
-    "delta": 60.0,  # Default quantization step
+    "delta": 16.0,  # Default quantization step
     "payload": bytes([0xAA] * 16),  # 128-bit test payload
 }
 
@@ -54,11 +54,6 @@ def image_to_base64(image_array: np.ndarray) -> str:
     """Convert numpy array to base64 string."""
     if image_array.dtype != np.uint8:
         image_array = np.clip(image_array, 0, 255).astype(np.uint8)
-    
-    # Handle different channel counts
-    if len(image_array.shape) == 3 and image_array.shape[2] == 3:
-        # BGR to RGB
-        image_array = cv2.cvtColor(image_array, cv2.COLOR_BGR2RGB)
     
     image = Image.fromarray(image_array)
     buffer = io.BytesIO()
@@ -86,8 +81,8 @@ async def health_check():
 @app.post("/api/embed")
 async def embed_watermark_endpoint(
     file: UploadFile = File(...),
-    delta: int = DEFAULT_PARAMS["delta"],
-    payload: Optional[str] = None,
+    delta: float = Form(DEFAULT_PARAMS["delta"]),
+    payload: Optional[str] = Form(None),
 ):
     """
     Embed watermark into an image.
@@ -106,6 +101,9 @@ async def embed_watermark_endpoint(
     
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
+
+    if delta < 4 or delta > 64:
+        raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")
     
     try:
         # Read image
@@ -175,10 +173,11 @@ async def embed_watermark_endpoint(
             "format": "png",
             "size": image_array.shape,
             "parameters": {
-                "delta": delta,
+                "delta": float(delta),
                 "wavelet": DEFAULT_PARAMS["wavelet"],
                 "dwt_level": DEFAULT_PARAMS["dwt_level"],
                 "subbands": DEFAULT_PARAMS["target_subbands"],
+                "payload_hex": watermark_payload.hex(),
             },
         })
         
@@ -191,8 +190,8 @@ async def embed_watermark_endpoint(
 @app.post("/api/extract")
 async def extract_watermark_endpoint(
     file: UploadFile = File(...),
-    delta: int = DEFAULT_PARAMS["delta"],
-    use_cnn: bool = False,
+    delta: float = Form(DEFAULT_PARAMS["delta"]),
+    use_cnn: bool = Form(False),
 ):
     """
     Extract watermark from an image.
@@ -212,6 +211,9 @@ async def extract_watermark_endpoint(
     
     if not file.content_type.startswith("image/"):
         raise HTTPException(status_code=400, detail="File must be an image")
+
+    if delta < 4 or delta > 64:
+        raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")
     
     try:
         # Read image
@@ -265,7 +267,7 @@ async def extract_watermark_endpoint(
             "bit_error_rate": ber,
             "confidence": confidence,
             "parameters": {
-                "delta": delta,
+                "delta": float(delta),
                 "wavelet": DEFAULT_PARAMS["wavelet"],
                 "dwt_level": DEFAULT_PARAMS["dwt_level"],
             },
