@@ -279,6 +279,114 @@ async def extract_watermark_endpoint(
         raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
 
 
+@app.post("/api/detect")
+async def detect_watermark_endpoint(
+    file: UploadFile = File(...),
+    threshold: float = Form(0.5),
+):
+    """
+    Detect if an image contains a watermark by trying multiple Delta values.
+    
+    Parameters:
+    - file: Image file (JPEG, PNG)
+    - threshold: Confidence threshold for detection (0-1, default: 0.5)
+    
+    Returns:
+    - watermark_detected: Boolean indicating if watermark was found
+    - confidence: Confidence score (0-1)
+    - detection_probability: Probability that watermark is present
+    - delta_used: The Delta value that gave the best detection result
+    """
+    if file.size > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+    
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+    
+    if threshold < 0 or threshold > 1:
+        raise HTTPException(status_code=400, detail="Threshold must be between 0 and 1")
+    
+    try:
+        # Read image
+        image_data = await file.read()
+        image_array = cv2.imdecode(
+            np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR
+        )
+        
+        if image_array is None:
+            raise ValueError("Could not decode image")
+        
+        # Convert BGR to RGB
+        image_array = cv2.cvtColor(image_array, cv2.COLOR_BGR2RGB)
+        
+        # Validate
+        validate_image(image_array)
+        
+        # Resize if needed
+        if image_array.shape[0] != 512 or image_array.shape[1] != 512:
+            image_array = cv2.resize(image_array, (512, 512))
+        
+        # Convert RGB to YCbCr and extract Y channel
+        ycbcr = rgb_to_ycbcr(image_array)
+        y_channel = extract_y_channel(ycbcr)
+        y_padded, pad_sizes = pad_to_multiple(y_channel, multiple=2**DEFAULT_PARAMS["dwt_level"])
+        
+        # Try multiple common Delta values and find best detection
+        delta_values = [4, 8, 12, 16, 20, 24, 28, 32, 40, 48, 56, 64]
+        best_confidence = 0
+        best_delta = 16
+        best_ber = 1.0
+        default_bits = np.unpackbits(np.frombuffer(DEFAULT_PARAMS["payload"], dtype=np.uint8))
+        
+        for delta in delta_values:
+            try:
+                num_bits = 128  # Fixed payload size
+                extracted_bits = extract_watermark(
+                    y_padded,
+                    num_bits=num_bits,
+                    seed=42,  # Must match embedding
+                    delta=float(delta),
+                    wavelet=DEFAULT_PARAMS["wavelet"],
+                    level=DEFAULT_PARAMS["dwt_level"],
+                    target_subbands=tuple(s.lower() for s in DEFAULT_PARAMS["target_subbands"]),
+                )
+                
+                # Calculate BER against default payload
+                ber = float(np.sum(extracted_bits != default_bits)) / len(extracted_bits)
+                confidence = max(0, 1.0 - ber)  # Confidence decreases with BER
+                
+                # Track best result
+                if confidence > best_confidence:
+                    best_confidence = confidence
+                    best_delta = delta
+                    best_ber = ber
+            except Exception:
+                # If extraction fails for this delta, continue trying others
+                continue
+        
+        # Determine if watermark is detected based on threshold
+        watermark_detected = best_confidence >= threshold
+        
+        return JSONResponse({
+            "status": "success",
+            "watermark_detected": watermark_detected,
+            "confidence": best_confidence,
+            "detection_probability": best_confidence,
+            "bit_error_rate": best_ber,
+            "threshold_used": threshold,
+            "parameters": {
+                "delta": float(best_delta),
+                "wavelet": DEFAULT_PARAMS["wavelet"],
+                "dwt_level": DEFAULT_PARAMS["dwt_level"],
+            },
+        })
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
+
+
 @app.get("/api/config")
 async def get_config():
     """Get default configuration parameters."""
