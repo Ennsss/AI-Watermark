@@ -387,6 +387,115 @@ async def detect_watermark_endpoint(
         raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
 
 
+@app.post("/api/remove")
+async def remove_watermark_endpoint(
+    file: UploadFile = File(...),
+    delta: float = Form(DEFAULT_PARAMS["delta"]),
+):
+    """
+    Remove watermark from an image by extracting and inverting the embedded signal.
+    
+    Parameters:
+    - file: Watermarked image file (JPEG, PNG)
+    - delta: Quantization step used for embedding (default: 16)
+    
+    Returns:
+    - Cleaned image (watermark removed) as base64-encoded PNG
+    - Processing details
+    """
+    if file.size > MAX_FILE_SIZE:
+        raise HTTPException(status_code=413, detail="File too large")
+    
+    if not file.content_type.startswith("image/"):
+        raise HTTPException(status_code=400, detail="File must be an image")
+
+    if delta < 4 or delta > 64:
+        raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")
+    
+    try:
+        # Read image
+        image_data = await file.read()
+        image_array = cv2.imdecode(
+            np.frombuffer(image_data, np.uint8), cv2.IMREAD_COLOR
+        )
+        
+        if image_array is None:
+            raise ValueError("Could not decode image")
+        
+        # Convert BGR to RGB
+        image_array = cv2.cvtColor(image_array, cv2.COLOR_BGR2RGB)
+        
+        # Validate
+        validate_image(image_array)
+        
+        # Resize to expected dimensions if needed
+        if image_array.shape[0] != 512 or image_array.shape[1] != 512:
+            image_array = cv2.resize(image_array, (512, 512))
+        
+        # Convert RGB to YCbCr and extract Y channel
+        ycbcr = rgb_to_ycbcr(image_array)
+        y_channel = extract_y_channel(ycbcr)
+        y_padded, pad_sizes = pad_to_multiple(y_channel, multiple=2**DEFAULT_PARAMS["dwt_level"])
+        
+        # Step 1: Extract the watermark bits
+        num_bits = 128  # Fixed payload size
+        extracted_bits = extract_watermark(
+            y_padded,
+            num_bits=num_bits,
+            seed=42,  # Must match embedding
+            delta=float(delta),
+            wavelet=DEFAULT_PARAMS["wavelet"],
+            level=DEFAULT_PARAMS["dwt_level"],
+            target_subbands=tuple(s.lower() for s in DEFAULT_PARAMS["target_subbands"]),
+        )
+        
+        # Step 2: Invert the bits (bitwise NOT) to get inverse watermark
+        inverse_bits = 1 - extracted_bits
+        
+        # Step 3: Embed the inverse watermark to cancel out the original
+        y_cleaned = embed_watermark(
+            y_padded,
+            inverse_bits,
+            seed=42,  # Must match original embedding
+            delta=float(delta),
+            wavelet=DEFAULT_PARAMS["wavelet"],
+            level=DEFAULT_PARAMS["dwt_level"],
+            target_subbands=tuple(s.lower() for s in DEFAULT_PARAMS["target_subbands"]),
+        )
+        
+        # Step 4: Remove padding
+        y_cleaned = y_cleaned[:y_channel.shape[0], :y_channel.shape[1]]
+        
+        # Replace Y channel in YCbCr
+        ycbcr[:, :, 0] = y_cleaned
+        
+        # Convert back to RGB
+        cleaned_rgb = ycbcr_to_rgb(ycbcr)
+        cleaned_rgb = np.clip(cleaned_rgb, 0, 255).astype(np.uint8)
+        
+        # Convert to base64
+        result_base64 = image_to_base64(cleaned_rgb)
+        
+        return JSONResponse({
+            "status": "success",
+            "image": result_base64,
+            "format": "png",
+            "size": image_array.shape,
+            "parameters": {
+                "delta": float(delta),
+                "wavelet": DEFAULT_PARAMS["wavelet"],
+                "dwt_level": DEFAULT_PARAMS["dwt_level"],
+                "subbands": DEFAULT_PARAMS["target_subbands"],
+                "extracted_payload": np.packbits(extracted_bits).tobytes().hex(),
+            },
+        })
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
+
+
 @app.get("/api/config")
 async def get_config():
     """Get default configuration parameters."""

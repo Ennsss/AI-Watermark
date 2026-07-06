@@ -3,7 +3,6 @@ import {
   Upload,
   Download,
   Zap,
-  Info,
   AlertCircle,
   Search,
 } from 'lucide-react/dist/cjs/lucide-react';
@@ -139,7 +138,7 @@ export default function App() {
         formData.append('file', file);
 
         const response = await axios.post(
-          `${API_BASE_URL}/api/extract`,
+          `${API_BASE_URL}/api/remove`,
           formData,
           {
             headers: { 'Content-Type': 'multipart/form-data' },
@@ -154,7 +153,7 @@ export default function App() {
       }
 
       setResult({
-        type: 'extract',
+        type: 'remove',
         data: results,
       });
     } catch (err) {
@@ -220,15 +219,6 @@ export default function App() {
     // Remove extension from fileName and add .png
     const nameWithoutExt = fileName.substring(0, fileName.lastIndexOf('.')) || fileName;
     link.download = `${nameWithoutExt}-watermarked.png`;
-    link.click();
-  };
-
-  const downloadImage = () => {
-    if (!result?.imageBase64) return;
-
-    const link = document.createElement('a');
-    link.href = `data:image/png;base64,${result.imageBase64}`;
-    link.download = `watermarked-${Date.now()}.png`;
     link.click();
   };
 
@@ -429,7 +419,8 @@ export default function App() {
             <section className="results-section">
               <h3>
                 {result.type === 'embed' ? '✅ Watermarks Embedded' : 
-                 result.type === 'extract' ? '✅ Watermarks Removed' :
+                 result.type === 'remove' ? '✅ Watermarks Removed' :
+                 result.type === 'extract' ? '✅ Watermarks Extracted' :
                  '✅ Detection Complete'}
               </h3>
 
@@ -441,6 +432,34 @@ export default function App() {
                         <h4>{item.fileName}</h4>
                         <div className="result-image">
                           <img src={`data:image/png;base64,${item.image}`} alt="Watermarked" />
+                        </div>
+                        <button
+                          className="download-button"
+                          onClick={() => downloadEmbeddedImage(item.image, item.fileName)}
+                        >
+                          <Download size={18} />
+                          Download
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="result-actions">
+                    <button className="download-button secondary-button" onClick={handleEmbedAnother}>
+                      <Upload size={18} />
+                      Process Another Batch
+                    </button>
+                  </div>
+                </>
+              )}
+
+              {result.type === 'remove' && (
+                <>
+                  <div className="results-grid">
+                    {result.data.map((item, idx) => (
+                      <div key={idx} className="result-card">
+                        <h4>{item.fileName}</h4>
+                        <div className="result-image">
+                          <img src={`data:image/png;base64,${item.image}`} alt="Watermark Removed" />
                         </div>
                         <button
                           className="download-button"
