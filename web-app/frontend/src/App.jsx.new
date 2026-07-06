@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import {
   Home,
@@ -12,7 +12,6 @@ import {
 
 import DashboardPage from './pages/DashboardPage';
 import ArtworksPage from './pages/ArtworksPage';
-import ArtworkDetailPage from './pages/ArtworkDetailPage';
 import RegisterArtworkPage from './pages/RegisterArtworkPage';
 import VerifyImagePage from './pages/VerifyImagePage';
 import VerificationHistoryPage from './pages/VerificationHistoryPage';
@@ -100,7 +99,6 @@ function AppPages() {
     <Routes>
       <Route path="/" element={<DashboardPage />} />
       <Route path="/artworks" element={<ArtworksPage />} />
-      <Route path="/artworks/:artworkId" element={<ArtworkDetailPage />} />
       <Route path="/register" element={<RegisterArtworkPage />} />
       <Route path="/verify" element={<VerifyImagePage />} />
       <Route path="/history" element={<VerificationHistoryPage />} />

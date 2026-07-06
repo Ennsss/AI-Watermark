@@ -1,0 +1,92 @@
+/* Verify Image Page */
+.verify-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.verify-form {
+  background-color: white;
+  padding: 32px;
+  border-radius: 8px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.result-card {
+  background-color: white;
+  border-radius: 8px;
+  padding: 40px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.result-card.success {
+  border-top: 4px solid #27ae60;
+}
+
+.result-card.warning {
+  border-top: 4px solid #f39c12;
+}
+
+.result-card.error {
+  border-top: 4px solid #e74c3c;
+}
+
+.result-icon {
+  margin-bottom: 20px;
+}
+
+.result-icon svg {
+  width: 48px;
+  height: 48px;
+  color: #27ae60;
+}
+
+.result-card.warning .result-icon svg {
+  color: #f39c12;
+}
+
+.result-card.error .result-icon svg {
+  color: #e74c3c;
+}
+
+.result-details {
+  background-color: #f8f9fa;
+  padding: 20px;
+  border-radius: 8px;
+  margin: 24px 0;
+  text-align: left;
+}
+
+.result-message {
+  background-color: #e8f5e9;
+  border-left: 4px solid #27ae60;
+  padding: 16px;
+  border-radius: 4px;
+  margin-bottom: 24px;
+  color: #1b5e20;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.result-card.warning .result-message {
+  background-color: #fff8e1;
+  border-left-color: #f39c12;
+  color: #7d6608;
+}
+
+.result-card.error .result-message {
+  background-color: #ffebee;
+  border-left-color: #e74c3c;
+  color: #b71c1c;
+}
+
+@media (max-width: 768px) {
+  .verify-form {
+    padding: 20px;
+  }
+  
+  .result-card {
+    padding: 24px;
+  }
+}
