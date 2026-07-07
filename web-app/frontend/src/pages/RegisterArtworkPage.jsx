@@ -115,20 +115,20 @@ export default function RegisterArtworkPage() {
 
           <div className="result-details">
             <div className="detail-row">
-              <span className="label">Artwork ID:</span>
-              <span className="value">{result.artwork_id}</span>
+              <span className="label marginLeft">Artwork ID:</span>
+              <span className="value marginRight">{result.artwork_id}</span>
             </div>
             <div className="detail-row">
-              <span className="label">Title:</span>
-              <span className="value">{result.title}</span>
+              <span className="label marginLeft">Title:</span>
+              <span className="value marginRight">{result.title}</span>
             </div>
             <div className="detail-row">
-              <span className="label">Creator:</span>
-              <span className="value">{result.creator_name}</span>
+              <span className="label marginLeft">Creator:</span>
+              <span className="value marginRight">{result.creator_name}</span>
             </div>
             <div className="detail-row">
-              <span className="label">Status:</span>
-              <span className="value watermarked">✓ Watermark Embedded</span>
+              <span className="label marginLeft">Status:</span>
+              <span className="value marginRight watermarked">✓ Watermark Embedded</span>
             </div>
           </div>
 

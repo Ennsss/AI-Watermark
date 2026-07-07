@@ -29,24 +29,24 @@ const ResultCard = ({ verification }) => {
       <h2>{styles.title}</h2>
       <div className="result-details">
         <div className="detail-row">
-          <span className="label">Verification ID:</span>
-          <span className="value">{verification.verification_id}</span>
+          <span className="label marginLeft">Verification ID:</span>
+          <span className="value marginRight">{verification.verification_id}</span>
         </div>
         {verification.artwork_id && (
           <div className="detail-row">
-            <span className="label">Against Artwork:</span>
-            <span className="value">{verification.artwork_id}</span>
+            <span className="label marginLeft">Against Artwork:</span>
+            <span className="value marginRight">{verification.artwork_id}</span>
           </div>
         )}
         {verification.ber !== null && (
           <div className="detail-row">
-            <span className="label">BER (Bit Error Rate):</span>
-            <span className="value">{verification.ber.toFixed(4)}</span>
+            <span className="label marginLeft">BER (Bit Error Rate):</span>
+            <span className="value marginRight">{verification.ber.toFixed(4)}</span>
           </div>
         )}
         <div className="detail-row">
-          <span className="label">Processing Time:</span>
-          <span className="value">{verification.processing_time_ms.toFixed(2)}ms</span>
+          <span className="label marginLeft">Processing Time:</span>
+          <span className="value marginRight">{verification.processing_time_ms.toFixed(2)}ms</span>
         </div>
       </div>
       {verification.message && (
