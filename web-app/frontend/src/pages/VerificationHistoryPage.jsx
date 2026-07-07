@@ -223,9 +223,11 @@ export default function VerificationHistoryPage() {
           {verifications.map((ver) => (
             <article key={ver.verification_id} className={`history-card ${ver.result_status}`}>
               <div className="history-card-top">
-                <div>
+                <div className="history-card-title-block">
                   <p className="card-kicker">{ver.verification_id}</p>
-                  <h2>{ver.suspected_filename}</h2>
+                  <h2 className="scrollable-filename" title={ver.suspected_filename}>
+                    {ver.suspected_filename}
+                  </h2>
                 </div>
                 <div className={`result-pill ${ver.result_status}`}>
                   {getResultIcon(ver.result_status)}

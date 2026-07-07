@@ -278,7 +278,7 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
     if not artwork:
         raise HTTPException(status_code=404, detail="Artwork not found")
 
-    watermarked_path = Path(artwork.watermarked_file_path) if artwork.watermarked_file_path else None
+    watermarked_path = artwork_service.resolve_watermarked_path(artwork)
     watermarked_image_base64 = file_to_base64(watermarked_path) if watermarked_path else None
     
     return {
@@ -301,11 +301,11 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
 async def download_watermarked_artwork(artwork_id: str, db: Session = Depends(get_db)):
     """Download the watermarked artwork image."""
     artwork = artwork_service.get_artwork(db, artwork_id)
-    if not artwork or not artwork.watermarked_file_path:
+    if not artwork:
         raise HTTPException(status_code=404, detail="Watermarked image not found")
 
-    watermarked_path = Path(artwork.watermarked_file_path)
-    if not watermarked_path.exists():
+    watermarked_path = artwork_service.resolve_watermarked_path(artwork)
+    if not watermarked_path:
         raise HTTPException(status_code=404, detail="Watermarked image not found")
 
     return FileResponse(

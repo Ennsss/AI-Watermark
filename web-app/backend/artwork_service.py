@@ -93,16 +93,50 @@ class ArtworkService:
         """Get payload for an artwork."""
         artwork = self.get_artwork(db, artwork_id)
         return artwork.payload if artwork else None
+
+    def resolve_watermarked_path(self, artwork: Artwork) -> Optional[Path]:
+        """Resolve a watermarked image path even if an old absolute path was stored."""
+        if not artwork or not artwork.watermarked_file_path:
+            return None
+
+        stored_path = Path(artwork.watermarked_file_path)
+        if stored_path.exists():
+            return stored_path
+
+        if artwork.watermarked_filename:
+            fallback_path = self.watermarked_dir / artwork.watermarked_filename
+            if fallback_path.exists():
+                return fallback_path
+
+        return None
+
+    def resolve_original_path(self, artwork: Artwork) -> Optional[Path]:
+        """Resolve an original image path even if an old absolute path was stored."""
+        if not artwork or not artwork.original_file_path:
+            return None
+
+        stored_path = Path(artwork.original_file_path)
+        if stored_path.exists():
+            return stored_path
+
+        if artwork.original_filename:
+            fallback_path = self.originals_dir / artwork.original_filename
+            if fallback_path.exists():
+                return fallback_path
+
+        return None
     
     def delete_artwork(self, db: Session, artwork_id: str) -> bool:
         """Delete an artwork and its files."""
         artwork = self.get_artwork(db, artwork_id)
         if artwork:
             # Delete files if they exist
-            if artwork.original_file_path and os.path.exists(artwork.original_file_path):
-                os.remove(artwork.original_file_path)
-            if artwork.watermarked_file_path and os.path.exists(artwork.watermarked_file_path):
-                os.remove(artwork.watermarked_file_path)
+            original_path = self.resolve_original_path(artwork)
+            watermarked_path = self.resolve_watermarked_path(artwork)
+            if original_path:
+                os.remove(original_path)
+            if watermarked_path:
+                os.remove(watermarked_path)
             
             db.delete(artwork)
             db.commit()

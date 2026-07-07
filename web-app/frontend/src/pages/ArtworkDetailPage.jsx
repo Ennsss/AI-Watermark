@@ -66,6 +66,11 @@ export default function ArtworkDetailPage() {
   }
 
   const statusLabel = artwork.watermark_status === 'embedded' ? 'Watermarked' : artwork.watermark_status;
+  const watermarkedPreviewSrc = artwork.watermarked_download_url
+    ? `${API_BASE_URL}${artwork.watermarked_download_url}?preview=${Date.now()}`
+    : artwork.watermarked_image_base64
+      ? `data:image/png;base64,${artwork.watermarked_image_base64}`
+      : null;
 
   return (
     <div className="artwork-detail-page">
@@ -113,12 +118,17 @@ export default function ArtworkDetailPage() {
           )}
         </div>
 
-        {artwork.watermarked_image_base64 ? (
+        {watermarkedPreviewSrc ? (
           <div className="preview-stage">
             <img
               className="preview-image-large"
-              src={`data:image/png;base64,${artwork.watermarked_image_base64}`}
+              src={watermarkedPreviewSrc}
               alt={`${artwork.title} watermarked preview`}
+              onError={(event) => {
+                if (artwork.watermarked_image_base64 && !event.currentTarget.src.startsWith('data:')) {
+                  event.currentTarget.src = `data:image/png;base64,${artwork.watermarked_image_base64}`;
+                }
+              }}
             />
           </div>
         ) : (
