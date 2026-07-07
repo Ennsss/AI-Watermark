@@ -5,8 +5,8 @@
 }
 
 .dashboard-page h1 {
-  font-size: 2rem;
-  font-weight: 700;
+  font-size: 2.55rem;
+  font-weight: 800;
   color: var(--text-dark);
   margin-bottom: 0.5rem;
 }
@@ -20,32 +20,46 @@
 
 .stat-card {
   background: var(--bg-white);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   padding: 1.5rem;
   box-shadow: var(--shadow-md);
   border: 1px solid var(--border);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.18s ease;
   border-left: 4px solid var(--border);
 }
 
 .stat-card:hover {
   box-shadow: var(--shadow-lg);
   transform: translateY(-4px);
-  border-left-color: var(--primary);
+  border-left-color: var(--secondary);
 }
 
 .stat-card.highlight {
-  background: rgba(124, 58, 237, 0.05);
+  background: linear-gradient(135deg, rgba(200, 16, 46, 0.18), rgba(28, 32, 42, 0.96));
   border-left-color: var(--primary);
-  box-shadow: 0 8px 20px rgba(124, 58, 237, 0.15);
+  box-shadow: 0 12px 28px rgba(200, 16, 46, 0.18);
 }
 
 .stat-value {
+  font-family: var(--font-display);
   font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--primary);
+  font-weight: 800;
+  color: var(--secondary);
   line-height: 1;
   margin-bottom: 0.5rem;
+}
+
+.stat-card:nth-child(2) .stat-value,
+.stat-card:nth-child(5) .stat-value {
+  color: var(--accent);
+}
+
+.stat-card:nth-child(4) .stat-value {
+  color: var(--artifact-white);
+}
+
+.stat-card:nth-child(6) .stat-value {
+  color: var(--text-light);
 }
 
 .stat-label {
@@ -53,7 +67,7 @@
   color: var(--text-light);
   font-weight: 500;
   text-transform: uppercase;
-  letter-spacing: 0.5px;
+  letter-spacing: 0.08em;
 }
 
 /* Activity Section */
@@ -75,7 +89,7 @@
 
 .activity-list {
   background: var(--bg-white);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-md);
   border: 1px solid var(--border);
   overflow: hidden;
   max-height: 400px;
@@ -94,7 +108,7 @@
 }
 
 .activity-item:hover {
-  background: rgba(124, 58, 237, 0.02);
+  background: rgba(7, 190, 213, 0.08);
 }
 
 .activity-type {
@@ -103,8 +117,8 @@
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
-  background: var(--primary);
-  color: white;
+  background: rgba(7, 190, 213, 0.12);
+  color: var(--secondary);
   padding: 0.25rem 0.75rem;
   border-radius: 0.25rem;
   margin-bottom: 0.5rem;

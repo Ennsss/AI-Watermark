@@ -170,7 +170,7 @@ export default function RegisterArtworkPage() {
       <h1>Register Artwork</h1>
 
       <form onSubmit={handleSubmit} className="register-form">
-        <div className="form-group">
+        <div className="form-group margin">
           <label htmlFor="title">Artwork Title *</label>
           <input
             id="title"
@@ -183,7 +183,7 @@ export default function RegisterArtworkPage() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group margin">
           <label htmlFor="creator_name">Creator Name *</label>
           <input
             id="creator_name"
@@ -196,7 +196,7 @@ export default function RegisterArtworkPage() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group margin">
           <label htmlFor="notes">Notes (optional)</label>
           <textarea
             id="notes"
@@ -208,7 +208,7 @@ export default function RegisterArtworkPage() {
           />
         </div>
 
-        <div className="form-group">
+        <div className="form-group margin">
           <label>Upload Artwork *</label>
           <div
             className="file-upload"

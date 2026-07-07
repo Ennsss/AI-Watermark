@@ -179,7 +179,7 @@ export default function VerifyImagePage() {
       <h1>Verify Image</h1>
 
       <form onSubmit={handleVerify} className="verify-form">
-        <div className="form-group">
+        <div className="form-group margin">
           <label htmlFor="artwork-select">Verify Against * </label>
           <select
             id="artwork-select"
@@ -196,7 +196,7 @@ export default function VerifyImagePage() {
           </select>
         </div>
 
-        <div className="form-group">
+        <div className="form-group margin">
           <label>Suspected / Reposted Image *</label>
           <div
             className="file-upload"

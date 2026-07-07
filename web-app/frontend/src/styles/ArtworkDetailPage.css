@@ -19,7 +19,7 @@
 }
 
 .back-button:hover {
-  color: var(--primary);
+  color: var(--secondary);
 }
 
 .detail-hero {
@@ -28,6 +28,8 @@
   justify-content: space-between;
   gap: 1.5rem;
   background: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
 }
 
 .artwork-preview-card {
@@ -49,7 +51,7 @@
 
 .preview-stage {
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--bg-light);
 }
@@ -59,13 +61,13 @@
   width: 100%;
   max-height: 520px;
   object-fit: contain;
-  background: #fff;
+  background: var(--artifact-white);
 }
 
 .preview-empty {
   padding: 2rem;
   border: 1px dashed var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-md);
   text-align: center;
   color: var(--text-light);
   background: var(--bg-light);
@@ -89,9 +91,9 @@
 }
 
 .hero-stat {
-  background: rgba(255, 255, 255, 0.75);
+  background: var(--artifact-graphite);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-sm);
   padding: 0.9rem 1rem;
 }
 
@@ -140,7 +142,7 @@
   padding: 0.9rem 1rem;
   background: var(--bg-light);
   border: 1px solid var(--border);
-  border-radius: 0.75rem;
+  border-radius: var(--radius-sm);
 }
 
 .detail-label {
@@ -163,7 +165,7 @@
 .notes-box {
   min-height: 140px;
   padding: 1rem;
-  border-radius: 0.75rem;
+  border-radius: var(--radius-sm);
   background: var(--bg-light);
   border: 1px solid var(--border);
   color: var(--text-dark);
@@ -186,12 +188,12 @@
   text-align: center;
   background: var(--bg-white);
   border: 1px solid var(--border);
-  border-radius: 1rem;
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
 }
 
 .detail-empty-state svg {
-  color: var(--primary);
+  color: var(--secondary);
   margin-bottom: 0.75rem;
 }
 

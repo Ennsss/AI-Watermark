@@ -9,6 +9,7 @@ import {
   ArrowUpRight,
   CalendarDays,
   User,
+  Image as ImageIcon,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import '../styles/ArtworksPage.css';
@@ -82,9 +83,30 @@ export default function ArtworksPage() {
         <div className="artworks-grid">
           {artworks.map((art) => {
             const isWatermarked = art.watermark_status === 'embedded';
+            const previewSrc = art.watermarked_image_base64
+              ? `data:image/png;base64,${art.watermarked_image_base64}`
+              : art.watermarked_download_url
+                ? `${API_BASE_URL}${art.watermarked_download_url}`
+                : null;
 
             return (
               <article key={art.artwork_id} className="artwork-card">
+                <div className="artwork-preview">
+                  {previewSrc ? (
+                    <img
+                      src={previewSrc}
+                      alt={`${art.title} preview`}
+                      className="artwork-preview-image"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <div className="artwork-preview-empty">
+                      <ImageIcon size={28} />
+                    </div>
+                  )}
+                  <span className="artwork-preview-id">{art.artwork_id}</span>
+                </div>
+
                 <div className="artwork-card-top">
                   <div>
                     <p className="card-kicker">{art.artwork_id}</p>

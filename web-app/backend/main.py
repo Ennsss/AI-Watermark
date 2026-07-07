@@ -265,6 +265,16 @@ async def get_artworks(db: Session = Depends(get_db)):
                 "registration_date": art.registration_date.isoformat(),
                 "watermark_status": art.watermark_status,
                 "notes": art.notes,
+                "watermarked_download_url": (
+                    f"/api/artworks/{art.artwork_id}/watermarked"
+                    if art.watermarked_file_path
+                    else None
+                ),
+                "watermarked_image_base64": (
+                    file_to_base64(Path(art.watermarked_file_path))
+                    if art.watermarked_file_path
+                    else None
+                ),
             }
             for art in artworks
         ],
@@ -700,14 +710,14 @@ async def extract_watermark_endpoint(
 @app.post("/api/detect")
 async def detect_watermark_endpoint(
     file: UploadFile = File(...),
-    threshold: float = Form(0.5),
+    threshold: float = Form(1.0),
 ):
     """
     Detect if an image contains a watermark by trying multiple Delta values.
     
     Parameters:
     - file: Image file (JPEG, PNG)
-    - threshold: Confidence threshold for detection (0-1, default: 0.5)
+    - threshold: Confidence threshold for detection (0-1, default: 1.0)
     
     Returns:
     - watermark_detected: Boolean indicating if watermark was found

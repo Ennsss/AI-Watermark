@@ -136,18 +136,18 @@ export default function ArtworkDetailPage() {
 
           <div className="detail-list">
             <div className="detail-row">
-              <span className="detail-label"><User size={14} /> Creator</span>
-              <span className="detail-value">{artwork.creator_name}</span>
+              <span className="detail-label marginLeft"><User size={14} /> Creator</span>
+              <span className="detail-value marginRight">{artwork.creator_name}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label"><Clock3 size={14} /> Registered</span>
-              <span className="detail-value">
+              <span className="detail-label marginLeft"><Clock3 size={14} /> Registered</span>
+              <span className="detail-value marginRight">
                 {new Date(artwork.registration_date).toLocaleString()}
               </span>
             </div>
             <div className="detail-row">
-              <span className="detail-label"><CheckCircle size={14} /> Watermark</span>
-              <span className="detail-value">{statusLabel}</span>
+              <span className="detail-label marginLeft"><CheckCircle size={14} /> Watermark</span>
+              <span className="detail-value marginRight">{statusLabel}</span>
             </div>
           </div>
         </section>

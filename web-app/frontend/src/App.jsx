@@ -1,4 +1,4 @@
-﻿import React, { useState } from 'react';
+import React, { useState } from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, useLocation } from 'react-router-dom';
 import {
   Home,
@@ -36,7 +36,11 @@ function AppLayout({ children }) {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <h1 className="logo">🎨 Art Provenance</h1>
+          <div className="brand-mark" aria-hidden="true">A</div>
+          <div>
+            <h1 className="logo">Artifact</h1>
+            <p className="brand-byline">by ChickenScratch Co.</p>
+          </div>
         </div>
 
         <nav className="sidebar-nav">
