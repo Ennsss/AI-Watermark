@@ -106,7 +106,7 @@
   overflow-y: hidden;
   white-space: nowrap;
   scrollbar-width: thin;
-  scrollbar-color: rgba(124, 58, 237, 0.45) transparent;
+  scrollbar-color: var(--artifact-border) transparent;
 }
 
 .scrollable-filename {
@@ -122,7 +122,7 @@
 }
 
 .scrollable-filename::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.35);
+  background: var(--artifact-border);
   border-radius: 999px;
 }
 
