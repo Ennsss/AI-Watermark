@@ -16,6 +16,7 @@ import ArtworkDetailPage from './pages/ArtworkDetailPage';
 import RegisterArtworkPage from './pages/RegisterArtworkPage';
 import VerifyImagePage from './pages/VerifyImagePage';
 import VerificationHistoryPage from './pages/VerificationHistoryPage';
+import artifactLogo from './artifact-logo.png';
 
 import './App.css';
 
@@ -36,11 +37,8 @@ function AppLayout({ children }) {
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
-          <div className="brand-mark" aria-hidden="true">A</div>
-          <div>
-            <h1 className="logo">Artifact</h1>
-            <p className="brand-byline">by ChickenScratch Co.</p>
-          </div>
+          <img className="artifact-logo" src={artifactLogo} alt="Artifact" />
+          <p className="brand-byline">by ChickenScratch Co.</p>
         </div>
 
         <nav className="sidebar-nav">
