@@ -475,7 +475,9 @@ async def verify_image(
             "result_status": verification.result_status,
             "ber": ber,
             "processing_time_ms": processing_time_ms,
-            "threshold_used": verification_service.BER_THRESHOLD,
+            "threshold_used": verification_service.POLICY.detection_ber_threshold,
+            "policy_version": verification_service.POLICY.policy_version,
+            "threshold_provisional": True,
             "expected_payload": expected_payload_hex,
             "extracted_payload": extracted_hex,
             "differing_bits": int(np.sum(extracted_bits != expected_bits)),
@@ -512,6 +514,8 @@ async def get_verifications(db: Session = Depends(get_db), artwork_id: Optional[
                 "result_status": ver.result_status,
                 "ber": ver.ber,
                 "processing_time_ms": ver.processing_time_ms,
+                "threshold_used": ver.threshold_used,
+                "policy_version": ver.policy_version,
             }
             for ver in verifications
         ],
@@ -540,6 +544,8 @@ async def get_verification_detail(verification_id: str, db: Session = Depends(ge
             "ber": verification.ber,
             "processing_time_ms": verification.processing_time_ms,
             "threshold_used": verification.threshold_used,
+            "policy_version": verification.policy_version,
+            "threshold_provisional": (verification.policy_version or "").startswith("provisional"),
             "expected_payload": verification.expected_payload,
             "extracted_payload": verification.extracted_payload,
             "differing_bits": calculate_differing_bits(verification.expected_payload, verification.extracted_payload),
@@ -769,13 +775,15 @@ async def extract_watermark_endpoint(
         raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
 
 
-@app.post("/api/detect")
+@app.post("/api/detect", deprecated=True)
 async def detect_watermark_endpoint(
     file: UploadFile = File(...),
     threshold: float = Form(1.0),
 ):
     """
-    Detect if an image contains a watermark by trying multiple Delta values.
+    Legacy/internal research score against a default payload. This endpoint is
+    not used by the registry-selected verification workflow, and 1 - BER is not
+    a calibrated probability.
     
     Parameters:
     - file: Image file (JPEG, PNG)
@@ -784,7 +792,7 @@ async def detect_watermark_endpoint(
     Returns:
     - watermark_detected: Boolean indicating if watermark was found
     - confidence: Confidence score (0-1)
-    - detection_probability: Probability that watermark is present
+    - legacy_confidence_score: Uncalibrated legacy score derived from BER
     - delta_used: The Delta value that gave the best detection result
     """
     if file.size > MAX_FILE_SIZE:
@@ -861,7 +869,8 @@ async def detect_watermark_endpoint(
             "status": "success",
             "watermark_detected": watermark_detected,
             "confidence": best_confidence,
-            "detection_probability": best_confidence,
+            "legacy_confidence_score": best_confidence,
+            "warning": "Legacy default-payload score; not a calibrated probability or registry verification result.",
             "bit_error_rate": best_ber,
             "threshold_used": threshold,
             "parameters": {

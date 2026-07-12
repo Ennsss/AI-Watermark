@@ -94,6 +94,8 @@ The frontend defaults to `http://localhost:3000` and the API to `http://localhos
 - `GET /api/verifications/{verification_id}/report.csv` - download an individual technical report
 - `GET /api/reports/verifications.csv` - download the compact history export
 
+The selected-record BER boundary is centralized in `backend/verification_policy.py`. The current `0.15` value is retained as a **provisional legacy boundary**, not a CSRP-approved threshold. New verification rows store the policy version and threshold used. Use the read-only audit and calibration scripts under `backend/scripts` with explicitly labeled positive and negative evidence before approving a replacement value. The legacy `/api/detect` endpoint is not used by the React registry workflow and its `1 - BER` value must not be interpreted as a calibrated probability.
+
 Older `/api/embed`, `/api/extract`, `/api/detect`, and `/api/remove` research/testing routes remain for backward compatibility. They are not the primary product workflow and the React portal does not expose custom payload entry.
 
 ## Validation

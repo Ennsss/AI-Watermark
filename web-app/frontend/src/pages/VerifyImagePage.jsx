@@ -60,6 +60,8 @@ const ResultCard = ({ verification }) => {
           <dt>Differing bits</dt><dd>{verification.differing_bits ?? 'N/A'}</dd>
           <dt>Payload length</dt><dd>{verification.payload_length ? `${verification.payload_length} bits` : 'N/A'}</dd>
           <dt>Threshold used</dt><dd>{verification.threshold_used ?? 'N/A'}</dd>
+          <dt>Policy version</dt><dd>{verification.policy_version || 'Legacy / unavailable'}</dd>
+          <dt>Threshold status</dt><dd>{verification.threshold_provisional ? 'Provisional — labeled calibration pending' : 'See policy version'}</dd>
           <dt>Watermark engine</dt><dd>{verification.watermark_engine || 'DWT-QIM'}</dd>
         </dl>
       </details>

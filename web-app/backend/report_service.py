@@ -76,6 +76,8 @@ class ReportService:
         writer.writerow(["Payload Length", len(verification.expected_payload) * 4 if verification.expected_payload else "N/A"])
         writer.writerow(["BER (Bit Error Rate)", verification.ber if verification.ber is not None else "N/A"])
         writer.writerow(["Threshold Used", verification.threshold_used if verification.threshold_used is not None else "N/A"])
+        writer.writerow(["Policy Version", verification.policy_version or "Legacy / unavailable"])
+        writer.writerow(["Threshold Status", "Provisional" if (verification.policy_version or "").startswith("provisional") else "Historical / see policy version"])
         writer.writerow(["Watermark Engine", "DWT-QIM"])
         writer.writerow(["Processing Time (ms)", verification.processing_time_ms if verification.processing_time_ms is not None else "N/A"])
         

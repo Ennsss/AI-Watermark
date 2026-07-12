@@ -137,6 +137,8 @@ export default function VerificationHistoryPage() {
               <span>Payload length</span><strong>{selectedVerification.payload_length ? `${selectedVerification.payload_length} bits` : 'N/A'}</strong>
               <span>BER</span><strong>{selectedVerification.ber !== null ? selectedVerification.ber.toFixed(4) : 'N/A'}</strong>
               <span>Threshold used</span><strong>{selectedVerification.threshold_used ?? 'N/A'}</strong>
+              <span>Policy version</span><strong>{selectedVerification.policy_version || 'Legacy / unavailable'}</strong>
+              <span>Threshold status</span><strong>{selectedVerification.threshold_provisional ? 'Provisional — labeled calibration pending' : 'Historical / see policy version'}</strong>
               <span>Watermark engine</span><strong>{selectedVerification.watermark_engine || 'DWT-QIM'}</strong>
               <span>Processing time</span><strong>{selectedVerification.processing_time_ms != null ? `${selectedVerification.processing_time_ms.toFixed(2)}ms` : 'N/A'}</strong>
             </div>

@@ -16,6 +16,7 @@ from artwork_service import ArtworkService  # noqa: E402
 from database import Artwork, Base, Verification  # noqa: E402
 from report_service import ReportService  # noqa: E402
 from verification_service import VerificationService  # noqa: E402
+from verification_policy import VERIFICATION_POLICY  # noqa: E402
 
 
 def make_session():
@@ -57,7 +58,7 @@ def test_archive_excludes_active_artwork_but_preserves_history_and_files(tmp_pat
         extracted_payload="0" * 32,
         ber=0.0,
         processing_time_ms=12.5,
-        threshold_used=0.15,
+        threshold_used=VERIFICATION_POLICY.detection_ber_threshold,
     )
     db.add(verification)
     db.commit()
@@ -99,7 +100,7 @@ def test_individual_report_contains_payload_comparison_fields():
         extracted_payload="8" + "0" * 31,
         ber=1 / 128,
         processing_time_ms=8.25,
-        threshold_used=0.15,
+        threshold_used=VERIFICATION_POLICY.detection_ber_threshold,
     ))
     db.commit()
 

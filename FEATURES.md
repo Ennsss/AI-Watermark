@@ -82,6 +82,7 @@ The system includes realistic attack scenarios that simulate social media compre
 
 ### 1. **Comprehensive Metrics**
 - **Primary Metric - BER**: Bit Error Rate (Hamming distance / payload length)
+- **Versioned Verification Policy**: Selected-record classification uses one centralized, currently provisional BER policy and stores the applied threshold on new events
 - **Supporting Metrics**:
   - SSIM (Structural Similarity Index)
   - PSNR (Peak Signal-to-Noise Ratio)
