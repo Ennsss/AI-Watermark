@@ -1,6 +1,7 @@
 """Verification service for managing watermark verification."""
 
 from datetime import datetime
+from pathlib import Path
 from typing import Optional, List
 from sqlalchemy.orm import Session
 from database import Verification, Artwork
@@ -84,6 +85,25 @@ class VerificationService:
     def get_all_verifications(self, db: Session) -> List[Verification]:
         """Get all verifications."""
         return db.query(Verification).order_by(Verification.verification_date.desc()).all()
+
+    def delete_verification(self, db: Session, verification_id: str) -> bool:
+        """Delete a verification record and any stored suspected image file."""
+        verification = self.get_verification(db, verification_id)
+        if verification is None:
+            return False
+
+        suspected_path = Path(verification.suspected_file_path) if verification.suspected_file_path else None
+        db.delete(verification)
+        db.commit()
+
+        if suspected_path and suspected_path.exists():
+            try:
+                suspected_path.unlink()
+            except OSError:
+                # File cleanup failure should not fail the API after DB deletion.
+                pass
+
+        return True
     
     def classify_result(self, ber: Optional[float], error: Optional[str] = None) -> tuple:
         """Classify verification result and return status with message.

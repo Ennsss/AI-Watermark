@@ -1,11 +1,11 @@
 {
   "frontend_url": "http://localhost:3000",
-  "generated_at_epoch": 1783845014.661521,
+  "generated_at_epoch": 1783853109.995306,
   "summary": {
     "total_steps": 16,
-    "passed": 16,
+    "passed": 15,
     "failed": 0,
-    "warned": 0
+    "warned": 1
   },
   "ui_inventory": {
     "dashboard": {
@@ -46,6 +46,7 @@
       "buttons": [
         "<icon-button>",
         "Back to artworks",
+        "Edit Artwork",
         "Verify This Artwork",
         "Back to Registry",
         "Unregister Artwork"
@@ -98,21 +99,7 @@
         "<icon-button>",
         "View details",
         "Download",
-        "View details",
-        "Download"
-      ],
-      "text_inputs": 0,
-      "textareas": 0,
-      "selects": 0,
-      "file_uploads": 0,
-      "images": 1
-    },
-    "history_detail": {
-      "buttons": [
-        "<icon-button>",
-        "Back to History",
-        "Download Technical Report",
-        "Back to History"
+        "Delete"
       ],
       "text_inputs": 0,
       "textareas": 0,
@@ -197,15 +184,15 @@
       "error": null
     },
     {
-      "name": "History details",
+      "name": "Delete verification history",
       "status": "PASS",
-      "details": "Opened a verification detail record",
+      "details": "Deleted one verification history entry from the history page",
       "error": null
     },
     {
-      "name": "Console errors on history detail",
-      "status": "PASS",
-      "details": "No severe browser console errors detected",
+      "name": "History details",
+      "status": "WARN",
+      "details": "No verification cards found to open details",
       "error": null
     },
     {

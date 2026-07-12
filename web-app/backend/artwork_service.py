@@ -147,3 +147,28 @@ class ArtworkService:
         db.commit()
         db.refresh(artwork)
         return artwork
+
+    def update_artwork_fields(
+        self,
+        db: Session,
+        artwork_id: str,
+        *,
+        title: Optional[str] = None,
+        creator_name: Optional[str] = None,
+        notes: Optional[str] = None,
+    ) -> Optional[Artwork]:
+        """Update editable artwork metadata fields."""
+        artwork = self.get_artwork(db, artwork_id)
+        if not artwork:
+            return None
+
+        if title is not None:
+            artwork.title = title
+        if creator_name is not None:
+            artwork.creator_name = creator_name
+        if notes is not None:
+            artwork.notes = notes
+
+        db.commit()
+        db.refresh(artwork)
+        return artwork

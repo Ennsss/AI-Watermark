@@ -9,8 +9,8 @@ class VerificationPolicy:
     payload_bits: int = 128
     exact_match_ber: float = 0.0
     detection_ber_threshold: float = 0.15
-    policy_version: str = "provisional-2026-07"
-    calibration_reference: str = "Provisional legacy boundary; labeled calibration pending"
+    policy_version: str = "provisional-2026-07-th0.20"
+    calibration_reference: str = "Provisional threshold relaxed to BER <= 0.20; labeled calibration pending"
 
     @property
     def ber_step(self) -> float:

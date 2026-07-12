@@ -14,6 +14,7 @@ from fastapi.responses import JSONResponse, StreamingResponse, FileResponse
 from PIL import Image
 import numpy as np
 from sqlalchemy.orm import Session
+from pydantic import BaseModel
 
 # Add parent src directory to path to import watermark modules
 import sys
@@ -71,6 +72,12 @@ DEFAULT_PARAMS = {
     "delta": 16.0,  # Default quantization step
     "payload": bytes([0xAA] * 16),  # 128-bit test payload
 }
+
+
+class ArtworkUpdateRequest(BaseModel):
+    title: Optional[str] = None
+    creator_name: Optional[str] = None
+    notes: Optional[str] = None
 
 
 def image_to_base64(image_array: np.ndarray) -> str:
@@ -339,6 +346,63 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
     }
 
 
+@app.patch("/api/artworks/{artwork_id}")
+async def update_artwork(artwork_id: str, payload: ArtworkUpdateRequest, db: Session = Depends(get_db)):
+    """Update editable artwork metadata."""
+    artwork = artwork_service.get_artwork(db, artwork_id)
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+
+    title = payload.title.strip() if payload.title is not None else None
+    creator_name = payload.creator_name.strip() if payload.creator_name is not None else None
+    notes = payload.notes.strip() if payload.notes is not None else None
+
+    if title is not None:
+        if not title:
+            raise HTTPException(status_code=422, detail="Artwork title is required")
+        if len(title) > TITLE_MAX_LENGTH:
+            raise HTTPException(status_code=422, detail=f"Artwork title must be {TITLE_MAX_LENGTH} characters or fewer")
+
+    if creator_name is not None:
+        if not creator_name:
+            raise HTTPException(status_code=422, detail="Creator name is required")
+        if len(creator_name) > CREATOR_MAX_LENGTH:
+            raise HTTPException(status_code=422, detail=f"Creator name must be {CREATOR_MAX_LENGTH} characters or fewer")
+
+    if payload.notes is not None and notes and len(notes) > NOTES_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Notes must be {NOTES_MAX_LENGTH} characters or fewer")
+
+    updated = artwork_service.update_artwork_fields(
+        db,
+        artwork_id,
+        title=title,
+        creator_name=creator_name,
+        notes=notes if payload.notes is not None else None,
+    )
+    if not updated:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+
+    watermarked_path = artwork_service.resolve_watermarked_path(updated)
+    return {
+        "status": "success",
+        "message": "Artwork updated successfully",
+        "data": {
+            "artwork_id": updated.artwork_id,
+            "title": updated.title,
+            "creator_name": updated.creator_name,
+            "registration_date": updated.registration_date.isoformat(),
+            "watermark_status": updated.watermark_status,
+            "archived_at": updated.archived_at.isoformat() if updated.archived_at else None,
+            "payload_length": len(updated.payload) * 4,
+            "payload_preview": f"{updated.payload[:4]}…{updated.payload[-4:]}",
+            "notes": updated.notes,
+            "watermarked_filename": updated.watermarked_filename,
+            "watermarked_download_url": f"/api/artworks/{updated.artwork_id}/watermarked",
+            "watermarked_image_base64": file_to_base64(watermarked_path) if watermarked_path else None,
+        },
+    }
+
+
 @app.patch("/api/artworks/{artwork_id}/archive")
 async def archive_artwork(artwork_id: str, db: Session = Depends(get_db)):
     """Remove an artwork from active workflows while preserving provenance."""
@@ -569,6 +633,34 @@ async def get_verification_report(verification_id: str, db: Session = Depends(ge
         media_type="text/csv",
         headers={"Content-Disposition": f"attachment; filename=verification_{verification_id}.csv"},
     )
+
+
+@app.delete("/api/verifications/{verification_id}")
+async def delete_verification(verification_id: str, db: Session = Depends(get_db)):
+    """Delete a verification record from history."""
+    deleted = verification_service.delete_verification(db, verification_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Verification not found")
+
+    return {
+        "status": "success",
+        "message": "Verification history entry deleted",
+        "data": {"verification_id": verification_id},
+    }
+
+
+@app.post("/api/verifications/{verification_id}/delete")
+async def delete_verification_compat(verification_id: str, db: Session = Depends(get_db)):
+    """Compatibility endpoint for environments that block DELETE methods."""
+    deleted = verification_service.delete_verification(db, verification_id)
+    if not deleted:
+        raise HTTPException(status_code=404, detail="Verification not found")
+
+    return {
+        "status": "success",
+        "message": "Verification history entry deleted",
+        "data": {"verification_id": verification_id},
+    }
 
 
 # ============================================================================

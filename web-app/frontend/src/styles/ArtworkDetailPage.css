@@ -249,6 +249,26 @@
 .unregister-modal p { color: var(--text-light); line-height: 1.7; }
 .modal-actions { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.25rem; }
 @media (max-width: 600px) { .modal-actions { flex-direction: column; } }
+.edit-modal { width: min(100%, 620px); }
+.edit-form-grid { display: grid; gap: .9rem; margin-top: .85rem; }
+.edit-field { display: grid; gap: .4rem; }
+.edit-field span { font-size: .78rem; letter-spacing: .06em; text-transform: uppercase; color: var(--text-light); font-weight: 700; }
+.edit-field input,
+.edit-field textarea {
+  width: 100%;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg-light);
+  color: var(--text-dark);
+  padding: .68rem .75rem;
+  outline: none;
+}
+.edit-field input:focus,
+.edit-field textarea:focus {
+  border-color: var(--secondary);
+  box-shadow: 0 0 0 2px rgba(7, 190, 213, .18);
+}
+.edit-field textarea { resize: vertical; }
 
 /* Keep record content contained; long metadata scrolls inside its own field. */
 .artwork-detail-page { min-width:0; overflow-x:hidden; }

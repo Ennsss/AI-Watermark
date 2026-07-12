@@ -402,6 +402,60 @@ class SmokeTestRunner:
 
         # History flow
         self.go("/history", "history", (By.XPATH, "//h1[contains(., 'Verification History')]"))
+
+        history_card_xpath = "//article[contains(@class,'history-card')]"
+        history_delete_button_xpath = "(//article[contains(@class,'history-card')])[1]//button[contains(@title, 'Delete verification')]"
+        history_cards_before_delete = len(self.driver.find_elements(By.XPATH, history_card_xpath))
+
+        if history_cards_before_delete > 0:
+            self._run_action(
+                "Delete first verification history card",
+                lambda: (
+                    self.driver.execute_script(
+                        "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});",
+                        self.driver.find_element(By.XPATH, history_delete_button_xpath),
+                    ),
+                    self.wait.until(EC.element_to_be_clickable((By.XPATH, history_delete_button_xpath))),
+                    self.driver.execute_script(
+                        "arguments[0].click();",
+                        self.driver.find_element(By.XPATH, history_delete_button_xpath),
+                    ),
+                ),
+            )
+            self._run_action(
+                "Reload history after delete",
+                lambda: self.driver.get(f"{FRONTEND_URL}/history"),
+            )
+            self._run_action(
+                "Wait for history page after delete",
+                lambda: self.wait.until(EC.presence_of_element_located((By.XPATH, "//h1[contains(., 'Verification History')]"))),
+            )
+            delete_reflected = self._run_action(
+                "Wait for persisted verification count decrease",
+                lambda: self.wait.until(
+                    lambda _driver: len(self.driver.find_elements(By.XPATH, history_card_xpath)) < history_cards_before_delete
+                ),
+                fatal=False,
+            )
+            if delete_reflected:
+                self.add_result(
+                    name="Delete verification history",
+                    status="PASS",
+                    details="Deleted one verification history entry from the history page",
+                )
+            else:
+                self.add_result(
+                    name="Delete verification history",
+                    status="FAIL",
+                    details="Delete button click did not remove a history entry; check backend DELETE /api/verifications/{id}",
+                )
+        else:
+            self.add_result(
+                name="Delete verification history",
+                status="WARN",
+                details="No verification history cards were available to delete",
+            )
+
         view_detail_clicked = self.click_first(".history-card-footer .btn-outline")
         if view_detail_clicked:
             self._run_action(
