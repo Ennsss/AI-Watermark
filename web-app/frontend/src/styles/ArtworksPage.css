@@ -275,3 +275,12 @@
     flex-direction: column;
   }
 }
+
+/* Registry collections must grow and scroll without compressing card content. */
+.artworks-page { min-height: 0; overflow-y: auto; }
+.artworks-grid { grid-template-columns: repeat(auto-fill, minmax(min(280px, 100%), 1fr)); align-items: stretch; }
+.artwork-card { min-width: 0; overflow: hidden; }
+.artwork-card-top { min-width: 0; flex-wrap: wrap; }
+.artwork-card-top > div:first-child, .meta-chip div { min-width: 0; }
+.artwork-card-title, .meta-value { overflow-wrap: anywhere; word-break: break-word; }
+.artwork-card-footer .btn { min-width: 0; white-space: normal; }

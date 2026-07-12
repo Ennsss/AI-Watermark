@@ -52,6 +52,17 @@ const ResultCard = ({ verification }) => {
       {verification.message && (
         <div className="result-message">{verification.message}</div>
       )}
+      <details className="result-technical-details">
+        <summary>Technical Details</summary>
+        <dl>
+          <dt>Expected payload</dt><dd><code>{verification.expected_payload || 'N/A'}</code></dd>
+          <dt>Extracted payload</dt><dd><code>{verification.extracted_payload || 'N/A'}</code></dd>
+          <dt>Differing bits</dt><dd>{verification.differing_bits ?? 'N/A'}</dd>
+          <dt>Payload length</dt><dd>{verification.payload_length ? `${verification.payload_length} bits` : 'N/A'}</dd>
+          <dt>Threshold used</dt><dd>{verification.threshold_used ?? 'N/A'}</dd>
+          <dt>Watermark engine</dt><dd>{verification.watermark_engine || 'DWT-QIM'}</dd>
+        </dl>
+      </details>
       <button
         className="btn btn-primary"
         onClick={() => {

@@ -62,9 +62,22 @@ class ReportService:
         
         # Technical details
         writer.writerow(["Technical Analysis"])
+        writer.writerow(["Expected Payload", verification.expected_payload or "N/A"])
+        writer.writerow(["Extracted Payload", verification.extracted_payload or "N/A"])
+        differing_bits = "N/A"
+        if verification.expected_payload and verification.extracted_payload:
+            try:
+                expected = bin(int(verification.expected_payload, 16))[2:].zfill(len(verification.expected_payload) * 4)
+                extracted = bin(int(verification.extracted_payload, 16))[2:].zfill(len(verification.extracted_payload) * 4)
+                differing_bits = sum(a != b for a, b in zip(expected, extracted)) + abs(len(expected) - len(extracted))
+            except ValueError:
+                pass
+        writer.writerow(["Differing Bits", differing_bits])
+        writer.writerow(["Payload Length", len(verification.expected_payload) * 4 if verification.expected_payload else "N/A"])
         writer.writerow(["BER (Bit Error Rate)", verification.ber if verification.ber is not None else "N/A"])
-        writer.writerow(["Processing Time (ms)", verification.processing_time_ms])
-        writer.writerow(["Threshold Used", verification.threshold_used])
+        writer.writerow(["Threshold Used", verification.threshold_used if verification.threshold_used is not None else "N/A"])
+        writer.writerow(["Watermark Engine", "DWT-QIM"])
+        writer.writerow(["Processing Time (ms)", verification.processing_time_ms if verification.processing_time_ms is not None else "N/A"])
         
         if verification.error_message:
             writer.writerow(["Error Message", verification.error_message])

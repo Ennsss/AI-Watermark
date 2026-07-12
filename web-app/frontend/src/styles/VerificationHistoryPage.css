@@ -491,3 +491,10 @@
     padding: 1.5rem;
   }
 }
+
+.technical-details { padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-light); }
+.technical-details summary { cursor: pointer; font-weight: 700; }
+.technical-grid { display: grid; grid-template-columns: minmax(130px, .35fr) minmax(0, 1fr); gap: .75rem 1rem; margin-top: 1rem; align-items: start; }
+.technical-grid span { color: var(--text-light); font-size: .82rem; font-weight: 700; text-transform: uppercase; }
+.technical-grid code { min-width: 0; padding: .6rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-white); overflow-wrap: anywhere; word-break: break-all; }
+@media (max-width: 600px) { .technical-grid { grid-template-columns: 1fr; } }

@@ -69,8 +69,15 @@ class ArtworkService:
         return db.query(Artwork).filter(Artwork.artwork_id == artwork_id).first()
     
     def get_all_artworks(self, db: Session) -> List[Artwork]:
-        """Get all artworks."""
-        return db.query(Artwork).order_by(Artwork.registration_date.desc()).all()
+        """Get active artworks available to registry and verification flows."""
+        return db.query(Artwork).filter(Artwork.archived_at.is_(None)).order_by(Artwork.registration_date.desc()).all()
+
+    def get_active_artwork(self, db: Session, artwork_id: str) -> Optional[Artwork]:
+        """Get an artwork only when it remains in the active registry."""
+        return db.query(Artwork).filter(
+            Artwork.artwork_id == artwork_id,
+            Artwork.archived_at.is_(None),
+        ).first()
     
     def update_watermark_status(
         self,
@@ -126,19 +133,13 @@ class ArtworkService:
 
         return None
     
-    def delete_artwork(self, db: Session, artwork_id: str) -> bool:
-        """Delete an artwork and its files."""
+    def archive_artwork(self, db: Session, artwork_id: str) -> Optional[Artwork]:
+        """Archive an artwork without deleting provenance records or files."""
         artwork = self.get_artwork(db, artwork_id)
-        if artwork:
-            # Delete files if they exist
-            original_path = self.resolve_original_path(artwork)
-            watermarked_path = self.resolve_watermarked_path(artwork)
-            if original_path:
-                os.remove(original_path)
-            if watermarked_path:
-                os.remove(watermarked_path)
-            
-            db.delete(artwork)
-            db.commit()
-            return True
-        return False
+        if not artwork or artwork.archived_at is not None:
+            return None
+        artwork.archived_at = datetime.utcnow()
+        artwork.watermark_status = "archived"
+        db.commit()
+        db.refresh(artwork)
+        return artwork

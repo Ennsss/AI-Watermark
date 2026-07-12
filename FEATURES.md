@@ -179,11 +179,11 @@ python -m evaluation run [options]
 ## Web Application Features
 
 ### Product Portal
-- **Dashboard** - Summary cards for artworks, watermarked records, verifications, and verification outcomes
-- **My Artworks** - Registry table showing artwork IDs, creators, status, and actions
+- **Dashboard** - Active-artwork and verification-outcome metrics without a redundant watermarked counter
+- **My Artworks** - Responsive, searchable active registry cards with contained metadata and actions
 - **Register Artwork** - Upload flow that embeds a watermark and stores the artwork record
 - **Verify Image** - Verification workflow that compares a selected artwork against a suspected image
-- **Verification History** - Event log of verification activity with record details and downloadable reports
+- **Verification History** - Searchable event log with payload-comparison details and downloadable reports
 - **Responsive Navigation** - Sidebar layout with mobile menu support
 - **Modern UI System** - Dark gradient sidebar, card-based content, gradient buttons, and polished form controls
 
@@ -202,8 +202,9 @@ python -m evaluation run [options]
   - Saves original and watermarked files
   - Returns artwork details and a base64 preview image
 
-- **GET /api/artworks** - List registered artworks
+- **GET /api/artworks** - List active registered artworks
 - **GET /api/artworks/{artwork_id}** - Retrieve a single artwork record
+- **PATCH /api/artworks/{artwork_id}/archive** - Unregister an artwork from active workflows while preserving provenance and files
 
 #### Verification Workflow
 - **POST /api/verifications** - Verify a suspected image against a selected artwork
@@ -213,7 +214,7 @@ python -m evaluation run [options]
 
 - **GET /api/verifications** - List verification records
 - **GET /api/verifications/{verification_id}** - Retrieve verification details
-- **GET /api/verifications/{verification_id}/report.csv** - Download a technical verification report
+- **GET /api/verifications/{verification_id}/report.csv** - Download a technical report with expected/extracted payloads and differing-bit count
 
 #### Legacy Watermark Operations
 - **POST /api/embed** - Embed watermark in uploaded image

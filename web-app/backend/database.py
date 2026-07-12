@@ -2,7 +2,7 @@
 
 import os
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, String, Text, Float, DateTime, ForeignKey
+from sqlalchemy import create_engine, Column, Integer, String, Text, Float, DateTime, ForeignKey, inspect, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
@@ -32,6 +32,7 @@ class Artwork(Base):
     payload = Column(Text, nullable=False)  # Store as hex string
     registration_date = Column(DateTime, default=datetime.utcnow, nullable=False)
     watermark_status = Column(String, default="embedded", nullable=False)
+    archived_at = Column(DateTime, nullable=True)
     notes = Column(Text)
     
     # Relationship
@@ -64,6 +65,13 @@ class Verification(Base):
 def init_db():
     """Initialize the database and create tables."""
     Base.metadata.create_all(bind=engine)
+    # create_all does not add columns to an existing SQLite database. Keep this
+    # small, idempotent migration here while the prototype has no migration tool.
+    if "artworks" in inspect(engine).get_table_names():
+        columns = {column["name"] for column in inspect(engine).get_columns("artworks")}
+        if "archived_at" not in columns:
+            with engine.begin() as connection:
+                connection.execute(text("ALTER TABLE artworks ADD COLUMN archived_at DATETIME"))
     print("Database initialized successfully")
 
 

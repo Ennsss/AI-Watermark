@@ -100,6 +100,18 @@ def validate_image(image_array: np.ndarray, max_size: int = 2048) -> None:
         raise ValueError(f"Image dimensions exceed maximum {max_size}x{max_size}")
 
 
+def calculate_differing_bits(expected_hex: Optional[str], extracted_hex: Optional[str]) -> Optional[int]:
+    """Return a null-safe Hamming distance for stored hexadecimal payloads."""
+    if not expected_hex or not extracted_hex:
+        return None
+    try:
+        expected = bin(int(expected_hex, 16))[2:].zfill(len(expected_hex) * 4)
+        extracted = bin(int(extracted_hex, 16))[2:].zfill(len(extracted_hex) * 4)
+    except ValueError:
+        return None
+    return sum(a != b for a, b in zip(expected, extracted)) + abs(len(expected) - len(extracted))
+
+
 @app.get("/health")
 async def health_check():
     """Health check endpoint."""
@@ -299,11 +311,30 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
             "creator_name": artwork.creator_name,
             "registration_date": artwork.registration_date.isoformat(),
             "watermark_status": artwork.watermark_status,
+            "archived_at": artwork.archived_at.isoformat() if artwork.archived_at else None,
+            "payload_length": len(artwork.payload) * 4,
+            "payload_preview": f"{artwork.payload[:4]}…{artwork.payload[-4:]}",
             "notes": artwork.notes,
             "watermarked_filename": artwork.watermarked_filename,
             "watermarked_download_url": f"/api/artworks/{artwork.artwork_id}/watermarked",
             "watermarked_image_base64": watermarked_image_base64,
         },
+    }
+
+
+@app.patch("/api/artworks/{artwork_id}/archive")
+async def archive_artwork(artwork_id: str, db: Session = Depends(get_db)):
+    """Remove an artwork from active workflows while preserving provenance."""
+    artwork = artwork_service.get_artwork(db, artwork_id)
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+    if artwork.archived_at is not None:
+        raise HTTPException(status_code=409, detail="Artwork is already unregistered")
+    archived = artwork_service.archive_artwork(db, artwork_id)
+    return {
+        "status": "success",
+        "message": "Artwork unregistered. Historical records and files were preserved.",
+        "data": {"artwork_id": archived.artwork_id, "archived_at": archived.archived_at.isoformat()},
     }
 
 
@@ -349,9 +380,9 @@ async def verify_image(
     
     try:
         # Get artwork and expected payload
-        artwork = artwork_service.get_artwork(db, artwork_id)
+        artwork = artwork_service.get_active_artwork(db, artwork_id)
         if not artwork:
-            raise HTTPException(status_code=404, detail="Artwork not found")
+            raise HTTPException(status_code=404, detail="Artwork not found in the active registry")
         
         expected_payload_hex = artwork.payload
         expected_payload = bytes_from_hex_payload(expected_payload_hex)
@@ -428,9 +459,16 @@ async def verify_image(
             "ber": ber,
             "processing_time_ms": processing_time_ms,
             "threshold_used": verification_service.BER_THRESHOLD,
+            "expected_payload": expected_payload_hex,
+            "extracted_payload": extracted_hex,
+            "differing_bits": int(np.sum(extracted_bits != expected_bits)),
+            "payload_length": len(expected_bits),
+            "watermark_engine": "DWT-QIM",
             "message": message,
         })
         
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -451,6 +489,7 @@ async def get_verifications(db: Session = Depends(get_db), artwork_id: Optional[
             {
                 "verification_id": ver.verification_id,
                 "artwork_id": ver.artwork_id,
+                "artwork_title": ver.artwork.title if ver.artwork else None,
                 "suspected_filename": ver.suspected_filename,
                 "verification_date": ver.verification_date.isoformat(),
                 "result_status": ver.result_status,
@@ -484,6 +523,12 @@ async def get_verification_detail(verification_id: str, db: Session = Depends(ge
             "ber": verification.ber,
             "processing_time_ms": verification.processing_time_ms,
             "threshold_used": verification.threshold_used,
+            "expected_payload": verification.expected_payload,
+            "extracted_payload": verification.extracted_payload,
+            "differing_bits": calculate_differing_bits(verification.expected_payload, verification.extracted_payload),
+            "payload_length": len(verification.expected_payload) * 4 if verification.expected_payload else None,
+            "watermark_engine": "DWT-QIM",
+            "error_message": verification.error_message,
         },
     }
 

@@ -1,252 +1,116 @@
-# AI Watermark Web Application
+# Artifact Web Application
 
-A mobile-responsive web application for embedding and extracting DWT-QIM watermarks on digital art.
+Artifact is a local, single-user digital artwork provenance registry. It registers an artwork, generates an `ART-XXXX` identifier and system-managed 128-bit payload, embeds that payload with the existing DWT-QIM engine, and stores a watermarked distribution copy. Verification always compares an uploaded suspected image against a user-selected active registry record and stores a `VER-XXXX` event.
+
+It is not a reverse-image-search service, legal ownership adjudicator, generic custom-payload editor, or authentication system.
+
+## Current product workflow
+
+```text
+Register artwork
+-> generate registry ID and internal payload
+-> embed and save the watermarked copy
+-> select an active artwork
+-> verify a suspected/reposted image
+-> review history and export a technical CSV report
+```
 
 ## Features
 
-- 🎨 **Embed Watermarks** - Add invisible DWT-QIM watermarks to digital images
-- 🔍 **Extract Watermarks** - Detect and extract embedded watermarks from images
-- 📱 **Mobile Responsive** - Works seamlessly on desktop, tablet, and mobile devices
-- ⚡ **Real-time Processing** - Fast image processing with instant feedback
-- 🔒 **Provenance Tracking** - Protect digital art ownership with robust watermarking
+- Dashboard metrics for active artworks and verification outcomes
+- Responsive, searchable My Artworks registry
+- Combined artwork registration and DWT-QIM embedding
+- Selected-record image verification with BER classification
+- Searchable verification history and individual technical CSV reports
+- Expected/extracted payload comparison in collapsible technical details
+- Archive-style artwork unregistration that preserves files, verification history, and reports
+- Artwork-level creator attribution (separate from any future account identity)
+
+Raw payloads remain system-managed. They are not accepted in the normal registration UI or shown on ordinary artwork cards.
 
 ## Architecture
 
-```
+```text
 web-app/
-├── backend/          # FastAPI server
-│   ├── main.py      # API endpoints
-│   └── requirements.txt
-└── frontend/         # React web app
-    ├── src/
-    │   ├── App.jsx      # Main component
-    │   ├── App.css      # Styles
-    │   └── index.jsx    # Entry point
-    ├── public/
-    │   └── index.html
-    └── package.json
+  backend/     FastAPI, SQLAlchemy/SQLite, registry/verification/report services
+  frontend/    React application
 ```
 
-## Setup Instructions
+The prototype uses SQLite and applies its small `archived_at` compatibility migration during backend startup. Archived artwork remains resolvable for historical detail/report relationships but is excluded from the active artwork list, dashboard active count, and new-verification selection.
 
-### Prerequisites
+## Prerequisites
 
 - Python 3.10+
-- Node.js 16+
-- npm or yarn
+- Node.js 18+
+- npm
 
-### Backend Setup
+## Setup
 
-1. Install Python dependencies:
-```bash
+From `web-app` on Windows:
+
+```powershell
+.\setup.ps1
+```
+
+Or install and run each side manually:
+
+```powershell
 cd backend
-pip install -r requirements.txt
-pip install -e ../../  # Install the main AI Watermark package
+py -m pip install -r requirements.txt
+py -m pip install -e ..\..\
+py main.py
 ```
 
-2. Run the FastAPI server:
-```bash
-python main.py
-```
-
-The API will be available at `http://localhost:8000`
-
-### Frontend Setup
-
-1. Install Node dependencies:
-```bash
+```powershell
 cd frontend
 npm install
-```
-
-2. Create `.env` file:
-```bash
-cp ../.env.example .env
-# Update REACT_APP_API_URL if needed
-```
-
-3. Start the development server:
-```bash
 npm start
 ```
 
-The app will open at `http://localhost:3000`
+The frontend defaults to `http://localhost:3000` and the API to `http://localhost:8000`. Set `REACT_APP_API_URL` when the backend uses a different origin.
 
-## API Endpoints
+## Product API
 
-### Health Check
-```
-GET /health
-```
+### Dashboard
 
-### Embed Watermark
-```
-POST /api/embed
-- file: Image file (multipart/form-data)
-- delta: Quantization step (optional, default: 16)
-- payload: 128-bit hex payload (optional)
+- `GET /api/dashboard/summary` - active artwork and verification-result counts
+- `GET /api/dashboard/recent-activity` - recent active registrations and verification events
 
-Response:
-{
-  "status": "success",
-  "image": "base64_encoded_image",
-  "format": "png",
-  "size": [512, 512],
-  "parameters": {...}
-}
-```
+### Artwork registry
 
-### Extract Watermark
-```
-POST /api/extract
-- file: Image file (multipart/form-data)
-- delta: Quantization step used for embedding (default: 16)
+- `POST /api/artworks/register` - register metadata, generate the payload, and embed/save a watermarked copy
+- `GET /api/artworks` - list active artwork records
+- `GET /api/artworks/{artwork_id}` - retrieve a record, including archived records needed by historical workflows
+- `GET /api/artworks/{artwork_id}/watermarked` - download the preserved watermarked copy
+- `PATCH /api/artworks/{artwork_id}/archive` - unregister from active workflows without deleting provenance data or files
 
-Response:
-{
-  "status": "success",
-  "extracted_payload": "hex_string",
-  "bit_error_rate": 0.0,
-  "confidence": 0.95,
-  "parameters": {...}
-}
-```
+### Verification and reports
 
-### Get Configuration
-```
-GET /api/config
+- `POST /api/verifications` - compare an upload against a selected active artwork
+- `GET /api/verifications` - list verification events
+- `GET /api/verifications/{verification_id}` - retrieve summary and technical comparison fields
+- `GET /api/verifications/{verification_id}/report.csv` - download an individual technical report
+- `GET /api/reports/verifications.csv` - download the compact history export
 
-Response:
-{
-  "defaults": {...},
-  "constraints": {...},
-  "supported_formats": ["JPEG", "PNG"]
-}
-```
+Older `/api/embed`, `/api/extract`, `/api/detect`, and `/api/remove` research/testing routes remain for backward compatibility. They are not the primary product workflow and the React portal does not expose custom payload entry.
 
-## Parameters
+## Validation
 
-### Quantization Step (Delta)
-- **Range**: 4 - 64
-- **Default**: 16
-- **Effect**: Higher values = more robust but more visible; Lower values = less visible but less robust
-
-### Image Size
-- **Expected**: 512 x 512 pixels
-- **Supported**: 256 x 256 to 2048 x 2048 (auto-resized)
-- **Max file size**: 50 MB
-
-### Payload
-- **Size**: 128 bits (16 bytes)
-- **Format**: Hexadecimal string (32 characters)
-- **Default**: Auto-generated test payload if not specified
-
-## Usage Examples
-
-### Embed a Watermark
-
-1. Select an image from your device
-2. Adjust Delta slider (robustness vs visibility)
-3. Optionally enter a custom 128-bit payload
-4. Click "Embed Watermark"
-5. Download the watermarked image
-
-### Extract a Watermark
-
-1. Select a watermarked image
-2. Set Delta to the value used during embedding
-3. Click "Extract Watermark"
-4. View the extracted payload and metrics:
-   - **Bit Error Rate (BER)**: Percentage of bits that differ
-   - **Confidence**: Extraction confidence score
-
-## Performance
-
-- Image processing: ~500-1000ms per image (depends on size)
-- API response time: <2s for typical images
-- Supported concurrent requests: Limited by backend workers
-
-## Troubleshooting
-
-### "Failed to embed watermark"
-- Check image format (JPEG/PNG)
-- Verify image size is reasonable
-- Ensure backend is running at correct address
-
-### "Payload must be 128 bits"
-- Enter exactly 32 hexadecimal characters
-- Example: `aabbccddeeff00112233445566778899`
-
-### CORS errors
-- Ensure `REACT_APP_API_URL` matches backend URL
-- Backend CORS is enabled for development
-
-### Extraction shows high BER
-- Image may have been degraded (compression, resize, crop)
-- Try increasing Delta value used during embedding
-- Original image may not have been watermarked
-
-## Development
-
-### Run Both Frontend and Backend
-
-```bash
-# Terminal 1: Backend
-cd backend
-python main.py
-
-# Terminal 2: Frontend  
-cd frontend
-npm start
-```
-
-### Build for Production
-
-```bash
+```powershell
 cd frontend
 npm run build
 ```
 
-Output will be in `frontend/build/`
-
-## Deployment
-
-### Docker (Optional)
-
-```dockerfile
-# Build image
-docker build -f Dockerfile -t watermark-app .
-
-# Run container
-docker run -p 8000:8000 -p 3000:3000 watermark-app
+```powershell
+py -m pytest
 ```
-
-### Cloud Deployment
-
-For AWS/GCP/Azure deployment, containerize both services and deploy to:
-- Backend: Cloud Run, Lambda, AppEngine
-- Frontend: S3 + CloudFront, Cloud Storage, or static hosting
 
 ## Limitations
 
-- Single-user tool (no authentication)
-- Watermark detection only works on images watermarked with this application
-- Does not protect against all types of image degradation
-- Research implementation, not production-grade DRM
+- Local/single-user prototype; authentication and ownership authorization are intentionally deferred
+- Verification checks only the selected registry record; it does not search the whole registry
+- Unregistration has no restore UI in this pass
+- Watermark robustness depends on the image transformation and current DWT-QIM configuration
+- Reports are technical evidence and are not legal proof of authorship, ownership, or copyright
 
-## Future Enhancements
-
-- [ ] Batch processing
-- [ ] User authentication and image library
-- [ ] Advanced extraction (CNN-assisted)
-- [ ] Watermark robustness analytics
-- [ ] Image comparison tools
-- [ ] Export analytics reports
-
-## License
-
-See main project LICENSE
-
-## Support
-
-For issues or questions, refer to the main project documentation in `docs/codebase_guide.md`
+For broader repository and research-engine details, see the root `README.md` and `docs/codebase_guide.md`.

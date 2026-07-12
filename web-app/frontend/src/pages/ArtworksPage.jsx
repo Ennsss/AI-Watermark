@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import {
   Plus,
   Eye,
@@ -12,6 +12,7 @@ import {
   Image as ImageIcon,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
+import SearchInput from '../components/SearchInput';
 import '../styles/ArtworksPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -20,7 +21,9 @@ export default function ArtworksPage() {
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     fetchArtworks();
@@ -45,6 +48,10 @@ export default function ArtworksPage() {
     navigate(`/verify?artwork_id=${artworkId}`);
   };
 
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredArtworks = artworks.filter((art) => [art.artwork_id, art.title, art.creator_name, art.watermark_status]
+    .some((value) => String(value || '').toLowerCase().includes(normalizedQuery)));
+
   if (loading) return <div className="loading">Loading artworks...</div>;
 
   return (
@@ -68,6 +75,7 @@ export default function ArtworksPage() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {location.state?.message && <div className="success-message" role="status">{location.state.message}</div>}
 
       {artworks.length === 0 ? (
         <div className="empty-state">
@@ -80,8 +88,13 @@ export default function ArtworksPage() {
           </button>
         </div>
       ) : (
+        <>
+        <SearchInput value={query} onChange={setQuery} label="Search artworks" placeholder="Search by artwork ID, title, or artist" />
+        {filteredArtworks.length === 0 ? (
+          <div className="empty-state">No artworks match your search.</div>
+        ) : (
         <div className="artworks-grid">
-          {artworks.map((art) => {
+          {filteredArtworks.map((art) => {
             const isWatermarked = art.watermark_status === 'embedded';
             const previewSrc = art.watermarked_image_base64
               ? `data:image/png;base64,${art.watermarked_image_base64}`
@@ -166,6 +179,8 @@ export default function ArtworksPage() {
             );
           })}
         </div>
+        )}
+        </>
       )}
     </div>
   );
