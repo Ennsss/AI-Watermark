@@ -1,9 +1,9 @@
 {
   "frontend_url": "http://localhost:3000",
-  "generated_at_epoch": 1783841568.4892807,
+  "generated_at_epoch": 1783845014.661521,
   "summary": {
-    "total_steps": 13,
-    "passed": 13,
+    "total_steps": 16,
+    "passed": 16,
     "failed": 0,
     "warned": 0
   },
@@ -16,7 +16,7 @@
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 0
+      "images": 1
     },
     "register": {
       "buttons": [
@@ -27,7 +27,7 @@
       "textareas": 1,
       "selects": 0,
       "file_uploads": 1,
-      "images": 0
+      "images": 1
     },
     "register_success": {
       "buttons": [
@@ -40,20 +40,21 @@
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 1
+      "images": 2
     },
     "artwork_detail": {
       "buttons": [
         "<icon-button>",
         "Back to artworks",
         "Verify This Artwork",
-        "Back to Registry"
+        "Back to Registry",
+        "Unregister Artwork"
       ],
       "text_inputs": 0,
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 1
+      "images": 2
     },
     "artworks": {
       "buttons": [
@@ -61,24 +62,13 @@
         "Register New Artwork",
         "View details",
         "Verify",
-        "View details",
-        "Verify",
-        "View details",
-        "Verify",
-        "View details",
-        "Verify",
-        "View details",
-        "Verify",
-        "View details",
-        "Verify",
-        "View details",
-        "Verify"
+        "<icon-button>"
       ],
       "text_inputs": 0,
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 7
+      "images": 2
     },
     "verify": {
       "buttons": [
@@ -89,7 +79,7 @@
       "textareas": 0,
       "selects": 1,
       "file_uploads": 1,
-      "images": 0
+      "images": 1
     },
     "verify_result": {
       "buttons": [
@@ -101,25 +91,11 @@
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 0
+      "images": 1
     },
     "history": {
       "buttons": [
         "<icon-button>",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
-        "View details",
-        "Download",
         "View details",
         "Download",
         "View details",
@@ -129,7 +105,7 @@
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 0
+      "images": 1
     },
     "history_detail": {
       "buttons": [
@@ -142,7 +118,21 @@
       "textareas": 0,
       "selects": 0,
       "file_uploads": 0,
-      "images": 0
+      "images": 1
+    },
+    "artworks_cleanup": {
+      "buttons": [
+        "<icon-button>",
+        "Register New Artwork",
+        "View details",
+        "Verify",
+        "<icon-button>"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 2
     }
   },
   "steps": [
@@ -214,6 +204,24 @@
     },
     {
       "name": "Console errors on history detail",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on artworks_cleanup",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Delete test artwork",
+      "status": "PASS",
+      "details": "Unregistered one 'Sample Artwork' entry during cleanup",
+      "error": null
+    },
+    {
+      "name": "Console errors on artworks cleanup",
       "status": "PASS",
       "details": "No severe browser console errors detected",
       "error": null

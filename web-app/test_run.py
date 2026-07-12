@@ -298,6 +298,22 @@ class SmokeTestRunner:
             lambda: self.wait.until(EC.presence_of_element_located((By.XPATH, "//h2[contains(., 'Embedded Watermark Preview')]"))),
         )
         self.route_inventory("artwork_detail")
+        self._run_action(
+            "Open detail unregister modal",
+            lambda: self.driver.find_element(By.XPATH, "//button[contains(., 'Unregister Artwork')]").click(),
+        )
+        self._run_action(
+            "Wait for detail unregister modal",
+            lambda: self.wait.until(EC.presence_of_element_located((By.ID, "unregister-title"))),
+        )
+        self._run_action(
+            "Cancel detail unregister modal",
+            lambda: self.driver.find_element(By.XPATH, "//div[contains(@class,'unregister-modal')]//button[contains(., 'Cancel')]").click(),
+        )
+        self._run_action(
+            "Wait for detail unregister modal close",
+            lambda: self.wait.until(EC.invisibility_of_element_located((By.ID, "unregister-title"))),
+        )
         self.add_result(
             name="Artwork details",
             status="PASS",
@@ -315,6 +331,22 @@ class SmokeTestRunner:
             lambda: self.wait.until(EC.presence_of_element_located((By.XPATH, "//h1[contains(., 'My Artworks')]"))),
         )
         self.route_inventory("artworks")
+        self._run_action(
+            "Open artworks unregister modal",
+            lambda: self.driver.find_element(By.CSS_SELECTOR, "button.artwork-trash-button").click(),
+        )
+        self._run_action(
+            "Wait for artworks unregister modal",
+            lambda: self.wait.until(EC.presence_of_element_located((By.ID, "card-unregister-title"))),
+        )
+        self._run_action(
+            "Cancel artworks unregister modal",
+            lambda: self.driver.find_element(By.XPATH, "//div[contains(@class,'unregister-modal')]//button[contains(., 'Cancel')]").click(),
+        )
+        self._run_action(
+            "Wait for artworks unregister modal close",
+            lambda: self.wait.until(EC.invisibility_of_element_located((By.ID, "card-unregister-title"))),
+        )
         self.check_console_errors("artworks")
 
         # Verify flow via artworks page button or direct route fallback
@@ -389,6 +421,55 @@ class SmokeTestRunner:
                 status="WARN",
                 details="No verification cards found to open details",
             )
+
+        # Cleanup flow: delete one test artwork at the end to validate unregister action.
+        self.go("/artworks", "artworks_cleanup", (By.XPATH, "//h1[contains(., 'My Artworks')]"))
+        test_artwork_card_xpath = (
+            "//article[contains(@class,'artwork-card')][.//h2[contains(@class,'artwork-card-title') and @title='Sample Artwork']]"
+        )
+        before_count = len(self.driver.find_elements(By.XPATH, test_artwork_card_xpath))
+
+        if before_count == 0:
+            self.add_result(
+                name="Delete test artwork",
+                status="WARN",
+                details="No 'Sample Artwork' card found to unregister during cleanup",
+            )
+        else:
+            self._run_action(
+                "Open cleanup unregister modal",
+                lambda: self.driver.find_element(
+                    By.XPATH,
+                    f"({test_artwork_card_xpath}//button[contains(@class,'artwork-trash-button')])[1]",
+                ).click(),
+            )
+            self._run_action(
+                "Wait for cleanup unregister modal",
+                lambda: self.wait.until(EC.presence_of_element_located((By.ID, "card-unregister-title"))),
+            )
+            self._run_action(
+                "Confirm cleanup unregister",
+                lambda: self.driver.find_element(
+                    By.XPATH,
+                    "//div[contains(@class,'unregister-modal')]//button[contains(@class,'btn-danger') and contains(., 'Unregister Artwork')]",
+                ).click(),
+            )
+            self._run_action(
+                "Wait for cleanup unregister modal close",
+                lambda: self.wait.until(EC.invisibility_of_element_located((By.ID, "card-unregister-title"))),
+            )
+            self._run_action(
+                "Wait for test artwork count decrease",
+                lambda: self.wait.until(
+                    lambda _driver: len(self.driver.find_elements(By.XPATH, test_artwork_card_xpath)) < before_count
+                ),
+            )
+            self.add_result(
+                name="Delete test artwork",
+                status="PASS",
+                details="Unregistered one 'Sample Artwork' entry during cleanup",
+            )
+            self.check_console_errors("artworks cleanup")
 
         self.add_result(
             name="Navigation coverage",
