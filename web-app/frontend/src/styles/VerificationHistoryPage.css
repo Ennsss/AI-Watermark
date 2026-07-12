@@ -10,6 +10,36 @@
   gap: 1rem;
 }
 
+.history-success-popup {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(45, 190, 120, 0.5);
+  background: rgba(45, 190, 120, 0.14);
+  color: var(--artifact-white);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-md);
+}
+
+.history-success-popup span {
+  font-weight: 700;
+  flex: 1;
+}
+
+.history-success-popup button {
+  border: none;
+  background: transparent;
+  color: var(--text-light);
+  cursor: pointer;
+  font-size: 1.1rem;
+  line-height: 1;
+}
+
+.history-success-popup button:hover {
+  color: var(--artifact-white);
+}
+
 .page-kicker {
   display: inline-flex;
   align-items: center;
@@ -420,6 +450,27 @@
   color: var(--text-dark);
 }
 
+.confirm-delete-copy {
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+.confirm-delete-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.75rem;
+  margin-top: 1rem;
+}
+
+.confirm-delete-actions .btn-danger {
+  background: var(--artifact-red);
+  color: var(--artifact-white);
+}
+
+.confirm-delete-actions .btn-danger:hover {
+  background: var(--artifact-red-dark);
+}
+
 .modal-details {
   display: flex;
   flex-direction: column;
@@ -492,6 +543,10 @@
   .modal-content {
     max-width: 100%;
     padding: 1.5rem;
+  }
+
+  .confirm-delete-actions {
+    flex-direction: column;
   }
 }
 

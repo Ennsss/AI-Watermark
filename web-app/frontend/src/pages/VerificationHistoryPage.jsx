@@ -10,9 +10,11 @@ import {
   FileText,
   Image as ImageIcon,
   ArrowLeft,
+  Trash2,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import SearchInput from '../components/SearchInput';
+import Toast from '../components/Toast';
 import '../styles/VerificationHistoryPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -48,6 +50,9 @@ export default function VerificationHistoryPage() {
   const [selectedVerification, setSelectedVerification] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [query, setQuery] = useState('');
+  const [deletingVerificationId, setDeletingVerificationId] = useState(null);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [verificationToDelete, setVerificationToDelete] = useState(null);
 
   useEffect(() => {
     fetchVerifications();
@@ -95,6 +100,31 @@ export default function VerificationHistoryPage() {
       link.parentNode.removeChild(link);
     } catch (err) {
       setError('Failed to download report');
+    }
+  };
+
+  const handleDeleteVerification = async (verificationId) => {
+    try {
+      setDeletingVerificationId(verificationId);
+      try {
+        await axios.delete(`${API_BASE_URL}/api/verifications/${verificationId}`);
+      } catch (deleteErr) {
+        if (deleteErr?.response?.status !== 405) {
+          throw deleteErr;
+        }
+        await axios.post(`${API_BASE_URL}/api/verifications/${verificationId}/delete`);
+      }
+      setVerifications((current) => current.filter((ver) => ver.verification_id !== verificationId));
+      if (selectedVerification?.verification_id === verificationId) {
+        setSelectedVerification(null);
+      }
+      setSuccessMessage(`Verification ${verificationId} deleted.`);
+      setError(null);
+    } catch (err) {
+      setError('Failed to delete verification');
+    } finally {
+      setDeletingVerificationId(null);
+      setVerificationToDelete(null);
     }
   };
 
@@ -235,6 +265,13 @@ export default function VerificationHistoryPage() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
+      {successMessage && (
+        <div className="history-success-popup" role="status" aria-live="polite">
+          <CheckCircle size={18} />
+          <span>{successMessage}</span>
+          <button type="button" onClick={() => setSuccessMessage('')} aria-label="Dismiss notification">×</button>
+        </div>
+      )}
 
       {verifications.length === 0 ? (
         <div className="empty-state">
@@ -310,6 +347,14 @@ export default function VerificationHistoryPage() {
                   <Download size={16} />
                   Download
                 </button>
+                <button
+                  className="btn btn-small artwork-trash-button"
+                  onClick={() => setVerificationToDelete(ver)}
+                  title="Delete verification"
+                  disabled={deletingVerificationId === ver.verification_id}
+                >
+                  <Trash2 size={16} />
+                </button>
               </div>
             </article>
           ))}
@@ -317,6 +362,27 @@ export default function VerificationHistoryPage() {
         )}
         </>
       )}
+      {verificationToDelete && (
+        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !deletingVerificationId) setVerificationToDelete(null); }}>
+          <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="confirm-delete-title">
+            <div className="modal-header">
+              <h2 id="confirm-delete-title" className="modal-title">Delete verification record?</h2>
+            </div>
+            <p className="confirm-delete-copy">
+              This will permanently remove verification <strong>{verificationToDelete.verification_id}</strong> from history.
+            </p>
+            <div className="confirm-delete-actions">
+              <button className="btn btn-outline" onClick={() => setVerificationToDelete(null)} disabled={Boolean(deletingVerificationId)}>
+                Cancel
+              </button>
+              <button className="btn btn-danger" onClick={() => handleDeleteVerification(verificationToDelete.verification_id)} disabled={Boolean(deletingVerificationId)}>
+                {deletingVerificationId ? 'Deleting...' : 'Delete'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+      <Toast message={successMessage} onDismiss={() => setSuccessMessage('')} />
     </div>
   );
 }

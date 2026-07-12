@@ -13,9 +13,11 @@ import {
   ArrowUpRight,
   Download,
   Trash2,
+  Pencil,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import ArtworkPreviewFallback from '../components/ArtworkPreviewFallback';
+import Toast from '../components/Toast';
 import '../styles/ArtworkDetailPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -29,6 +31,14 @@ export default function ArtworkDetailPage() {
   const [showUnregister, setShowUnregister] = useState(false);
   const [unregistering, setUnregistering] = useState(false);
   const [previewBroken, setPreviewBroken] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+  const [editForm, setEditForm] = useState({
+    title: '',
+    creator_name: '',
+    notes: '',
+  });
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -87,6 +97,30 @@ export default function ArtworkDetailPage() {
       setShowUnregister(false);
     } finally {
       setUnregistering(false);
+    }
+  };
+
+  const openEditModal = () => {
+    setEditForm({
+      title: artwork.title || '',
+      creator_name: artwork.creator_name || '',
+      notes: artwork.notes || '',
+    });
+    setShowEditModal(true);
+  };
+
+  const handleSaveEdit = async () => {
+    try {
+      setEditing(true);
+      const response = await axios.patch(`${API_BASE_URL}/api/artworks/${artwork.artwork_id}`, editForm);
+      setArtwork(response.data.data);
+      setShowEditModal(false);
+      setSuccessMessage('Artwork details updated successfully.');
+      setError(null);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to update artwork details');
+    } finally {
+      setEditing(false);
     }
   };
 
@@ -200,6 +234,9 @@ export default function ArtworkDetailPage() {
             {artwork.notes ? artwork.notes : 'No notes were added for this artwork.'}
           </div>
           <div className="detail-actions">
+            <button className="btn btn-outline" onClick={openEditModal}>
+              <Pencil size={16} /> Edit Artwork
+            </button>
             <button className="btn btn-primary" onClick={() => navigate(`/verify?artwork_id=${artwork.artwork_id}`)}>
               Verify This Artwork <ArrowUpRight size={16} />
             </button>
@@ -234,6 +271,50 @@ export default function ArtworkDetailPage() {
           </div>
         </div>
       )}
+      {showEditModal && (
+        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !editing) setShowEditModal(false); }}>
+          <div className="unregister-modal edit-modal" role="dialog" aria-modal="true" aria-labelledby="edit-artwork-title">
+            <h2 id="edit-artwork-title">Edit artwork details</h2>
+            <div className="edit-form-grid">
+              <label className="edit-field" htmlFor="edit-title">
+                <span>Title</span>
+                <input
+                  id="edit-title"
+                  type="text"
+                  value={editForm.title}
+                  onChange={(event) => setEditForm((current) => ({ ...current, title: event.target.value }))}
+                  maxLength={120}
+                />
+              </label>
+              <label className="edit-field" htmlFor="edit-creator">
+                <span>Creator</span>
+                <input
+                  id="edit-creator"
+                  type="text"
+                  value={editForm.creator_name}
+                  onChange={(event) => setEditForm((current) => ({ ...current, creator_name: event.target.value }))}
+                  maxLength={80}
+                />
+              </label>
+              <label className="edit-field" htmlFor="edit-notes">
+                <span>Notes</span>
+                <textarea
+                  id="edit-notes"
+                  value={editForm.notes}
+                  onChange={(event) => setEditForm((current) => ({ ...current, notes: event.target.value }))}
+                  maxLength={1000}
+                  rows={4}
+                />
+              </label>
+            </div>
+            <div className="modal-actions">
+              <button className="btn btn-outline" onClick={() => setShowEditModal(false)} disabled={editing}>Cancel</button>
+              <button className="btn btn-primary" onClick={handleSaveEdit} disabled={editing}>{editing ? 'Saving...' : 'Save Changes'}</button>
+            </div>
+          </div>
+        </div>
+      )}
+      <Toast message={successMessage} onDismiss={() => setSuccessMessage('')} />
     </div>
   );
 }

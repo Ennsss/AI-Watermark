@@ -1,0 +1,223 @@
+{
+  "frontend_url": "http://localhost:3000",
+  "generated_at_epoch": 1783853109.995306,
+  "summary": {
+    "total_steps": 16,
+    "passed": 15,
+    "failed": 0,
+    "warned": 1
+  },
+  "ui_inventory": {
+    "dashboard": {
+      "buttons": [
+        "<icon-button>"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 1
+    },
+    "register": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_success": {
+      "buttons": [
+        "<icon-button>",
+        "Download Watermarked Image",
+        "View Artwork Record",
+        "Register Another Artwork"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 2
+    },
+    "artwork_detail": {
+      "buttons": [
+        "<icon-button>",
+        "Back to artworks",
+        "Edit Artwork",
+        "Verify This Artwork",
+        "Back to Registry",
+        "Unregister Artwork"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 2
+    },
+    "artworks": {
+      "buttons": [
+        "<icon-button>",
+        "Register New Artwork",
+        "View details",
+        "Verify",
+        "<icon-button>"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 2
+    },
+    "verify": {
+      "buttons": [
+        "<icon-button>",
+        "Verify Watermark"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 1,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "verify_result": {
+      "buttons": [
+        "<icon-button>",
+        "Download Technical Report",
+        "Verify Another Image"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 1
+    },
+    "history": {
+      "buttons": [
+        "<icon-button>",
+        "View details",
+        "Download",
+        "Delete"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 1
+    },
+    "artworks_cleanup": {
+      "buttons": [
+        "<icon-button>",
+        "Register New Artwork",
+        "View details",
+        "Verify",
+        "<icon-button>"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 2
+    }
+  },
+  "steps": [
+    {
+      "name": "Console errors on dashboard",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on register",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Register artwork",
+      "status": "PASS",
+      "details": "Artwork registration and watermark embedding completed",
+      "error": null
+    },
+    {
+      "name": "Console errors on register success",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Artwork details",
+      "status": "PASS",
+      "details": "Artwork details page loaded from registration result",
+      "error": null
+    },
+    {
+      "name": "Console errors on artwork detail",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on artworks",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Verify image",
+      "status": "PASS",
+      "details": "Verification flow completed and result shown",
+      "error": null
+    },
+    {
+      "name": "Console errors on verify result",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on history",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Delete verification history",
+      "status": "PASS",
+      "details": "Deleted one verification history entry from the history page",
+      "error": null
+    },
+    {
+      "name": "History details",
+      "status": "WARN",
+      "details": "No verification cards found to open details",
+      "error": null
+    },
+    {
+      "name": "Console errors on artworks_cleanup",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Delete test artwork",
+      "status": "PASS",
+      "details": "Unregistered one 'Sample Artwork' entry during cleanup",
+      "error": null
+    },
+    {
+      "name": "Console errors on artworks cleanup",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Navigation coverage",
+      "status": "PASS",
+      "details": "Visited dashboard, register, artwork details, artworks, verify, and history",
+      "error": null
+    }
+  ]
+}
