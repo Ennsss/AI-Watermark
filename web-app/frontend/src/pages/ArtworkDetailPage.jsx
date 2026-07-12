@@ -101,7 +101,7 @@ export default function ArtworkDetailPage() {
           <p className="page-kicker">
             <Sparkles size={14} /> Artwork record
           </p>
-          <h1>{artwork.title}</h1>
+          <h1 className="scrollable-detail-title" title={artwork.title}>{artwork.title}</h1>
           <p className="detail-hero-subtitle">
             A clean provenance snapshot for this registered artwork, including registry data and current watermark state.
           </p>
@@ -176,18 +176,18 @@ export default function ArtworkDetailPage() {
 
           <div className="detail-list">
             <div className="detail-row">
-              <span className="detail-label marginLeft"><User size={14} /> Creator</span>
-              <span className="detail-value marginRight">{artwork.creator_name}</span>
+              <span className="detail-label"><User size={14} /> Creator</span>
+              <span className="detail-value scrollable-detail-value" title={artwork.creator_name}>{artwork.creator_name}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label marginLeft"><Clock3 size={14} /> Registered</span>
-              <span className="detail-value marginRight">
+              <span className="detail-label"><Clock3 size={14} /> Registered</span>
+              <span className="detail-value">
                 {new Date(artwork.registration_date).toLocaleString()}
               </span>
             </div>
             <div className="detail-row">
-              <span className="detail-label marginLeft"><CheckCircle size={14} /> Watermark</span>
-              <span className="detail-value marginRight">{statusLabel}</span>
+              <span className="detail-label"><CheckCircle size={14} /> Watermark</span>
+              <span className="detail-value">{statusLabel}</span>
             </div>
           </div>
         </section>

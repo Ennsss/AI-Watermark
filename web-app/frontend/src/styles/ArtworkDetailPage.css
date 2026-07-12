@@ -249,3 +249,30 @@
 .unregister-modal p { color: var(--text-light); line-height: 1.7; }
 .modal-actions { display: flex; justify-content: flex-end; gap: .75rem; margin-top: 1.25rem; }
 @media (max-width: 600px) { .modal-actions { flex-direction: column; } }
+
+/* Keep record content contained; long metadata scrolls inside its own field. */
+.artwork-detail-page { min-width:0; overflow-x:hidden; }
+.artwork-detail-page .detail-hero { min-width:0; }
+.artwork-detail-page .detail-hero-copy { flex:1; min-width:0; }
+.artwork-detail-page .detail-hero-aside { max-width:100%; }
+.artwork-detail-page .detail-grid,
+.artwork-detail-page .detail-grid > *,
+.artwork-detail-page .detail-panel,
+.artwork-detail-page .detail-list,
+.artwork-detail-page .detail-row,
+.technical-artwork-details { min-width:0; }
+.scrollable-detail-title,
+.scrollable-detail-value { display:block; max-width:100%; min-width:0; padding-bottom:.3rem; overflow-x:auto; overflow-y:hidden; white-space:nowrap; scrollbar-width:thin; scrollbar-color:var(--artifact-border) transparent; }
+.scrollable-detail-title::-webkit-scrollbar,
+.scrollable-detail-value::-webkit-scrollbar { height:.4rem; }
+.scrollable-detail-title::-webkit-scrollbar-thumb,
+.scrollable-detail-value::-webkit-scrollbar-thumb { background:var(--artifact-border); border-radius:999px; }
+.artwork-detail-page .detail-row { padding:1rem 1.1rem; }
+.artwork-detail-page .detail-label { flex:0 0 auto; }
+.artwork-detail-page .detail-value { max-width:min(65%,100%); min-width:0; padding-inline:.25rem; overflow-wrap:anywhere; }
+.artwork-detail-page .hero-stat-value { max-width:100%; min-width:0; overflow-wrap:anywhere; }
+.artwork-detail-page .notes-box { min-width:0; max-height:280px; overflow-y:auto; overflow-x:hidden; overflow-wrap:anywhere; word-break:break-word; white-space:pre-wrap; }
+.technical-artwork-details .payload-preview { display:block; max-width:min(65%,100%); min-width:0; padding:.45rem .6rem; overflow-x:auto; overflow-y:hidden; white-space:nowrap; color:var(--artifact-cyan); background:rgba(7,190,213,.06); border-radius:var(--radius-sm); scrollbar-width:thin; scrollbar-color:var(--artifact-border) transparent; }
+.technical-artwork-details .payload-preview::-webkit-scrollbar { height:.4rem; }
+.technical-artwork-details .payload-preview::-webkit-scrollbar-thumb { background:var(--artifact-border); border-radius:999px; }
+@media (max-width:768px) { .artwork-detail-page .detail-value, .technical-artwork-details .payload-preview { width:100%; max-width:100%; } }
