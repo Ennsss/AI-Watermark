@@ -15,6 +15,7 @@ import {
   Trash2,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
+import ArtworkPreviewFallback from '../components/ArtworkPreviewFallback';
 import '../styles/ArtworkDetailPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -27,6 +28,7 @@ export default function ArtworkDetailPage() {
   const [error, setError] = useState(null);
   const [showUnregister, setShowUnregister] = useState(false);
   const [unregistering, setUnregistering] = useState(false);
+  const [previewBroken, setPreviewBroken] = useState(false);
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -79,7 +81,7 @@ export default function ArtworkDetailPage() {
     try {
       setUnregistering(true);
       await axios.patch(`${API_BASE_URL}/api/artworks/${artwork.artwork_id}/archive`);
-      navigate('/artworks', { state: { message: `${artwork.artwork_id} was unregistered.` } });
+      navigate('/artworks', { state: { message: 'Artwork unregistered successfully.' } });
     } catch (err) {
       setError(err.response?.data?.detail || 'Failed to unregister artwork');
       setShowUnregister(false);
@@ -134,7 +136,7 @@ export default function ArtworkDetailPage() {
           )}
         </div>
 
-        {watermarkedPreviewSrc ? (
+        {watermarkedPreviewSrc && !previewBroken ? (
           <div className="preview-stage">
             <img
               className="preview-image-large"
@@ -143,14 +145,14 @@ export default function ArtworkDetailPage() {
               onError={(event) => {
                 if (artwork.watermarked_image_base64 && !event.currentTarget.src.startsWith('data:')) {
                   event.currentTarget.src = `data:image/png;base64,${artwork.watermarked_image_base64}`;
+                } else {
+                  setPreviewBroken(true);
                 }
               }}
             />
           </div>
         ) : (
-          <div className="preview-empty">
-            Watermarked image preview unavailable.
-          </div>
+          <ArtworkPreviewFallback />
         )}
       </section>
 

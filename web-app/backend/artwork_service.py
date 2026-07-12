@@ -70,13 +70,17 @@ class ArtworkService:
     
     def get_all_artworks(self, db: Session) -> List[Artwork]:
         """Get active artworks available to registry and verification flows."""
-        return db.query(Artwork).filter(Artwork.archived_at.is_(None)).order_by(Artwork.registration_date.desc()).all()
+        return db.query(Artwork).filter(
+            Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
+        ).order_by(Artwork.registration_date.desc()).all()
 
     def get_active_artwork(self, db: Session, artwork_id: str) -> Optional[Artwork]:
         """Get an artwork only when it remains in the active registry."""
         return db.query(Artwork).filter(
             Artwork.artwork_id == artwork_id,
             Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
         ).first()
     
     def update_watermark_status(
@@ -136,7 +140,7 @@ class ArtworkService:
     def archive_artwork(self, db: Session, artwork_id: str) -> Optional[Artwork]:
         """Archive an artwork without deleting provenance records or files."""
         artwork = self.get_artwork(db, artwork_id)
-        if not artwork or artwork.archived_at is not None:
+        if not artwork or artwork.archived_at is not None or artwork.watermark_status == "archived":
             return None
         artwork.archived_at = datetime.utcnow()
         artwork.watermark_status = "archived"

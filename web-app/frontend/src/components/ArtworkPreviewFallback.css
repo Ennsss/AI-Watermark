@@ -1,0 +1,9 @@
+.artwork-preview-fallback { width:100%; min-height:220px; display:grid; place-items:center; align-content:center; gap:.65rem; padding:1.25rem; color:var(--text-light); background:radial-gradient(circle at 50% 35%,rgba(7,190,213,.12),transparent 48%),var(--artifact-graphite); }
+.artwork-preview-fallback.compact { height:100%; min-height:0; padding:.5rem; gap:.15rem; }
+.artwork-preview-fallback svg { width:min(180px,55%); fill:none; stroke:var(--text-muted); stroke-width:4; stroke-linecap:round; stroke-linejoin:round; }
+.artwork-preview-fallback.compact svg { width:72px; }
+.artwork-preview-fallback span { font-size:.82rem; font-weight:700; letter-spacing:.03em; }
+.artwork-preview-fallback.compact span { font-size:.68rem; }
+.artwork-preview-fallback .fallback-mountain { fill:rgba(7,190,213,.08); stroke:var(--artifact-cyan); opacity:.7; }
+.artwork-preview-fallback .fallback-eye { fill:var(--artifact-gray); stroke:none; }
+.artwork-preview-fallback .fallback-break { stroke:var(--artifact-red); stroke-width:5; }

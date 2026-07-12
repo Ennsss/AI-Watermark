@@ -280,6 +280,8 @@
 .artworks-page { min-height: 0; overflow-y: auto; }
 .artworks-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); align-items: stretch; }
 .artwork-card { min-width: 0; overflow: hidden; }
+.artwork-card.is-removing { pointer-events:none; animation:artwork-card-remove .28s ease-in forwards; }
+@keyframes artwork-card-remove { to { opacity:0; transform:translateX(34px) scale(.96); } }
 .artwork-card-top { min-width: 0; flex-wrap: wrap; }
 .artwork-card-top > div:first-child, .meta-chip div { min-width: 0; }
 .artwork-card-title { max-width: 100%; padding-bottom: .2rem; overflow-x: auto; overflow-y: hidden; white-space: nowrap; scrollbar-width: thin; scrollbar-color: var(--artifact-border) transparent; }
@@ -288,7 +290,8 @@
 .artwork-card-title::-webkit-scrollbar-thumb { background: var(--artifact-border); border-radius: 999px; }
 .meta-value { overflow-wrap: anywhere; word-break: break-word; }
 .artwork-card-footer .btn { min-width: 0; white-space: normal; }
-.artwork-trash-button { flex: 0 0 40px !important; width: 40px; padding: .625rem; border: 1px solid rgba(200,16,46,.7); background: transparent; color: var(--artifact-red); }
+.artwork-trash-button { flex: 0 0 48px !important; width:48px; min-height:42px; padding:.625rem; margin-left:0; border:1px solid rgba(200,16,46,.7); background:transparent; color:var(--artifact-red); }
+.artwork-trash-button svg { width:22px; height:22px; stroke-width:2.35; }
 .artwork-trash-button:hover { background: rgba(200,16,46,.12); }
 .unregister-modal { width: min(100%,520px); padding: 1.5rem; border: 1px solid var(--border); border-radius: var(--radius-md); background: var(--bg-white); box-shadow: var(--shadow-xl); }
 .unregister-modal p { color: var(--text-light); line-height: 1.7; }

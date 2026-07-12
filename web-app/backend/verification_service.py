@@ -119,7 +119,10 @@ class VerificationService:
     
     def get_dashboard_stats(self, db: Session) -> dict:
         """Get statistics for dashboard."""
-        total_artworks = db.query(Artwork).filter(Artwork.archived_at.is_(None)).count()
+        total_artworks = db.query(Artwork).filter(
+            Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
+        ).count()
         total_verifications = db.query(Verification).count()
         
         matches = db.query(Verification).filter(Verification.result_status == "match").count()
@@ -138,7 +141,10 @@ class VerificationService:
     
     def get_recent_activity(self, db: Session, limit: int = 10) -> List[dict]:
         """Get recent activity for dashboard."""
-        artworks = db.query(Artwork).filter(Artwork.archived_at.is_(None)).order_by(Artwork.registration_date.desc()).limit(limit).all()
+        artworks = db.query(Artwork).filter(
+            Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
+        ).order_by(Artwork.registration_date.desc()).limit(limit).all()
         verifications = db.query(Verification).order_by(Verification.verification_date.desc()).limit(limit).all()
         
         events = []

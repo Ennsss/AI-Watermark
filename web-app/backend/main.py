@@ -328,7 +328,7 @@ async def archive_artwork(artwork_id: str, db: Session = Depends(get_db)):
     artwork = artwork_service.get_artwork(db, artwork_id)
     if not artwork:
         raise HTTPException(status_code=404, detail="Artwork not found")
-    if artwork.archived_at is not None:
+    if artwork.archived_at is not None or artwork.watermark_status == "archived":
         raise HTTPException(status_code=409, detail="Artwork is already unregistered")
     archived = artwork_service.archive_artwork(db, artwork_id)
     return {

@@ -9,11 +9,12 @@ import {
   ArrowUpRight,
   CalendarDays,
   User,
-  Image as ImageIcon,
   Trash2,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import SearchInput from '../components/SearchInput';
+import ArtworkPreviewFallback from '../components/ArtworkPreviewFallback';
+import Toast from '../components/Toast';
 import '../styles/ArtworksPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -28,6 +29,8 @@ export default function ArtworksPage() {
   const [artworkToUnregister, setArtworkToUnregister] = useState(null);
   const [unregistering, setUnregistering] = useState(false);
   const [successMessage, setSuccessMessage] = useState(location.state?.message || '');
+  const [brokenPreviews, setBrokenPreviews] = useState({});
+  const [exitingArtworkId, setExitingArtworkId] = useState(null);
 
   useEffect(() => {
     fetchArtworks();
@@ -57,11 +60,19 @@ export default function ArtworksPage() {
     try {
       setUnregistering(true);
       await axios.patch(`${API_BASE_URL}/api/artworks/${artworkToUnregister.artwork_id}/archive`);
-      setArtworks((current) => current.filter((art) => art.artwork_id !== artworkToUnregister.artwork_id));
-      setSuccessMessage(`${artworkToUnregister.artwork_id} was unregistered.`);
+      const archivedId = artworkToUnregister.artwork_id;
+      setExitingArtworkId(archivedId);
       setArtworkToUnregister(null);
+      window.setTimeout(() => {
+        setArtworks((current) => current.filter((art) => art.artwork_id !== archivedId));
+        setExitingArtworkId(null);
+        setSuccessMessage('Artwork unregistered successfully.');
+      }, 280);
     } catch (err) {
-      setError(err.response?.data?.detail || 'Failed to unregister artwork');
+      const detail = err.response?.data?.detail;
+      setError(detail === 'Not Found'
+        ? 'The archive API is unavailable. Restart the backend server and try again.'
+        : detail || 'Failed to unregister artwork');
       setArtworkToUnregister(null);
     } finally {
       setUnregistering(false);
@@ -95,7 +106,6 @@ export default function ArtworksPage() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
-      {successMessage && <div className="success-message" role="status">{successMessage}</div>}
 
       {artworks.length === 0 ? (
         <div className="empty-state">
@@ -123,19 +133,18 @@ export default function ArtworksPage() {
                 : null;
 
             return (
-              <article key={art.artwork_id} className="artwork-card">
+              <article key={art.artwork_id} className={`artwork-card${exitingArtworkId === art.artwork_id ? ' is-removing' : ''}`}>
                 <div className="artwork-preview">
-                  {previewSrc ? (
+                  {previewSrc && !brokenPreviews[art.artwork_id] ? (
                     <img
                       src={previewSrc}
                       alt={`${art.title} preview`}
                       className="artwork-preview-image"
                       loading="lazy"
+                      onError={() => setBrokenPreviews((current) => ({ ...current, [art.artwork_id]: true }))}
                     />
                   ) : (
-                    <div className="artwork-preview-empty">
-                      <ImageIcon size={28} />
-                    </div>
+                    <ArtworkPreviewFallback compact />
                   )}
                   <span className="artwork-preview-id">{art.artwork_id}</span>
                 </div>
@@ -222,6 +231,7 @@ export default function ArtworksPage() {
           </div>
         </div>
       )}
+      <Toast message={successMessage} onDismiss={() => setSuccessMessage('')} />
     </div>
   );
 }
