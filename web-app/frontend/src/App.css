@@ -88,8 +88,8 @@ select {
   z-index: 1000;
   width: 44px;
   height: 44px;
-  background: var(--artifact-red);
-  color: var(--artifact-white);
+  background: var(--artifact-cyan);
+  color: var(--artifact-black-deep);
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
@@ -99,7 +99,7 @@ select {
 }
 
 .mobile-menu-toggle:hover {
-  background: var(--primary-dark);
+  background: #069db1;
   transform: scale(1.05);
 }
 
@@ -343,15 +343,15 @@ textarea {
 }
 
 .btn-primary {
-  background: var(--artifact-red);
-  color: var(--artifact-white);
-  box-shadow: 0 8px 20px rgba(200, 16, 46, 0.22);
+  background: var(--artifact-cyan);
+  color: var(--artifact-black-deep);
+  box-shadow: 0 8px 20px rgba(7, 190, 213, 0.22);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  background: var(--artifact-red-dark);
-  box-shadow: 0 12px 28px rgba(200, 16, 46, 0.32);
+  background: #069db1;
+  box-shadow: 0 12px 28px rgba(7, 190, 213, 0.32);
 }
 
 .btn-primary:active {

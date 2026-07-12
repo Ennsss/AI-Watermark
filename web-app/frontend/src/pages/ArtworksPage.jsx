@@ -10,6 +10,7 @@ import {
   CalendarDays,
   User,
   Image as ImageIcon,
+  Trash2,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
 import SearchInput from '../components/SearchInput';
@@ -18,12 +19,15 @@ import '../styles/ArtworksPage.css';
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 
 export default function ArtworksPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
   const [artworks, setArtworks] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [query, setQuery] = useState('');
-  const navigate = useNavigate();
-  const location = useLocation();
+  const [artworkToUnregister, setArtworkToUnregister] = useState(null);
+  const [unregistering, setUnregistering] = useState(false);
+  const [successMessage, setSuccessMessage] = useState(location.state?.message || '');
 
   useEffect(() => {
     fetchArtworks();
@@ -46,6 +50,22 @@ export default function ArtworksPage() {
 
   const handleVerify = (artworkId) => {
     navigate(`/verify?artwork_id=${artworkId}`);
+  };
+
+  const handleUnregister = async () => {
+    if (!artworkToUnregister) return;
+    try {
+      setUnregistering(true);
+      await axios.patch(`${API_BASE_URL}/api/artworks/${artworkToUnregister.artwork_id}/archive`);
+      setArtworks((current) => current.filter((art) => art.artwork_id !== artworkToUnregister.artwork_id));
+      setSuccessMessage(`${artworkToUnregister.artwork_id} was unregistered.`);
+      setArtworkToUnregister(null);
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to unregister artwork');
+      setArtworkToUnregister(null);
+    } finally {
+      setUnregistering(false);
+    }
   };
 
   const normalizedQuery = query.trim().toLowerCase();
@@ -75,7 +95,7 @@ export default function ArtworksPage() {
       </div>
 
       {error && <div className="error-message">{error}</div>}
-      {location.state?.message && <div className="success-message" role="status">{location.state.message}</div>}
+      {successMessage && <div className="success-message" role="status">{successMessage}</div>}
 
       {artworks.length === 0 ? (
         <div className="empty-state">
@@ -123,7 +143,7 @@ export default function ArtworksPage() {
                 <div className="artwork-card-top">
                   <div>
                     <p className="card-kicker">{art.artwork_id}</p>
-                    <h2 className="artwork-card-title">{art.title}</h2>
+                    <h2 className="artwork-card-title" title={art.title}>{art.title}</h2>
                   </div>
                   <div className={`status-badge ${isWatermarked ? 'success' : 'warning'}`}>
                     {isWatermarked ? (
@@ -174,6 +194,14 @@ export default function ArtworksPage() {
                   >
                     Verify <ArrowUpRight size={15} />
                   </button>
+                  <button
+                    className="btn btn-small artwork-trash-button"
+                    onClick={() => setArtworkToUnregister(art)}
+                    title={`Unregister ${art.title}`}
+                    aria-label={`Unregister ${art.title}`}
+                  >
+                    <Trash2 size={16} />
+                  </button>
                 </div>
               </article>
             );
@@ -181,6 +209,18 @@ export default function ArtworksPage() {
         </div>
         )}
         </>
+      )}
+      {artworkToUnregister && (
+        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !unregistering) setArtworkToUnregister(null); }}>
+          <div className="unregister-modal" role="dialog" aria-modal="true" aria-labelledby="card-unregister-title">
+            <h2 id="card-unregister-title">Unregister artwork?</h2>
+            <p><strong>{artworkToUnregister.title}</strong> will be removed from your active registry and can no longer be selected for new verification attempts. Existing verification history, technical records, and image files will be preserved. This action cannot be restored from the application.</p>
+            <div className="modal-actions">
+              <button className="btn btn-outline" onClick={() => setArtworkToUnregister(null)} disabled={unregistering}>Cancel</button>
+              <button className="btn btn-danger" onClick={handleUnregister} disabled={unregistering}>{unregistering ? 'Unregistering...' : 'Unregister Artwork'}</button>
+            </div>
+          </div>
+        </div>
       )}
     </div>
   );
