@@ -117,11 +117,11 @@ Expected labels:
 Classification rules:
 
 - If BER is exactly `0`, result is `match`.
-- If BER is greater than `0` and less than or equal to `0.15`, result is `partial`.
-- If BER is greater than `0.15`, result is `no_match`.
+- If BER is greater than `0` and less than or equal to the threshold stored for the verification, result is `partial`.
+- If BER is greater than the stored threshold, result is `no_match` for the selected artwork record.
 - If extraction cannot produce a result, the system should show a clear failure/error state.
 
-The threshold used for partial detection is `0.15`.
+The current committed boundary is `0.15` under policy `provisional-2026-07`. It is a provisional legacy boundary, not a CSRP-approved acceptance threshold. A replacement requires labeled positive and negative calibration evidence and explicit team approval. Historical rows retain their original status and `threshold_used`.
 
 ## 7. Data Model
 
@@ -163,6 +163,7 @@ Fields:
 - `processing_time_ms`: processing duration.
 - `error_message`: optional error detail.
 - `threshold_used`: classification threshold.
+- `policy_version`: classification-policy identifier for new verification rows; older rows may be null.
 
 ## 8. Main UI Areas
 
@@ -705,4 +706,3 @@ The system is acceptable when:
 - Dashboard counts update after registration and verification.
 - UI remains readable and contained with long filenames and long text values.
 - Missing data or backend errors show understandable messages rather than blank pages or crashes.
-

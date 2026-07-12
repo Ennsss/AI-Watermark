@@ -39,7 +39,7 @@
 
 .history-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 1.25rem;
 }
 
@@ -100,13 +100,14 @@
 
 .history-card h2 {
   margin: 0.65rem 0 0;
+  font-family: var(--font-ui);
   font-size: 1.1rem;
   max-width: 100%;
   overflow-x: auto;
   overflow-y: hidden;
   white-space: nowrap;
   scrollbar-width: thin;
-  scrollbar-color: rgba(124, 58, 237, 0.45) transparent;
+  scrollbar-color: var(--artifact-border) transparent;
 }
 
 .scrollable-filename {
@@ -122,9 +123,12 @@
 }
 
 .scrollable-filename::-webkit-scrollbar-thumb {
-  background: rgba(124, 58, 237, 0.35);
+  background: var(--artifact-border);
   border-radius: 999px;
 }
+
+@media (max-width: 1400px) { .history-grid { grid-template-columns: repeat(3, minmax(0,1fr)); } }
+@media (max-width: 1050px) { .history-grid { grid-template-columns: repeat(2, minmax(0,1fr)); } }
 
 .result-pill {
   display: inline-flex;
@@ -490,3 +494,10 @@
     padding: 1.5rem;
   }
 }
+
+.technical-details { padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-light); }
+.technical-details summary { cursor: pointer; font-weight: 700; }
+.technical-grid { display: grid; grid-template-columns: minmax(130px, .35fr) minmax(0, 1fr); gap: .75rem 1rem; margin-top: 1rem; align-items: start; }
+.technical-grid span { color: var(--text-light); font-size: .82rem; font-weight: 700; text-transform: uppercase; }
+.technical-grid code { min-width: 0; padding: .6rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-white); overflow-wrap: anywhere; word-break: break-all; }
+@media (max-width: 600px) { .technical-grid { grid-template-columns: 1fr; } }

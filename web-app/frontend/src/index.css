@@ -1,4 +1,12 @@
-@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;700;800&family=Manrope:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap');
+
+@font-face {
+  font-family: "Nordique Pro";
+  src: url('./fontspring-demo-nordiquepro-bold.otf') format('opentype');
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+}
 
 ::-webkit-scrollbar {
   width: 8px;

@@ -5,6 +5,9 @@ import axios from 'axios';
 import '../styles/RegisterArtworkPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
+const TITLE_MAX_LENGTH = 120;
+const CREATOR_MAX_LENGTH = 80;
+const NOTES_MAX_LENGTH = 1000;
 
 export default function RegisterArtworkPage() {
   const [formData, setFormData] = useState({
@@ -56,7 +59,9 @@ export default function RegisterArtworkPage() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!formData.title || !formData.creator_name || !file) {
+    const title = formData.title.trim();
+    const creatorName = formData.creator_name.trim();
+    if (!title || !creatorName || !file) {
       setError('Please fill in all required fields');
       return;
     }
@@ -66,9 +71,9 @@ export default function RegisterArtworkPage() {
 
     try {
       const formDataToSend = new FormData();
-      formDataToSend.append('title', formData.title);
-      formDataToSend.append('creator_name', formData.creator_name);
-      formDataToSend.append('notes', formData.notes);
+      formDataToSend.append('title', title);
+      formDataToSend.append('creator_name', creatorName);
+      formDataToSend.append('notes', formData.notes.trim());
       formDataToSend.append('file', file);
 
       const response = await axios.post(
@@ -111,7 +116,7 @@ export default function RegisterArtworkPage() {
           <div className="success-badge">
             <Check size={48} />
           </div>
-          <h2>Artwork Registered Successfully!</h2>
+          <h2>Artwork Registered Successfully</h2>
 
           <div className="result-details">
             <div className="detail-row">
@@ -120,15 +125,15 @@ export default function RegisterArtworkPage() {
             </div>
             <div className="detail-row">
               <span className="label marginLeft">Title:</span>
-              <span className="value marginRight">{result.title}</span>
+              <span className="value marginRight scrollable-result-value" title={result.title}>{result.title}</span>
             </div>
             <div className="detail-row">
               <span className="label marginLeft">Creator:</span>
-              <span className="value marginRight">{result.creator_name}</span>
+              <span className="value marginRight scrollable-result-value" title={result.creator_name}>{result.creator_name}</span>
             </div>
             <div className="detail-row">
               <span className="label marginLeft">Status:</span>
-              <span className="value marginRight watermarked">✓ Watermark Embedded</span>
+              <span className="value marginRight watermarked"><Check size={16} /> Watermark Embedded</span>
             </div>
           </div>
 
@@ -179,8 +184,10 @@ export default function RegisterArtworkPage() {
             placeholder="Enter artwork title"
             value={formData.title}
             onChange={handleInputChange}
+            maxLength={TITLE_MAX_LENGTH}
             required
           />
+          <span className="character-count">{formData.title.length}/{TITLE_MAX_LENGTH}</span>
         </div>
 
         <div className="form-group margin">
@@ -192,8 +199,10 @@ export default function RegisterArtworkPage() {
             placeholder="Enter creator name"
             value={formData.creator_name}
             onChange={handleInputChange}
+            maxLength={CREATOR_MAX_LENGTH}
             required
           />
+          <span className="character-count">{formData.creator_name.length}/{CREATOR_MAX_LENGTH}</span>
         </div>
 
         <div className="form-group margin">
@@ -204,8 +213,10 @@ export default function RegisterArtworkPage() {
             placeholder="Add any additional notes about this artwork"
             value={formData.notes}
             onChange={handleInputChange}
+            maxLength={NOTES_MAX_LENGTH}
             rows="3"
           />
+          <span className="character-count">{formData.notes.length}/{NOTES_MAX_LENGTH}</span>
         </div>
 
         <div className="form-group margin">

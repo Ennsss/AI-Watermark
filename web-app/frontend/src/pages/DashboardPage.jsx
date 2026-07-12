@@ -46,11 +46,11 @@ export default function DashboardPage() {
       <div className="stats-grid">
         <div className="stat-card">
           <div className="stat-value">{stats?.total_artworks || 0}</div>
-          <div className="stat-label">Registered Artworks</div>
+          <div className="stat-label">Active Registered Artworks</div>
         </div>
         <div className="stat-card">
-          <div className="stat-value">{stats?.watermarked_artworks || 0}</div>
-          <div className="stat-label">Watermarked</div>
+          <div className="stat-value">{(stats?.partials || 0) + (stats?.no_matches || 0)}</div>
+          <div className="stat-label">Partial / No-Match Results</div>
         </div>
         <div className="stat-card">
           <div className="stat-value">{stats?.total_verifications || 0}</div>

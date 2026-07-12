@@ -2,12 +2,14 @@
 
 import os
 from datetime import datetime
-from sqlalchemy import create_engine, Column, Integer, String, Text, Float, DateTime, ForeignKey
+from pathlib import Path
+from sqlalchemy import create_engine, Column, Integer, String, Text, Float, DateTime, ForeignKey, inspect, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker, relationship
 
 # Database configuration
-DATABASE_URL = "sqlite:///./watermark_registry.db"
+DATABASE_PATH = Path(__file__).resolve().parent / "watermark_registry.db"
+DATABASE_URL = f"sqlite:///{DATABASE_PATH.as_posix()}"
 engine = create_engine(
     DATABASE_URL, connect_args={"check_same_thread": False}, echo=False
 )
@@ -32,6 +34,7 @@ class Artwork(Base):
     payload = Column(Text, nullable=False)  # Store as hex string
     registration_date = Column(DateTime, default=datetime.utcnow, nullable=False)
     watermark_status = Column(String, default="embedded", nullable=False)
+    archived_at = Column(DateTime, nullable=True)
     notes = Column(Text)
     
     # Relationship
@@ -56,6 +59,7 @@ class Verification(Base):
     processing_time_ms = Column(Float)
     error_message = Column(Text)
     threshold_used = Column(Float)
+    policy_version = Column(String)
     
     # Relationship
     artwork = relationship("Artwork", back_populates="verifications")
@@ -64,7 +68,19 @@ class Verification(Base):
 def init_db():
     """Initialize the database and create tables."""
     Base.metadata.create_all(bind=engine)
-    print("Database initialized successfully")
+    # create_all does not add columns to an existing SQLite database. Keep this
+    # small, idempotent migration here while the prototype has no migration tool.
+    if "artworks" in inspect(engine).get_table_names():
+        columns = {column["name"] for column in inspect(engine).get_columns("artworks")}
+        if "archived_at" not in columns:
+            with engine.begin() as connection:
+                connection.execute(text("ALTER TABLE artworks ADD COLUMN archived_at DATETIME"))
+    if "verifications" in inspect(engine).get_table_names():
+        columns = {column["name"] for column in inspect(engine).get_columns("verifications")}
+        if "policy_version" not in columns:
+            with engine.begin() as connection:
+                connection.execute(text("ALTER TABLE verifications ADD COLUMN policy_version VARCHAR"))
+    print(f"Database initialized successfully: {DATABASE_PATH}")
 
 
 def get_db():

@@ -5,13 +5,13 @@ from typing import Optional, List
 from sqlalchemy.orm import Session
 from database import Verification, Artwork
 from utils import generate_verification_id
+from verification_policy import VERIFICATION_POLICY
 
 
 class VerificationService:
     """Service for managing verification records."""
     
-    # Configurable threshold for BER classification
-    BER_THRESHOLD = 0.15
+    POLICY = VERIFICATION_POLICY
     
     def create_verification(
         self,
@@ -43,17 +43,7 @@ class VerificationService:
         """
         verification_id = generate_verification_id(db)
         
-        # Classify result
-        if error_message:
-            result_status = "error"
-        elif ber is None:
-            result_status = "extraction_failed"
-        elif ber == 0:
-            result_status = "match"
-        elif ber <= self.BER_THRESHOLD:
-            result_status = "partial"
-        else:
-            result_status = "no_match"
+        result_status, _ = self.POLICY.classify(ber, error_message)
         
         verification = Verification(
             verification_id=verification_id,
@@ -67,7 +57,8 @@ class VerificationService:
             ber=ber,
             processing_time_ms=processing_time_ms,
             error_message=error_message,
-            threshold_used=self.BER_THRESHOLD,
+            threshold_used=self.POLICY.detection_ber_threshold,
+            policy_version=self.POLICY.policy_version,
         )
         
         db.add(verification)
@@ -100,28 +91,13 @@ class VerificationService:
         Returns:
             (status, display_message)
         """
-        if error:
-            return ("error", f"Extraction failed: {error}")
-        
-        if ber is None:
-            return ("extraction_failed", "No valid watermark detected")
-        
-        if ber == 0:
-            return ("match", "Verified Match - watermark detected with zero bit errors")
-        
-        if ber <= self.BER_THRESHOLD:
-            return (
-                "partial",
-                f"Partial / Corrupted Watermark Detected - BER: {ber:.4f}. The extracted payload is similar to the stored payload but contains bit errors.",
-            )
-        
-        return ("no_match", "No Valid Watermark Detected")
+        return self.POLICY.classify(ber, error)
     
     def get_dashboard_stats(self, db: Session) -> dict:
         """Get statistics for dashboard."""
-        total_artworks = db.query(Artwork).count()
-        watermarked_artworks = db.query(Artwork).filter(
-            Artwork.watermark_status == "embedded"
+        total_artworks = db.query(Artwork).filter(
+            Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
         ).count()
         total_verifications = db.query(Verification).count()
         
@@ -132,7 +108,6 @@ class VerificationService:
         
         return {
             "total_artworks": total_artworks,
-            "watermarked_artworks": watermarked_artworks,
             "total_verifications": total_verifications,
             "matches": matches,
             "partials": partials,
@@ -142,7 +117,10 @@ class VerificationService:
     
     def get_recent_activity(self, db: Session, limit: int = 10) -> List[dict]:
         """Get recent activity for dashboard."""
-        artworks = db.query(Artwork).order_by(Artwork.registration_date.desc()).limit(limit).all()
+        artworks = db.query(Artwork).filter(
+            Artwork.archived_at.is_(None),
+            Artwork.watermark_status != "archived",
+        ).order_by(Artwork.registration_date.desc()).limit(limit).all()
         verifications = db.query(Verification).order_by(Verification.verification_date.desc()).limit(limit).all()
         
         events = []

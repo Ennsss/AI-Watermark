@@ -4,6 +4,12 @@
   margin: 0 auto;
 }
 
+.result-technical-details { width: 100%; margin: 1rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); text-align: left; }
+.result-technical-details summary { cursor: pointer; font-weight: 700; }
+.result-technical-details dl { display: grid; grid-template-columns: minmax(130px,.35fr) minmax(0,1fr); gap: .75rem 1rem; margin-top: 1rem; }
+.result-technical-details dt { color: var(--text-light); font-weight: 700; }
+.result-technical-details dd, .result-technical-details code { min-width: 0; overflow-wrap: anywhere; word-break: break-all; }
+
 .verify-form {
   background-color: var(--bg-white);
   padding: 32px;

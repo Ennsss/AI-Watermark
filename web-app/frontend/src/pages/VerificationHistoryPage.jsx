@@ -12,6 +12,7 @@ import {
   ArrowLeft,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
+import SearchInput from '../components/SearchInput';
 import '../styles/VerificationHistoryPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -46,6 +47,7 @@ export default function VerificationHistoryPage() {
   const [error, setError] = useState(null);
   const [selectedVerification, setSelectedVerification] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
+  const [query, setQuery] = useState('');
 
   useEffect(() => {
     fetchVerifications();
@@ -96,6 +98,10 @@ export default function VerificationHistoryPage() {
     }
   };
 
+  const normalizedQuery = query.trim().toLowerCase();
+  const filteredVerifications = verifications.filter((ver) => [ver.verification_id, ver.artwork_id, ver.artwork_title, ver.suspected_filename, ver.result_status, getResultLabel(ver.result_status)]
+    .some((value) => String(value || '').toLowerCase().includes(normalizedQuery)));
+
   if (loading) return <div className="loading">Loading verification history...</div>;
 
   if (selectedVerification) {
@@ -121,6 +127,22 @@ export default function VerificationHistoryPage() {
               <span>{getResultLabel(selectedVerification.result_status)}</span>
             </div>
           </div>
+
+          <details className="technical-details">
+            <summary>Technical Details</summary>
+            <div className="technical-grid">
+              <span>Expected payload</span><code>{selectedVerification.expected_payload || 'N/A'}</code>
+              <span>Extracted payload</span><code>{selectedVerification.extracted_payload || 'N/A'}</code>
+              <span>Differing bits</span><strong>{selectedVerification.differing_bits ?? 'N/A'}</strong>
+              <span>Payload length</span><strong>{selectedVerification.payload_length ? `${selectedVerification.payload_length} bits` : 'N/A'}</strong>
+              <span>BER</span><strong>{selectedVerification.ber !== null ? selectedVerification.ber.toFixed(4) : 'N/A'}</strong>
+              <span>Threshold used</span><strong>{selectedVerification.threshold_used ?? 'N/A'}</strong>
+              <span>Policy version</span><strong>{selectedVerification.policy_version || 'Legacy / unavailable'}</strong>
+              <span>Threshold status</span><strong>{selectedVerification.threshold_provisional ? 'Provisional — labeled calibration pending' : 'Historical / see policy version'}</strong>
+              <span>Watermark engine</span><strong>{selectedVerification.watermark_engine || 'DWT-QIM'}</strong>
+              <span>Processing time</span><strong>{selectedVerification.processing_time_ms != null ? `${selectedVerification.processing_time_ms.toFixed(2)}ms` : 'N/A'}</strong>
+            </div>
+          </details>
 
           <div className="verification-detail-grid">
             <div className="info-panel">
@@ -219,8 +241,13 @@ export default function VerificationHistoryPage() {
           <p>No verifications yet. Start by registering an artwork and then verifying images.</p>
         </div>
       ) : (
+        <>
+        <SearchInput value={query} onChange={setQuery} label="Search verification history" placeholder="Search by verification ID, artwork ID, title, or filename" />
+        {filteredVerifications.length === 0 ? (
+          <div className="empty-state">No verifications match your search.</div>
+        ) : (
         <div className="history-grid">
-          {verifications.map((ver) => (
+          {filteredVerifications.map((ver) => (
             <article key={ver.verification_id} className={`history-card ${ver.result_status}`}>
               <div className="history-card-top">
                 <div className="history-card-title-block">
@@ -287,6 +314,8 @@ export default function VerificationHistoryPage() {
             </article>
           ))}
         </div>
+        )}
+        </>
       )}
     </div>
   );

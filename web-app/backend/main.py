@@ -51,6 +51,9 @@ STORAGE_DIR = Path(__file__).parent / "storage"
 UPLOAD_DIR.mkdir(exist_ok=True)
 STORAGE_DIR.mkdir(exist_ok=True)
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+TITLE_MAX_LENGTH = 120
+CREATOR_MAX_LENGTH = 80
+NOTES_MAX_LENGTH = 1000
 
 # Initialize database
 init_db()
@@ -98,6 +101,18 @@ def validate_image(image_array: np.ndarray, max_size: int = 2048) -> None:
     height, width = image_array.shape[:2]
     if height > max_size or width > max_size:
         raise ValueError(f"Image dimensions exceed maximum {max_size}x{max_size}")
+
+
+def calculate_differing_bits(expected_hex: Optional[str], extracted_hex: Optional[str]) -> Optional[int]:
+    """Return a null-safe Hamming distance for stored hexadecimal payloads."""
+    if not expected_hex or not extracted_hex:
+        return None
+    try:
+        expected = bin(int(expected_hex, 16))[2:].zfill(len(expected_hex) * 4)
+        extracted = bin(int(extracted_hex, 16))[2:].zfill(len(extracted_hex) * 4)
+    except ValueError:
+        return None
+    return sum(a != b for a, b in zip(expected, extracted)) + abs(len(expected) - len(extracted))
 
 
 @app.get("/health")
@@ -148,6 +163,20 @@ async def register_artwork(
     5. Save registry record
     6. Return watermarked image download
     """
+    title = title.strip()
+    creator_name = creator_name.strip()
+    notes = notes.strip() if notes else None
+    if not title:
+        raise HTTPException(status_code=422, detail="Artwork title is required")
+    if len(title) > TITLE_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Artwork title must be {TITLE_MAX_LENGTH} characters or fewer")
+    if not creator_name:
+        raise HTTPException(status_code=422, detail="Creator name is required")
+    if len(creator_name) > CREATOR_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Creator name must be {CREATOR_MAX_LENGTH} characters or fewer")
+    if notes and len(notes) > NOTES_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Notes must be {NOTES_MAX_LENGTH} characters or fewer")
+
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
@@ -299,11 +328,30 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
             "creator_name": artwork.creator_name,
             "registration_date": artwork.registration_date.isoformat(),
             "watermark_status": artwork.watermark_status,
+            "archived_at": artwork.archived_at.isoformat() if artwork.archived_at else None,
+            "payload_length": len(artwork.payload) * 4,
+            "payload_preview": f"{artwork.payload[:4]}…{artwork.payload[-4:]}",
             "notes": artwork.notes,
             "watermarked_filename": artwork.watermarked_filename,
             "watermarked_download_url": f"/api/artworks/{artwork.artwork_id}/watermarked",
             "watermarked_image_base64": watermarked_image_base64,
         },
+    }
+
+
+@app.patch("/api/artworks/{artwork_id}/archive")
+async def archive_artwork(artwork_id: str, db: Session = Depends(get_db)):
+    """Remove an artwork from active workflows while preserving provenance."""
+    artwork = artwork_service.get_artwork(db, artwork_id)
+    if not artwork:
+        raise HTTPException(status_code=404, detail="Artwork not found")
+    if artwork.archived_at is not None or artwork.watermark_status == "archived":
+        raise HTTPException(status_code=409, detail="Artwork is already unregistered")
+    archived = artwork_service.archive_artwork(db, artwork_id)
+    return {
+        "status": "success",
+        "message": "Artwork unregistered. Historical records and files were preserved.",
+        "data": {"artwork_id": archived.artwork_id, "archived_at": archived.archived_at.isoformat()},
     }
 
 
@@ -349,9 +397,9 @@ async def verify_image(
     
     try:
         # Get artwork and expected payload
-        artwork = artwork_service.get_artwork(db, artwork_id)
+        artwork = artwork_service.get_active_artwork(db, artwork_id)
         if not artwork:
-            raise HTTPException(status_code=404, detail="Artwork not found")
+            raise HTTPException(status_code=404, detail="Artwork not found in the active registry")
         
         expected_payload_hex = artwork.payload
         expected_payload = bytes_from_hex_payload(expected_payload_hex)
@@ -427,10 +475,19 @@ async def verify_image(
             "result_status": verification.result_status,
             "ber": ber,
             "processing_time_ms": processing_time_ms,
-            "threshold_used": verification_service.BER_THRESHOLD,
+            "threshold_used": verification_service.POLICY.detection_ber_threshold,
+            "policy_version": verification_service.POLICY.policy_version,
+            "threshold_provisional": True,
+            "expected_payload": expected_payload_hex,
+            "extracted_payload": extracted_hex,
+            "differing_bits": int(np.sum(extracted_bits != expected_bits)),
+            "payload_length": len(expected_bits),
+            "watermark_engine": "DWT-QIM",
             "message": message,
         })
         
+    except HTTPException:
+        raise
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
     except Exception as e:
@@ -451,11 +508,14 @@ async def get_verifications(db: Session = Depends(get_db), artwork_id: Optional[
             {
                 "verification_id": ver.verification_id,
                 "artwork_id": ver.artwork_id,
+                "artwork_title": ver.artwork.title if ver.artwork else None,
                 "suspected_filename": ver.suspected_filename,
                 "verification_date": ver.verification_date.isoformat(),
                 "result_status": ver.result_status,
                 "ber": ver.ber,
                 "processing_time_ms": ver.processing_time_ms,
+                "threshold_used": ver.threshold_used,
+                "policy_version": ver.policy_version,
             }
             for ver in verifications
         ],
@@ -484,6 +544,14 @@ async def get_verification_detail(verification_id: str, db: Session = Depends(ge
             "ber": verification.ber,
             "processing_time_ms": verification.processing_time_ms,
             "threshold_used": verification.threshold_used,
+            "policy_version": verification.policy_version,
+            "threshold_provisional": (verification.policy_version or "").startswith("provisional"),
+            "expected_payload": verification.expected_payload,
+            "extracted_payload": verification.extracted_payload,
+            "differing_bits": calculate_differing_bits(verification.expected_payload, verification.extracted_payload),
+            "payload_length": len(verification.expected_payload) * 4 if verification.expected_payload else None,
+            "watermark_engine": "DWT-QIM",
+            "error_message": verification.error_message,
         },
     }
 
@@ -707,13 +775,15 @@ async def extract_watermark_endpoint(
         raise HTTPException(status_code=500, detail=f"Processing error: {str(e)}")
 
 
-@app.post("/api/detect")
+@app.post("/api/detect", deprecated=True)
 async def detect_watermark_endpoint(
     file: UploadFile = File(...),
     threshold: float = Form(1.0),
 ):
     """
-    Detect if an image contains a watermark by trying multiple Delta values.
+    Legacy/internal research score against a default payload. This endpoint is
+    not used by the registry-selected verification workflow, and 1 - BER is not
+    a calibrated probability.
     
     Parameters:
     - file: Image file (JPEG, PNG)
@@ -722,7 +792,7 @@ async def detect_watermark_endpoint(
     Returns:
     - watermark_detected: Boolean indicating if watermark was found
     - confidence: Confidence score (0-1)
-    - detection_probability: Probability that watermark is present
+    - legacy_confidence_score: Uncalibrated legacy score derived from BER
     - delta_used: The Delta value that gave the best detection result
     """
     if file.size > MAX_FILE_SIZE:
@@ -799,7 +869,8 @@ async def detect_watermark_endpoint(
             "status": "success",
             "watermark_detected": watermark_detected,
             "confidence": best_confidence,
-            "detection_probability": best_confidence,
+            "legacy_confidence_score": best_confidence,
+            "warning": "Legacy default-payload score; not a calibrated probability or registry verification result.",
             "bit_error_rate": best_ber,
             "threshold_used": threshold,
             "parameters": {

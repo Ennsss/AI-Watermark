@@ -12,8 +12,10 @@ import {
   Sparkles,
   ArrowUpRight,
   Download,
+  Trash2,
 } from 'lucide-react/dist/cjs/lucide-react';
 import axios from 'axios';
+import ArtworkPreviewFallback from '../components/ArtworkPreviewFallback';
 import '../styles/ArtworkDetailPage.css';
 
 const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
@@ -24,6 +26,9 @@ export default function ArtworkDetailPage() {
   const [artwork, setArtwork] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [showUnregister, setShowUnregister] = useState(false);
+  const [unregistering, setUnregistering] = useState(false);
+  const [previewBroken, setPreviewBroken] = useState(false);
 
   useEffect(() => {
     const loadArtwork = async () => {
@@ -72,6 +77,19 @@ export default function ArtworkDetailPage() {
       ? `data:image/png;base64,${artwork.watermarked_image_base64}`
       : null;
 
+  const handleUnregister = async () => {
+    try {
+      setUnregistering(true);
+      await axios.patch(`${API_BASE_URL}/api/artworks/${artwork.artwork_id}/archive`);
+      navigate('/artworks', { state: { message: 'Artwork unregistered successfully.' } });
+    } catch (err) {
+      setError(err.response?.data?.detail || 'Failed to unregister artwork');
+      setShowUnregister(false);
+    } finally {
+      setUnregistering(false);
+    }
+  };
+
   return (
     <div className="artwork-detail-page">
       <button className="back-button" onClick={() => navigate('/artworks')}>
@@ -83,7 +101,7 @@ export default function ArtworkDetailPage() {
           <p className="page-kicker">
             <Sparkles size={14} /> Artwork record
           </p>
-          <h1>{artwork.title}</h1>
+          <h1 className="scrollable-detail-title" title={artwork.title}>{artwork.title}</h1>
           <p className="detail-hero-subtitle">
             A clean provenance snapshot for this registered artwork, including registry data and current watermark state.
           </p>
@@ -118,7 +136,7 @@ export default function ArtworkDetailPage() {
           )}
         </div>
 
-        {watermarkedPreviewSrc ? (
+        {watermarkedPreviewSrc && !previewBroken ? (
           <div className="preview-stage">
             <img
               className="preview-image-large"
@@ -127,16 +145,28 @@ export default function ArtworkDetailPage() {
               onError={(event) => {
                 if (artwork.watermarked_image_base64 && !event.currentTarget.src.startsWith('data:')) {
                   event.currentTarget.src = `data:image/png;base64,${artwork.watermarked_image_base64}`;
+                } else {
+                  setPreviewBroken(true);
                 }
               }}
             />
           </div>
         ) : (
-          <div className="preview-empty">
-            Watermarked image preview unavailable.
-          </div>
+          <ArtworkPreviewFallback />
         )}
       </section>
+
+      <details className="card technical-artwork-details">
+        <summary>Technical Details</summary>
+        <div className="detail-list">
+          <div className="detail-row"><span className="detail-label">Artwork ID</span><span className="detail-value">{artwork.artwork_id}</span></div>
+          <div className="detail-row"><span className="detail-label">Watermark status</span><span className="detail-value">{statusLabel}</span></div>
+          <div className="detail-row"><span className="detail-label">Payload length</span><span className="detail-value">{artwork.payload_length} bits</span></div>
+          <div className="detail-row"><span className="detail-label">Payload preview</span><code className="payload-preview">{artwork.payload_preview}</code></div>
+          <div className="detail-row"><span className="detail-label">Watermark engine</span><span className="detail-value">DWT-QIM</span></div>
+          <div className="detail-row"><span className="detail-label">Registered</span><span className="detail-value">{new Date(artwork.registration_date).toLocaleString()}</span></div>
+        </div>
+      </details>
 
       <div className="detail-grid">
         <section className="card detail-panel">
@@ -146,18 +176,18 @@ export default function ArtworkDetailPage() {
 
           <div className="detail-list">
             <div className="detail-row">
-              <span className="detail-label marginLeft"><User size={14} /> Creator</span>
-              <span className="detail-value marginRight">{artwork.creator_name}</span>
+              <span className="detail-label"><User size={14} /> Creator</span>
+              <span className="detail-value scrollable-detail-value" title={artwork.creator_name}>{artwork.creator_name}</span>
             </div>
             <div className="detail-row">
-              <span className="detail-label marginLeft"><Clock3 size={14} /> Registered</span>
-              <span className="detail-value marginRight">
+              <span className="detail-label"><Clock3 size={14} /> Registered</span>
+              <span className="detail-value">
                 {new Date(artwork.registration_date).toLocaleString()}
               </span>
             </div>
             <div className="detail-row">
-              <span className="detail-label marginLeft"><CheckCircle size={14} /> Watermark</span>
-              <span className="detail-value marginRight">{statusLabel}</span>
+              <span className="detail-label"><CheckCircle size={14} /> Watermark</span>
+              <span className="detail-value">{statusLabel}</span>
             </div>
           </div>
         </section>
@@ -186,9 +216,24 @@ export default function ArtworkDetailPage() {
             <button className="btn btn-outline" onClick={() => navigate('/artworks')}>
               Back to Registry
             </button>
+            <button className="btn btn-danger" onClick={() => setShowUnregister(true)}>
+              <Trash2 size={16} /> Unregister Artwork
+            </button>
           </div>
         </section>
       </div>
+      {showUnregister && (
+        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget) setShowUnregister(false); }}>
+          <div className="unregister-modal" role="dialog" aria-modal="true" aria-labelledby="unregister-title">
+            <h2 id="unregister-title">Unregister artwork?</h2>
+            <p>This artwork will be removed from your active registry and can no longer be selected for new verification attempts. Existing verification history and technical records will be preserved. This action cannot be restored from the application.</p>
+            <div className="modal-actions">
+              <button className="btn btn-outline" onClick={() => setShowUnregister(false)} disabled={unregistering}>Cancel</button>
+              <button className="btn btn-danger" onClick={handleUnregister} disabled={unregistering}>{unregistering ? 'Unregistering…' : 'Unregister Artwork'}</button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
