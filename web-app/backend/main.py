@@ -51,6 +51,9 @@ STORAGE_DIR = Path(__file__).parent / "storage"
 UPLOAD_DIR.mkdir(exist_ok=True)
 STORAGE_DIR.mkdir(exist_ok=True)
 MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
+TITLE_MAX_LENGTH = 120
+CREATOR_MAX_LENGTH = 80
+NOTES_MAX_LENGTH = 1000
 
 # Initialize database
 init_db()
@@ -160,6 +163,20 @@ async def register_artwork(
     5. Save registry record
     6. Return watermarked image download
     """
+    title = title.strip()
+    creator_name = creator_name.strip()
+    notes = notes.strip() if notes else None
+    if not title:
+        raise HTTPException(status_code=422, detail="Artwork title is required")
+    if len(title) > TITLE_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Artwork title must be {TITLE_MAX_LENGTH} characters or fewer")
+    if not creator_name:
+        raise HTTPException(status_code=422, detail="Creator name is required")
+    if len(creator_name) > CREATOR_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Creator name must be {CREATOR_MAX_LENGTH} characters or fewer")
+    if notes and len(notes) > NOTES_MAX_LENGTH:
+        raise HTTPException(status_code=422, detail=f"Notes must be {NOTES_MAX_LENGTH} characters or fewer")
+
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     

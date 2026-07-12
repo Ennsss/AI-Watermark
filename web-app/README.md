@@ -28,6 +28,8 @@ Register artwork
 
 Raw payloads remain system-managed. They are not accepted in the normal registration UI or shown on ordinary artwork cards.
 
+Registration metadata is limited to 120 characters for artwork titles, 80 for creator names, and 1,000 for optional notes. The frontend and API enforce the same limits.
+
 ## Architecture
 
 ```text
