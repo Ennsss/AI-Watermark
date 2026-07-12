@@ -60,6 +60,7 @@ class Verification(Base):
     error_message = Column(Text)
     threshold_used = Column(Float)
     policy_version = Column(String)
+    archived_at = Column(DateTime, nullable=True)
     
     # Relationship
     artwork = relationship("Artwork", back_populates="verifications")
@@ -80,6 +81,9 @@ def init_db():
         if "policy_version" not in columns:
             with engine.begin() as connection:
                 connection.execute(text("ALTER TABLE verifications ADD COLUMN policy_version VARCHAR"))
+        if "archived_at" not in columns:
+            with engine.begin() as connection:
+                connection.execute(text("ALTER TABLE verifications ADD COLUMN archived_at DATETIME"))
     print(f"Database initialized successfully: {DATABASE_PATH}")
 
 

@@ -50,9 +50,9 @@ export default function VerificationHistoryPage() {
   const [selectedVerification, setSelectedVerification] = useState(null);
   const [detailLoading, setDetailLoading] = useState(false);
   const [query, setQuery] = useState('');
-  const [deletingVerificationId, setDeletingVerificationId] = useState(null);
+  const [archivingVerificationId, setArchivingVerificationId] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
-  const [verificationToDelete, setVerificationToDelete] = useState(null);
+  const [verificationToArchive, setVerificationToArchive] = useState(null);
 
   useEffect(() => {
     fetchVerifications();
@@ -103,28 +103,28 @@ export default function VerificationHistoryPage() {
     }
   };
 
-  const handleDeleteVerification = async (verificationId) => {
+  const handleArchiveVerification = async (verificationId) => {
     try {
-      setDeletingVerificationId(verificationId);
+      setArchivingVerificationId(verificationId);
       try {
-        await axios.delete(`${API_BASE_URL}/api/verifications/${verificationId}`);
-      } catch (deleteErr) {
-        if (deleteErr?.response?.status !== 405) {
-          throw deleteErr;
+        await axios.patch(`${API_BASE_URL}/api/verifications/${verificationId}/archive`);
+      } catch (archiveErr) {
+        if (archiveErr?.response?.status !== 405) {
+          throw archiveErr;
         }
-        await axios.post(`${API_BASE_URL}/api/verifications/${verificationId}/delete`);
+        await axios.post(`${API_BASE_URL}/api/verifications/${verificationId}/archive`);
       }
       setVerifications((current) => current.filter((ver) => ver.verification_id !== verificationId));
       if (selectedVerification?.verification_id === verificationId) {
         setSelectedVerification(null);
       }
-      setSuccessMessage(`Verification ${verificationId} deleted.`);
+      setSuccessMessage(`Verification ${verificationId} archived.`);
       setError(null);
     } catch (err) {
-      setError('Failed to delete verification');
+      setError('Failed to archive verification');
     } finally {
-      setDeletingVerificationId(null);
-      setVerificationToDelete(null);
+      setArchivingVerificationId(null);
+      setVerificationToArchive(null);
     }
   };
 
@@ -349,9 +349,9 @@ export default function VerificationHistoryPage() {
                 </button>
                 <button
                   className="btn btn-small artwork-trash-button"
-                  onClick={() => setVerificationToDelete(ver)}
-                  title="Delete verification"
-                  disabled={deletingVerificationId === ver.verification_id}
+                  onClick={() => setVerificationToArchive(ver)}
+                  title="Archive verification"
+                  disabled={archivingVerificationId === ver.verification_id}
                 >
                   <Trash2 size={16} />
                 </button>
@@ -362,21 +362,21 @@ export default function VerificationHistoryPage() {
         )}
         </>
       )}
-      {verificationToDelete && (
-        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !deletingVerificationId) setVerificationToDelete(null); }}>
-          <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="confirm-delete-title">
+      {verificationToArchive && (
+        <div className="modal-overlay" role="presentation" onMouseDown={(event) => { if (event.target === event.currentTarget && !archivingVerificationId) setVerificationToArchive(null); }}>
+          <div className="modal-content" role="dialog" aria-modal="true" aria-labelledby="confirm-archive-title">
             <div className="modal-header">
-              <h2 id="confirm-delete-title" className="modal-title">Delete verification record?</h2>
+              <h2 id="confirm-archive-title" className="modal-title">Archive verification record?</h2>
             </div>
             <p className="confirm-delete-copy">
-              This will permanently remove verification <strong>{verificationToDelete.verification_id}</strong> from history.
+              This will hide verification <strong>{verificationToArchive.verification_id}</strong> from active history.
             </p>
             <div className="confirm-delete-actions">
-              <button className="btn btn-outline" onClick={() => setVerificationToDelete(null)} disabled={Boolean(deletingVerificationId)}>
+              <button className="btn btn-outline" onClick={() => setVerificationToArchive(null)} disabled={Boolean(archivingVerificationId)}>
                 Cancel
               </button>
-              <button className="btn btn-danger" onClick={() => handleDeleteVerification(verificationToDelete.verification_id)} disabled={Boolean(deletingVerificationId)}>
-                {deletingVerificationId ? 'Deleting...' : 'Delete'}
+              <button className="btn btn-danger" onClick={() => handleArchiveVerification(verificationToArchive.verification_id)} disabled={Boolean(archivingVerificationId)}>
+                {archivingVerificationId ? 'Archiving...' : 'Archive'}
               </button>
             </div>
           </div>

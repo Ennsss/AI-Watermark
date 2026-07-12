@@ -15,3 +15,9 @@ build/
 !tests/fixtures/*
 .env
 evaluation_output/
+
+# Local runtime databases (do not commit)
+web-app/backend/watermark_registry.db
+web-app/backend/*.db
+web-app/backend/*.db-shm
+web-app/backend/*.db-wal

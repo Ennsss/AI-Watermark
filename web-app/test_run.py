@@ -404,56 +404,60 @@ class SmokeTestRunner:
         self.go("/history", "history", (By.XPATH, "//h1[contains(., 'Verification History')]"))
 
         history_card_xpath = "//article[contains(@class,'history-card')]"
-        history_delete_button_xpath = "(//article[contains(@class,'history-card')])[1]//button[contains(@title, 'Delete verification')]"
-        history_cards_before_delete = len(self.driver.find_elements(By.XPATH, history_card_xpath))
+        history_archive_button_xpath = "(//article[contains(@class,'history-card')])[1]//button[contains(@title, 'Archive verification')]"
+        history_cards_before_archive = len(self.driver.find_elements(By.XPATH, history_card_xpath))
 
-        if history_cards_before_delete > 0:
+        if history_cards_before_archive > 0:
             self._run_action(
-                "Delete first verification history card",
+                "Open archive verification modal",
                 lambda: (
                     self.driver.execute_script(
                         "arguments[0].scrollIntoView({block: 'center', inline: 'nearest'});",
-                        self.driver.find_element(By.XPATH, history_delete_button_xpath),
+                        self.driver.find_element(By.XPATH, history_archive_button_xpath),
                     ),
-                    self.wait.until(EC.element_to_be_clickable((By.XPATH, history_delete_button_xpath))),
+                    self.wait.until(EC.element_to_be_clickable((By.XPATH, history_archive_button_xpath))),
                     self.driver.execute_script(
                         "arguments[0].click();",
-                        self.driver.find_element(By.XPATH, history_delete_button_xpath),
+                        self.driver.find_element(By.XPATH, history_archive_button_xpath),
                     ),
                 ),
             )
             self._run_action(
-                "Reload history after delete",
+                "Confirm archive verification",
+                lambda: self.driver.find_element(By.XPATH, "//button[contains(., 'Archive')]").click(),
+            )
+            self._run_action(
+                "Reload history after archive",
                 lambda: self.driver.get(f"{FRONTEND_URL}/history"),
             )
             self._run_action(
-                "Wait for history page after delete",
+                "Wait for history page after archive",
                 lambda: self.wait.until(EC.presence_of_element_located((By.XPATH, "//h1[contains(., 'Verification History')]"))),
             )
-            delete_reflected = self._run_action(
+            archive_reflected = self._run_action(
                 "Wait for persisted verification count decrease",
                 lambda: self.wait.until(
-                    lambda _driver: len(self.driver.find_elements(By.XPATH, history_card_xpath)) < history_cards_before_delete
+                    lambda _driver: len(self.driver.find_elements(By.XPATH, history_card_xpath)) < history_cards_before_archive
                 ),
                 fatal=False,
             )
-            if delete_reflected:
+            if archive_reflected:
                 self.add_result(
-                    name="Delete verification history",
+                    name="Archive verification history",
                     status="PASS",
-                    details="Deleted one verification history entry from the history page",
+                    details="Archived one verification history entry from the history page",
                 )
             else:
                 self.add_result(
-                    name="Delete verification history",
+                    name="Archive verification history",
                     status="FAIL",
-                    details="Delete button click did not remove a history entry; check backend DELETE /api/verifications/{id}",
+                    details="Archive action did not remove a history entry; check backend /api/verifications/{id}/archive",
                 )
         else:
             self.add_result(
-                name="Delete verification history",
+                name="Archive verification history",
                 status="WARN",
-                details="No verification history cards were available to delete",
+                details="No verification history cards were available to archive",
             )
 
         view_detail_clicked = self.click_first(".history-card-footer .btn-outline")

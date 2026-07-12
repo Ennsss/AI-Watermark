@@ -71,6 +71,13 @@ class VerificationService:
     def get_verification(self, db: Session, verification_id: str) -> Optional[Verification]:
         """Get verification by ID."""
         return db.query(Verification).filter(Verification.verification_id == verification_id).first()
+
+    def get_active_verification(self, db: Session, verification_id: str) -> Optional[Verification]:
+        """Get non-archived verification by ID."""
+        return db.query(Verification).filter(
+            Verification.verification_id == verification_id,
+            Verification.archived_at.is_(None),
+        ).first()
     
     def get_verifications_for_artwork(
         self,
@@ -79,12 +86,25 @@ class VerificationService:
     ) -> List[Verification]:
         """Get all verifications for an artwork."""
         return db.query(Verification).filter(
-            Verification.artwork_id == artwork_id
+            Verification.artwork_id == artwork_id,
+            Verification.archived_at.is_(None),
         ).order_by(Verification.verification_date.desc()).all()
     
     def get_all_verifications(self, db: Session) -> List[Verification]:
         """Get all verifications."""
-        return db.query(Verification).order_by(Verification.verification_date.desc()).all()
+        return db.query(Verification).filter(
+            Verification.archived_at.is_(None)
+        ).order_by(Verification.verification_date.desc()).all()
+
+    def archive_verification(self, db: Session, verification_id: str) -> bool:
+        """Archive a verification record from active history views."""
+        verification = self.get_active_verification(db, verification_id)
+        if verification is None:
+            return False
+
+        verification.archived_at = datetime.utcnow()
+        db.commit()
+        return True
 
     def delete_verification(self, db: Session, verification_id: str) -> bool:
         """Delete a verification record and any stored suspected image file."""
@@ -119,11 +139,20 @@ class VerificationService:
             Artwork.archived_at.is_(None),
             Artwork.watermark_status != "archived",
         ).count()
-        total_verifications = db.query(Verification).count()
+        total_verifications = db.query(Verification).filter(Verification.archived_at.is_(None)).count()
         
-        matches = db.query(Verification).filter(Verification.result_status == "match").count()
-        partials = db.query(Verification).filter(Verification.result_status == "partial").count()
-        no_matches = db.query(Verification).filter(Verification.result_status == "no_match").count()
+        matches = db.query(Verification).filter(
+            Verification.archived_at.is_(None),
+            Verification.result_status == "match",
+        ).count()
+        partials = db.query(Verification).filter(
+            Verification.archived_at.is_(None),
+            Verification.result_status == "partial",
+        ).count()
+        no_matches = db.query(Verification).filter(
+            Verification.archived_at.is_(None),
+            Verification.result_status == "no_match",
+        ).count()
         errors = total_verifications - matches - partials - no_matches
         
         return {
@@ -141,7 +170,9 @@ class VerificationService:
             Artwork.archived_at.is_(None),
             Artwork.watermark_status != "archived",
         ).order_by(Artwork.registration_date.desc()).limit(limit).all()
-        verifications = db.query(Verification).order_by(Verification.verification_date.desc()).limit(limit).all()
+        verifications = db.query(Verification).filter(
+            Verification.archived_at.is_(None)
+        ).order_by(Verification.verification_date.desc()).limit(limit).all()
         
         events = []
         

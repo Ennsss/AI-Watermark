@@ -649,6 +649,34 @@ async def delete_verification(verification_id: str, db: Session = Depends(get_db
     }
 
 
+@app.patch("/api/verifications/{verification_id}/archive")
+async def archive_verification(verification_id: str, db: Session = Depends(get_db)):
+    """Archive a verification record from active history views."""
+    archived = verification_service.archive_verification(db, verification_id)
+    if not archived:
+        raise HTTPException(status_code=404, detail="Verification not found")
+
+    return {
+        "status": "success",
+        "message": "Verification history entry archived",
+        "data": {"verification_id": verification_id},
+    }
+
+
+@app.post("/api/verifications/{verification_id}/archive")
+async def archive_verification_compat(verification_id: str, db: Session = Depends(get_db)):
+    """Compatibility archive endpoint for clients that cannot send PATCH."""
+    archived = verification_service.archive_verification(db, verification_id)
+    if not archived:
+        raise HTTPException(status_code=404, detail="Verification not found")
+
+    return {
+        "status": "success",
+        "message": "Verification history entry archived",
+        "data": {"verification_id": verification_id},
+    }
+
+
 @app.post("/api/verifications/{verification_id}/delete")
 async def delete_verification_compat(verification_id: str, db: Session = Depends(get_db)):
     """Compatibility endpoint for environments that block DELETE methods."""
