@@ -1,0 +1,100 @@
+/* Verify Image Page */
+.verify-page {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.result-technical-details { width: 100%; margin: 1rem 0; padding: 1rem; border: 1px solid var(--border); border-radius: var(--radius-sm); text-align: left; }
+.result-technical-details summary { cursor: pointer; font-weight: 700; }
+.result-technical-details dl { display: grid; grid-template-columns: minmax(130px,.35fr) minmax(0,1fr); gap: .75rem 1rem; margin-top: 1rem; }
+.result-technical-details dt { color: var(--text-light); font-weight: 700; }
+.result-technical-details dd, .result-technical-details code { min-width: 0; overflow-wrap: anywhere; word-break: break-all; }
+
+.verify-form {
+  background-color: var(--bg-white);
+  padding: 32px;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+}
+
+.result-card {
+  background-color: var(--bg-white);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  padding: 40px;
+  box-shadow: var(--shadow-md);
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.result-card.success {
+  border-top: 4px solid var(--success);
+}
+
+.result-card.warning {
+  border-top: 4px solid var(--warning);
+}
+
+.result-card.error {
+  border-top: 4px solid var(--error);
+}
+
+.result-icon {
+  margin-bottom: 20px;
+}
+
+.result-icon svg {
+  width: 48px;
+  height: 48px;
+  color: var(--success);
+}
+
+.result-card.warning .result-icon svg {
+  color: var(--warning);
+}
+
+.result-card.error .result-icon svg {
+  color: var(--error);
+}
+
+.result-details {
+  background-color: var(--artifact-graphite);
+  padding: 20px;
+  border-radius: var(--radius-sm);
+  margin: 24px 0;
+  text-align: left;
+}
+
+.result-message {
+  background-color: rgba(45, 190, 120, 0.12);
+  border-left: 4px solid var(--success);
+  padding: 16px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 24px;
+  color: var(--artifact-white);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.result-card.warning .result-message {
+  background-color: rgba(255, 199, 44, 0.12);
+  border-left-color: var(--warning);
+  color: var(--artifact-white);
+}
+
+.result-card.error .result-message {
+  background-color: rgba(200, 16, 46, 0.12);
+  border-left-color: var(--error);
+  color: var(--artifact-white);
+}
+
+@media (max-width: 768px) {
+  .verify-form {
+    padding: 20px;
+  }
+  
+  .result-card {
+    padding: 24px;
+  }
+}

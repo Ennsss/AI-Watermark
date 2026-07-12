@@ -1,0 +1,4 @@
+.record-search { display:flex; align-items:center; gap:.65rem; width:min(100%,560px); padding:0 .85rem; border:1px solid var(--border); border-radius:var(--radius-sm); background:var(--artifact-graphite); color:var(--text-light); }
+.record-search:focus-within { border-color:var(--artifact-cyan); box-shadow:0 0 0 3px rgba(7,190,213,.14); }
+.record-search input[type="search"] { flex:1; min-width:0; padding:.85rem 0; border:0; outline:0; color:var(--text-dark); background:transparent; font:inherit; }
+.record-search button { display:grid; place-items:center; padding:.3rem; border:0; background:transparent; color:var(--text-light); cursor:pointer; }

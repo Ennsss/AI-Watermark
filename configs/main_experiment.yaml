@@ -1,0 +1,51 @@
+image_size: 512
+wavelet: haar
+dwt_level: 2
+dwt_mode: symmetric
+subbands:
+  - LH2
+  - HL2
+payload_bits: 128
+delta_candidates:
+  - 8
+  - 16
+  - 24
+  - 32
+selected_delta: null
+seed: 42
+cnn_input_shape:
+  - 128
+  - 128
+  - 2
+cnn_decoder:
+  batch_size: 32
+  learning_rate: 0.001
+  epochs: 50
+  early_stopping_patience: 5
+attacks:
+  jpeg:
+    - 90
+    - 70
+    - 50
+  resize:
+    - 0.75
+    - 0.50
+    - 0.25
+  crop:
+    mild: [0.05, 0.10]
+    moderate: [0.20, 0.30]
+    severe: [0.40, 0.50]
+  reencode:
+    - 1
+    - 2
+    - 3
+excluded_from_main:
+  - AES-256 encryption
+  - Reed-Solomon ECC
+  - adaptive perceptual masking
+  - tiled embedding
+  - Gaussian noise
+  - combined attack chains
+  - false positive analysis
+  - broad parameter sweeps
+
