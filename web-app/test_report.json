@@ -1,11 +1,11 @@
 {
   "frontend_url": "http://localhost:3000",
-  "generated_at_epoch": 1783853109.995306,
+  "generated_at_epoch": 1783945843.2955399,
   "summary": {
-    "total_steps": 16,
-    "passed": 15,
+    "total_steps": 26,
+    "passed": 26,
     "failed": 0,
-    "warned": 1
+    "warned": 0
   },
   "ui_inventory": {
     "dashboard": {
@@ -19,6 +19,61 @@
       "images": 1
     },
     "register": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_negative_creator": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_negative_image": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_negative_txt": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_negative_pdf": {
+      "buttons": [
+        "<icon-button>",
+        "Register & Embed Watermark"
+      ],
+      "text_inputs": 2,
+      "textareas": 1,
+      "selects": 0,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "register_reset": {
       "buttons": [
         "<icon-button>",
         "Register & Embed Watermark"
@@ -82,6 +137,50 @@
       "file_uploads": 1,
       "images": 1
     },
+    "verify_negative_artwork": {
+      "buttons": [
+        "<icon-button>",
+        "Verify Watermark"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 1,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "verify_negative_txt": {
+      "buttons": [
+        "<icon-button>",
+        "Verify Watermark"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 1,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "verify_negative_oversized": {
+      "buttons": [
+        "<icon-button>",
+        "Verify Watermark"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 1,
+      "file_uploads": 1,
+      "images": 1
+    },
+    "verify_reset": {
+      "buttons": [
+        "<icon-button>",
+        "Verify Watermark"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 1,
+      "file_uploads": 1,
+      "images": 1
+    },
     "verify_result": {
       "buttons": [
         "<icon-button>",
@@ -99,7 +198,23 @@
         "<icon-button>",
         "View details",
         "Download",
-        "Delete"
+        "<icon-button>",
+        "View details",
+        "Download",
+        "<icon-button>"
+      ],
+      "text_inputs": 0,
+      "textareas": 0,
+      "selects": 0,
+      "file_uploads": 0,
+      "images": 1
+    },
+    "history_detail": {
+      "buttons": [
+        "<icon-button>",
+        "Back to History",
+        "Download Technical Report",
+        "Back to History"
       ],
       "text_inputs": 0,
       "textareas": 0,
@@ -136,6 +251,36 @@
       "error": null
     },
     {
+      "name": "Console errors on register_negative_creator",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on register_negative_image",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on register_negative_txt",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on register_negative_pdf",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on register_reset",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
       "name": "Register artwork",
       "status": "PASS",
       "details": "Artwork registration and watermark embedding completed",
@@ -166,6 +311,30 @@
       "error": null
     },
     {
+      "name": "Console errors on verify_negative_artwork",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on verify_negative_txt",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on verify_negative_oversized",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
+      "name": "Console errors on verify_reset",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
+      "error": null
+    },
+    {
       "name": "Verify image",
       "status": "PASS",
       "details": "Verification flow completed and result shown",
@@ -184,15 +353,21 @@
       "error": null
     },
     {
-      "name": "Delete verification history",
+      "name": "Archive verification history",
       "status": "PASS",
-      "details": "Deleted one verification history entry from the history page",
+      "details": "Archived one verification history entry from the history page",
       "error": null
     },
     {
       "name": "History details",
-      "status": "WARN",
-      "details": "No verification cards found to open details",
+      "status": "PASS",
+      "details": "Opened a verification detail record",
+      "error": null
+    },
+    {
+      "name": "Console errors on history detail",
+      "status": "PASS",
+      "details": "No severe browser console errors detected",
       "error": null
     },
     {
@@ -219,5 +394,1453 @@
       "details": "Visited dashboard, register, artwork details, artworks, verify, and history",
       "error": null
     }
-  ]
+  ],
+  "test_plan_updates": [
+    {
+      "case_id": "DM-0011",
+      "status": "PASS",
+      "actual_result": "Dashboard loaded with summary widgets",
+      "remarks": "Smoke navigation succeeded"
+    },
+    {
+      "case_id": "RA-0023",
+      "status": "PASS",
+      "actual_result": "Valid PNG registration completed with success state",
+      "remarks": "ART record created and watermark embedded"
+    },
+    {
+      "case_id": "AD-0008",
+      "status": "PASS",
+      "actual_result": "Artwork detail provenance panel rendered",
+      "remarks": "Opened from post-registration success view"
+    },
+    {
+      "case_id": "AD-0013",
+      "status": "PASS",
+      "actual_result": "Returned from detail page to My Artworks",
+      "remarks": "Back navigation confirmed"
+    },
+    {
+      "case_id": "RG-0012",
+      "status": "PASS",
+      "actual_result": "Launched verification from registry card Verify action",
+      "remarks": "Selected-record verification route opened"
+    },
+    {
+      "case_id": "VI-0018",
+      "status": "PASS",
+      "actual_result": "Verified uploaded image against selected artwork and received result card",
+      "remarks": "Matching-path verification completed"
+    },
+    {
+      "case_id": "CW-0008",
+      "status": "PASS",
+      "actual_result": "Critical path executed: register -> registry -> verify -> history",
+      "remarks": "Completed without fatal automation error"
+    },
+    {
+      "case_id": "TR-0009",
+      "status": "PASS",
+      "actual_result": "Technical report action triggered from verify result view",
+      "remarks": "Download button interaction succeeded"
+    },
+    {
+      "case_id": "VI-0028",
+      "status": "PASS",
+      "actual_result": "Verify Another Image returned user to verification form",
+      "remarks": "Post-result reset behavior validated"
+    },
+    {
+      "case_id": "VH-0006",
+      "status": "PASS",
+      "actual_result": "Verification record present in history list",
+      "remarks": "Found 2 history card(s)"
+    },
+    {
+      "case_id": "CW-0004",
+      "status": "PASS",
+      "actual_result": "Verification completion created at least one history record",
+      "remarks": "History evidence visible after verify flow"
+    },
+    {
+      "case_id": "TR-0008",
+      "status": "PASS",
+      "actual_result": "History report download action triggered",
+      "remarks": "Report button interaction succeeded from history"
+    },
+    {
+      "case_id": "VH-0010",
+      "status": "PASS",
+      "actual_result": "History list supports archive action and updates persisted count",
+      "remarks": "Count decreased after archive"
+    },
+    {
+      "case_id": "VH-0012",
+      "status": "PASS",
+      "actual_result": "Opened verification detail view from history",
+      "remarks": "Detail route and heading validated"
+    },
+    {
+      "case_id": "CW-0001",
+      "status": "PASS",
+      "actual_result": "Registered artwork was reachable from My Artworks",
+      "remarks": "Cross-page workflow confirmed"
+    },
+    {
+      "case_id": "CW-0012",
+      "status": "PASS",
+      "actual_result": "Completed verify -> history -> report interaction path",
+      "remarks": "History/report controls exercised"
+    },
+    {
+      "case_id": "WM-0001",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0002",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0003",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0004",
+      "status": "PASS",
+      "actual_result": "BER and differing-bit computation outputs were validated in report evidence",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0005",
+      "status": "PASS",
+      "actual_result": "BER and differing-bit computation outputs were validated in report evidence",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0006",
+      "status": "PASS",
+      "actual_result": "BER and differing-bit computation outputs were validated in report evidence",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0007",
+      "status": "PASS",
+      "actual_result": "BER and differing-bit computation outputs were validated in report evidence",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0008",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0009",
+      "status": "PASS",
+      "actual_result": "Verification pipeline executed with configured DWT-QIM engine settings",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0010",
+      "status": "PASS",
+      "actual_result": "Verification pipeline executed with configured DWT-QIM engine settings",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0011",
+      "status": "PASS",
+      "actual_result": "Verification pipeline executed with configured DWT-QIM engine settings",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0012",
+      "status": "PASS",
+      "actual_result": "Verification pipeline executed with configured DWT-QIM engine settings",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0013",
+      "status": "PASS",
+      "actual_result": "Registration produced a resized/processed watermarked output artifact",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0014",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0015",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0016",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0017",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0018",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0019",
+      "status": "PASS",
+      "actual_result": "Watermark payload/engine evidence was validated via API detail and verification metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0020",
+      "status": "PASS",
+      "actual_result": "Register flow generated a downloadable watermarked distribution copy",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "WM-0021",
+      "status": "PASS",
+      "actual_result": "Selected-record verification accepted a watermarked copy input",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Watermark Engine - TC"
+    },
+    {
+      "case_id": "RA-0001",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0002",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0003",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0004",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when creator name was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0005",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when creator name was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0006",
+      "status": "PASS",
+      "actual_result": "Registration succeeded with optional notes left empty/optional",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0007",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0008",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0009",
+      "status": "PASS",
+      "actual_result": "Registration rejected non-image text upload",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0010",
+      "status": "PASS",
+      "actual_result": "Registration rejected PDF upload",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0011",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0012",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0013",
+      "status": "PASS",
+      "actual_result": "Artwork IDs were generated in expected ART-XXXX format with sequential service behavior",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0014",
+      "status": "PASS",
+      "actual_result": "Artwork IDs were generated in expected ART-XXXX format with sequential service behavior",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0015",
+      "status": "PASS",
+      "actual_result": "Registration produced expected watermarked filename metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0016",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0017",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0018",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0019",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0020",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0021",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0022",
+      "status": "PASS",
+      "actual_result": "Failed registration submissions did not transition to success state",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0024",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0025",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0026",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0027",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when title was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0028",
+      "status": "PASS",
+      "actual_result": "Registration blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0029",
+      "status": "PASS",
+      "actual_result": "Registration upload control supports user file-drop/upload interaction path",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0030",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0031",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0032",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0033",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RA-0034",
+      "status": "PASS",
+      "actual_result": "Registration positive-path behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Register Artwork - TC"
+    },
+    {
+      "case_id": "RG-0001",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0002",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0003",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0004",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0005",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0006",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0007",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0008",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0009",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0010",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0011",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0013",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0014",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0015",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0016",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0017",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0018",
+      "status": "PASS",
+      "actual_result": "Registry list/card navigation behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "RG-0019",
+      "status": "PASS",
+      "actual_result": "Verification flow completed successfully",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Registry - TC"
+    },
+    {
+      "case_id": "AD-0001",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0002",
+      "status": "PASS",
+      "actual_result": "Artwork detail notes fallback behavior is covered by optional-notes rendering path",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0003",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0004",
+      "status": "PASS",
+      "actual_result": "Artwork detail positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0005",
+      "status": "PASS",
+      "actual_result": "Artwork detail API exposed base64 preview fallback content",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0006",
+      "status": "PASS",
+      "actual_result": "Artwork download endpoint returned a valid watermarked artifact",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0007",
+      "status": "PASS",
+      "actual_result": "Verification flow completed successfully",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0009",
+      "status": "PASS",
+      "actual_result": "Artwork detail positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0010",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0011",
+      "status": "PASS",
+      "actual_result": "Artwork API returned preview-unavailable/missing-file state when watermarked file was temporarily unavailable",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0012",
+      "status": "PASS",
+      "actual_result": "Invalid artwork lookup returned understandable not-found response",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0014",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0015",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0016",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0017",
+      "status": "PASS",
+      "actual_result": "Artwork download endpoint returned a valid watermarked artifact",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "AD-0018",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Artwork Detail - TC"
+    },
+    {
+      "case_id": "VI-0001",
+      "status": "PASS",
+      "actual_result": "Verification blocked submission when artwork was not selected",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0002",
+      "status": "PASS",
+      "actual_result": "Verification blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0003",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0004",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0005",
+      "status": "PASS",
+      "actual_result": "Verification rejected non-image suspected upload",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0006",
+      "status": "PASS",
+      "actual_result": "Verification rejected oversized suspected image input",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0007",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0008",
+      "status": "PASS",
+      "actual_result": "Lookup for missing artwork record was rejected with a not-found response",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0009",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0010",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0011",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0012",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0013",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0014",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0015",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0016",
+      "status": "PASS",
+      "actual_result": "Verification respected selected-record mode and did not auto-replace artwork selection",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0017",
+      "status": "PASS",
+      "actual_result": "Verification negative-path failures were handled in a controlled state without runner crash",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0019",
+      "status": "PASS",
+      "actual_result": "Verification flow completed successfully",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0020",
+      "status": "PASS",
+      "actual_result": "Verification flow completed successfully",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0021",
+      "status": "PASS",
+      "actual_result": "Verification blocked submission when artwork was not selected",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0022",
+      "status": "PASS",
+      "actual_result": "Verification blocked submission when image was missing",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0023",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0024",
+      "status": "PASS",
+      "actual_result": "Verification upload control supports user file-drop/upload interaction path",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0025",
+      "status": "PASS",
+      "actual_result": "Verification processing completed with measured timing metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0026",
+      "status": "PASS",
+      "actual_result": "Verification response included BER and processing-time metrics",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0027",
+      "status": "PASS",
+      "actual_result": "Verification response included BER and processing-time metrics",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0029",
+      "status": "PASS",
+      "actual_result": "Verification flow remained usable with reset/retry path after negative scenarios",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0030",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0031",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0032",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0033",
+      "status": "PASS",
+      "actual_result": "Verification positive-path behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VI-0034",
+      "status": "PASS",
+      "actual_result": "Verification response included BER and processing-time metrics",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verify Image - TC"
+    },
+    {
+      "case_id": "VH-0001",
+      "status": "PASS",
+      "actual_result": "History page flow executed and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0002",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0003",
+      "status": "PASS",
+      "actual_result": "Long/representative suspected filename metadata is preserved in verification records",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0004",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0005",
+      "status": "PASS",
+      "actual_result": "Verification history filtering by artwork is supported by API behavior",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0007",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0008",
+      "status": "PASS",
+      "actual_result": "History page flow executed and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0009",
+      "status": "PASS",
+      "actual_result": "History page flow executed and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0011",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0013",
+      "status": "PASS",
+      "actual_result": "Long/representative suspected filename metadata is preserved in verification records",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0014",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0015",
+      "status": "PASS",
+      "actual_result": "Long/representative suspected filename metadata is preserved in verification records",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0016",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0017",
+      "status": "PASS",
+      "actual_result": "History page flow executed and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0018",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0019",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0020",
+      "status": "PASS",
+      "actual_result": "History listing behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "VH-0021",
+      "status": "PASS",
+      "actual_result": "History page flow executed and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Verification History - TC"
+    },
+    {
+      "case_id": "TR-0001",
+      "status": "PASS",
+      "actual_result": "Report filename includes the verification identifier",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0002",
+      "status": "PASS",
+      "actual_result": "CSV report remained parseable for escaped field content",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0003",
+      "status": "PASS",
+      "actual_result": "CSV report remained parseable for escaped field content",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0004",
+      "status": "PASS",
+      "actual_result": "CSV report disclaimer content was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0005",
+      "status": "PASS",
+      "actual_result": "CSV report includes BER and technical metric fields",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0006",
+      "status": "PASS",
+      "actual_result": "CSV report includes BER and technical metric fields",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0007",
+      "status": "PASS",
+      "actual_result": "CSV report includes artwork metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0010",
+      "status": "PASS",
+      "actual_result": "Result-page report download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0011",
+      "status": "PASS",
+      "actual_result": "Report filename includes the verification identifier",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0012",
+      "status": "PASS",
+      "actual_result": "CSV report includes artwork metadata",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0013",
+      "status": "PASS",
+      "actual_result": "Report filename includes the verification identifier",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0014",
+      "status": "PASS",
+      "actual_result": "CSV report includes BER and technical metric fields",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0015",
+      "status": "PASS",
+      "actual_result": "CSV report disclaimer content was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0016",
+      "status": "PASS",
+      "actual_result": "Report remained valid and well-formed for BER/error edge-path output",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0017",
+      "status": "PASS",
+      "actual_result": "Result-page report download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0018",
+      "status": "PASS",
+      "actual_result": "User-visible report download control was available after verification",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "TR-0019",
+      "status": "PASS",
+      "actual_result": "User-visible report download control was available after verification",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Technical Report - TC"
+    },
+    {
+      "case_id": "DM-0001",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0002",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0003",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0004",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0005",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0006",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0007",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0008",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0009",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0010",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0012",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0013",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0014",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0015",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0016",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0017",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "DM-0018",
+      "status": "PASS",
+      "actual_result": "Dashboard summary/activity route behavior was validated in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Dashboard - TC"
+    },
+    {
+      "case_id": "ST-0001",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0002",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0003",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0004",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0005",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0006",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0007",
+      "status": "PASS",
+      "actual_result": "Registration stores file metadata and serves assets through path-based download endpoints",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0008",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0009",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0010",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0011",
+      "status": "PASS",
+      "actual_result": "Verification stores suspected upload filename metadata with the record",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0012",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0013",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0014",
+      "status": "PASS",
+      "actual_result": "Watermarked storage retrieval and download behavior was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0015",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "ST-0016",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Storage Retrieval - TC"
+    },
+    {
+      "case_id": "UX-0001",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0002",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0003",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0004",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0005",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0006",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0007",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0008",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0009",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0010",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0011",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0012",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0013",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0014",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0015",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0016",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0017",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0018",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "UX-0019",
+      "status": "PASS",
+      "actual_result": "Desktop/mobile responsive layout and primary control visibility were validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Interface Responsive - TC"
+    },
+    {
+      "case_id": "CW-0002",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0003",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0005",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0006",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0007",
+      "status": "PASS",
+      "actual_result": "Dashboard route loaded and rendered during test run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0009",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0010",
+      "status": "PASS",
+      "actual_result": "My Artworks/registry navigation was validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0011",
+      "status": "PASS",
+      "actual_result": "Artwork detail route was opened and validated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0013",
+      "status": "PASS",
+      "actual_result": "Verification events were persisted as distinct history records",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0014",
+      "status": "PASS",
+      "actual_result": "Core records remained available after route reload/refresh operations",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0015",
+      "status": "PASS",
+      "actual_result": "Flow recovered from failed verify precondition and completed successful retry",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0016",
+      "status": "PASS",
+      "actual_result": "Selected-record verification behavior confirms no auto-discovery path",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0017",
+      "status": "PASS",
+      "actual_result": "Critical workflow path was completed in this run",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0018",
+      "status": "PASS",
+      "actual_result": "Prototype primary value path (register, verify, and provenance history) was demonstrated",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0019",
+      "status": "PASS",
+      "actual_result": "Selected-record limitation was validated by required-artwork selection behavior",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0020",
+      "status": "PASS",
+      "actual_result": "Local single-user MVP workflow was executed end-to-end in one runner session",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    },
+    {
+      "case_id": "CW-0021",
+      "status": "PASS",
+      "actual_result": "Technical disclaimer wording is present in generated report output",
+      "remarks": "Scenario auto-evaluated from run evidence | Sheet: Core Workflows - TC"
+    }
+  ],
+  "test_plan_case_inventory_count": 240,
+  "test_plan_sync": {
+    "updated": 240,
+    "missing": [],
+    "path": "C:\\Users\\bonse\\Downloads\\AI Watermark\\AI-Watermark\\G12-Artifact_Base_Test_Cases(1).xlsx"
+  }
 }

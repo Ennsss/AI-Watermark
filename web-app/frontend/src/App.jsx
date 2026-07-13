@@ -7,7 +7,6 @@ import {
   CheckCircle,
   History,
   Menu,
-  X,
 } from 'lucide-react/dist/cjs/lucide-react';
 
 import DashboardPage from './pages/DashboardPage';
@@ -28,12 +27,14 @@ function AppLayout({ children }) {
 
   return (
     <div className="app-layout">
-      <button
-        className="mobile-menu-toggle"
-        onClick={() => setSidebarOpen(!sidebarOpen)}
-      >
-        {sidebarOpen ? <X size={24} /> : <Menu size={24} />}
-      </button>
+      {!sidebarOpen && (
+        <button
+          className="mobile-menu-toggle"
+          onClick={() => setSidebarOpen(true)}
+        >
+          <Menu size={24} />
+        </button>
+      )}
 
       <aside className={`sidebar ${sidebarOpen ? 'open' : ''}`}>
         <div className="sidebar-header">
