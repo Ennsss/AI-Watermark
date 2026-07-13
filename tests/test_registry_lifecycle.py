@@ -88,7 +88,7 @@ def test_dashboard_counts_only_active_artworks():
     assert stats["total_artworks"] == 0
 
 
-def test_individual_report_contains_payload_comparison_fields():
+def test_individual_report_contains_safe_payload_comparison_fields():
     db = make_session()
     artwork = add_artwork(db)
     db.add(Verification(
@@ -107,8 +107,11 @@ def test_individual_report_contains_payload_comparison_fields():
     report = ReportService.generate_verification_csv(db, "VER-0002")
     rows = dict(row for row in csv.reader(io.StringIO(report)) if len(row) == 2)
 
-    assert rows["Expected Payload"] == "0" * 32
-    assert rows["Extracted Payload"] == "8" + "0" * 31
+    assert rows["Expected Payload Fingerprint"].startswith("sha256:")
+    assert rows["Extracted Payload Fingerprint"].startswith("sha256:")
+    assert rows["Expected Payload Fingerprint"] != rows["Extracted Payload Fingerprint"]
+    assert "0" * 32 not in report
+    assert "8" + "0" * 31 not in report
     assert rows["Differing Bits"] == "1"
     assert rows["Payload Length"] == "128"
     assert rows["Watermark Engine"] == "DWT-QIM"

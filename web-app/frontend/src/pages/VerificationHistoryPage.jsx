@@ -161,8 +161,8 @@ export default function VerificationHistoryPage() {
           <details className="technical-details">
             <summary>Technical Details</summary>
             <div className="technical-grid">
-              <span>Expected payload</span><code>{selectedVerification.expected_payload || 'N/A'}</code>
-              <span>Extracted payload</span><code>{selectedVerification.extracted_payload || 'N/A'}</code>
+              <span>Expected payload fingerprint</span><code>{selectedVerification.expected_payload_fingerprint || 'N/A'}</code>
+              <span>Extracted payload fingerprint</span><code>{selectedVerification.extracted_payload_fingerprint || 'N/A'}</code>
               <span>Differing bits</span><strong>{selectedVerification.differing_bits ?? 'N/A'}</strong>
               <span>Payload length</span><strong>{selectedVerification.payload_length ? `${selectedVerification.payload_length} bits` : 'N/A'}</strong>
               <span>BER</span><strong>{selectedVerification.ber !== null ? selectedVerification.ber.toFixed(4) : 'N/A'}</strong>

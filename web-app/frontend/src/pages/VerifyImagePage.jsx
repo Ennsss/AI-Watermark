@@ -56,8 +56,8 @@ const ResultCard = ({ verification }) => {
       <details className="result-technical-details">
         <summary>Technical Details</summary>
         <dl>
-          <dt>Expected payload</dt><dd><code>{verification.expected_payload || 'N/A'}</code></dd>
-          <dt>Extracted payload</dt><dd><code>{verification.extracted_payload || 'N/A'}</code></dd>
+          <dt>Expected payload fingerprint</dt><dd><code>{verification.expected_payload_fingerprint || 'N/A'}</code></dd>
+          <dt>Extracted payload fingerprint</dt><dd><code>{verification.extracted_payload_fingerprint || 'N/A'}</code></dd>
           <dt>Differing bits</dt><dd>{verification.differing_bits ?? 'N/A'}</dd>
           <dt>Payload length</dt><dd>{verification.payload_length ? `${verification.payload_length} bits` : 'N/A'}</dd>
           <dt>Threshold used</dt><dd>{verification.threshold_used ?? 'N/A'}</dd>

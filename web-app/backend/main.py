@@ -29,7 +29,7 @@ from database import init_db, get_db
 from artwork_service import ArtworkService
 from verification_service import VerificationService
 from report_service import ReportService
-from utils import bytes_from_hex_payload, hex_from_bytes_payload
+from utils import bytes_from_hex_payload, hex_from_bytes_payload, payload_fingerprint
 
 app = FastAPI(
     title="AI Watermark Web API",
@@ -344,7 +344,7 @@ async def get_artwork(artwork_id: str, db: Session = Depends(get_db)):
             "watermark_status": artwork.watermark_status,
             "archived_at": artwork.archived_at.isoformat() if artwork.archived_at else None,
             "payload_length": len(artwork.payload) * 4,
-            "payload_preview": f"{artwork.payload[:4]}…{artwork.payload[-4:]}",
+            "payload_fingerprint": payload_fingerprint(artwork.payload),
             "notes": artwork.notes,
             "watermarked_filename": artwork.watermarked_filename,
             "watermarked_download_url": f"/api/artworks/{artwork.artwork_id}/watermarked",
@@ -401,7 +401,7 @@ async def update_artwork(artwork_id: str, payload: ArtworkUpdateRequest, db: Ses
             "watermark_status": updated.watermark_status,
             "archived_at": updated.archived_at.isoformat() if updated.archived_at else None,
             "payload_length": len(updated.payload) * 4,
-            "payload_preview": f"{updated.payload[:4]}…{updated.payload[-4:]}",
+            "payload_fingerprint": payload_fingerprint(updated.payload),
             "notes": updated.notes,
             "watermarked_filename": updated.watermarked_filename,
             "watermarked_download_url": f"/api/artworks/{updated.artwork_id}/watermarked",
@@ -548,8 +548,8 @@ async def verify_image(
             "threshold_used": verification_service.POLICY.detection_ber_threshold,
             "policy_version": verification_service.POLICY.policy_version,
             "threshold_provisional": True,
-            "expected_payload": expected_payload_hex,
-            "extracted_payload": extracted_hex,
+            "expected_payload_fingerprint": payload_fingerprint(expected_payload_hex),
+            "extracted_payload_fingerprint": payload_fingerprint(extracted_hex),
             "differing_bits": int(np.sum(extracted_bits != expected_bits)),
             "payload_length": len(expected_bits),
             "watermark_engine": "DWT-QIM",
@@ -616,8 +616,8 @@ async def get_verification_detail(verification_id: str, db: Session = Depends(ge
             "threshold_used": verification.threshold_used,
             "policy_version": verification.policy_version,
             "threshold_provisional": (verification.policy_version or "").startswith("provisional"),
-            "expected_payload": verification.expected_payload,
-            "extracted_payload": verification.extracted_payload,
+            "expected_payload_fingerprint": payload_fingerprint(verification.expected_payload),
+            "extracted_payload_fingerprint": payload_fingerprint(verification.extracted_payload),
             "differing_bits": calculate_differing_bits(verification.expected_payload, verification.extracted_payload),
             "payload_length": len(verification.expected_payload) * 4 if verification.expected_payload else None,
             "watermark_engine": "DWT-QIM",

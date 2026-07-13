@@ -196,7 +196,7 @@ export default function ArtworkDetailPage() {
           <div className="detail-row"><span className="detail-label">Artwork ID</span><span className="detail-value">{artwork.artwork_id}</span></div>
           <div className="detail-row"><span className="detail-label">Watermark status</span><span className="detail-value">{statusLabel}</span></div>
           <div className="detail-row"><span className="detail-label">Payload length</span><span className="detail-value">{artwork.payload_length} bits</span></div>
-          <div className="detail-row"><span className="detail-label">Payload preview</span><code className="payload-preview">{artwork.payload_preview}</code></div>
+          <div className="detail-row"><span className="detail-label">Payload fingerprint</span><code className="payload-preview">{artwork.payload_fingerprint || 'N/A'}</code></div>
           <div className="detail-row"><span className="detail-label">Watermark engine</span><span className="detail-value">DWT-QIM</span></div>
           <div className="detail-row"><span className="detail-label">Registered</span><span className="detail-value">{new Date(artwork.registration_date).toLocaleString()}</span></div>
         </div>

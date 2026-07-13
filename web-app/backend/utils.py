@@ -1,6 +1,8 @@
 """Utility functions for ID and payload generation."""
 
+import hashlib
 import secrets
+from typing import Optional
 from sqlalchemy.orm import Session
 from database import Artwork, Verification
 
@@ -49,3 +51,14 @@ def bytes_from_hex_payload(hex_payload: str) -> bytes:
 def hex_from_bytes_payload(payload_bytes: bytes) -> str:
     """Convert bytes payload to hex string."""
     return payload_bytes.hex()
+
+
+def payload_fingerprint(hex_payload: Optional[str], length: int = 12) -> Optional[str]:
+    """Return a short one-way fingerprint without exposing raw payload bits."""
+    if not hex_payload:
+        return None
+    try:
+        payload_bytes = bytes.fromhex(hex_payload)
+    except ValueError:
+        payload_bytes = hex_payload.encode("utf-8")
+    return f"sha256:{hashlib.sha256(payload_bytes).hexdigest()[:length]}"

@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import Optional
 from sqlalchemy.orm import Session
 from database import Verification, Artwork
+from utils import payload_fingerprint
 
 
 class ReportService:
@@ -62,8 +63,8 @@ class ReportService:
         
         # Technical details
         writer.writerow(["Technical Analysis"])
-        writer.writerow(["Expected Payload", verification.expected_payload or "N/A"])
-        writer.writerow(["Extracted Payload", verification.extracted_payload or "N/A"])
+        writer.writerow(["Expected Payload Fingerprint", payload_fingerprint(verification.expected_payload) or "N/A"])
+        writer.writerow(["Extracted Payload Fingerprint", payload_fingerprint(verification.extracted_payload) or "N/A"])
         differing_bits = "N/A"
         if verification.expected_payload and verification.extracted_payload:
             try:
