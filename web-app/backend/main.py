@@ -55,6 +55,7 @@ MAX_FILE_SIZE = 50 * 1024 * 1024  # 50MB
 TITLE_MAX_LENGTH = 120
 CREATOR_MAX_LENGTH = 80
 NOTES_MAX_LENGTH = 1000
+ALLOWED_UPLOAD_MIME_TYPES = {"image/jpeg", "image/png"}
 
 # Initialize database
 init_db()
@@ -108,6 +109,13 @@ def validate_image(image_array: np.ndarray, max_size: int = 2048) -> None:
     height, width = image_array.shape[:2]
     if height > max_size or width > max_size:
         raise ValueError(f"Image dimensions exceed maximum {max_size}x{max_size}")
+
+
+def validate_upload_content_type(file: UploadFile) -> None:
+    """Restrict uploads to JPEG and PNG files only."""
+    content_type = (file.content_type or "").lower()
+    if content_type not in ALLOWED_UPLOAD_MIME_TYPES:
+        raise HTTPException(status_code=400, detail="Only JPEG and PNG files are allowed")
 
 
 def calculate_differing_bits(expected_hex: Optional[str], extracted_hex: Optional[str]) -> Optional[int]:
@@ -187,8 +195,7 @@ async def register_artwork(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
     
     try:
         # Read and validate image
@@ -456,8 +463,7 @@ async def verify_image(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
     
     try:
         # Get artwork and expected payload
@@ -715,8 +721,7 @@ async def embed_watermark_endpoint(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
 
     if delta < 4 or delta > 64:
         raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")
@@ -825,8 +830,7 @@ async def extract_watermark_endpoint(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
 
     if delta < 4 or delta > 64:
         raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")
@@ -918,8 +922,7 @@ async def detect_watermark_endpoint(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
     
     if threshold < 0 or threshold > 1:
         raise HTTPException(status_code=400, detail="Threshold must be between 0 and 1")
@@ -1025,8 +1028,7 @@ async def remove_watermark_endpoint(
     if file.size > MAX_FILE_SIZE:
         raise HTTPException(status_code=413, detail="File too large")
     
-    if not file.content_type.startswith("image/"):
-        raise HTTPException(status_code=400, detail="File must be an image")
+    validate_upload_content_type(file)
 
     if delta < 4 or delta > 64:
         raise HTTPException(status_code=400, detail="Delta must be between 4 and 64")

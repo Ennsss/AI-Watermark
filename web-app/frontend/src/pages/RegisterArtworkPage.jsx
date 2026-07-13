@@ -8,6 +8,7 @@ const API_BASE_URL = process.env.REACT_APP_API_URL || 'http://localhost:8000';
 const TITLE_MAX_LENGTH = 120;
 const CREATOR_MAX_LENGTH = 80;
 const NOTES_MAX_LENGTH = 1000;
+const ALLOWED_IMAGE_TYPES = ['image/jpeg', 'image/png'];
 
 export default function RegisterArtworkPage() {
   const [formData, setFormData] = useState({
@@ -27,8 +28,8 @@ export default function RegisterArtworkPage() {
     const selectedFile = e.target.files?.[0];
     if (!selectedFile) return;
 
-    if (!selectedFile.type.startsWith('image/')) {
-      setError('Please select a valid image file');
+    if (!ALLOWED_IMAGE_TYPES.includes(selectedFile.type)) {
+      setError('Only JPEG and PNG files are allowed');
       return;
     }
 
@@ -235,7 +236,7 @@ export default function RegisterArtworkPage() {
           >
             <input
               type="file"
-              accept="image/*"
+              accept="image/jpeg,image/png"
               onChange={handleFileSelect}
               style={{ display: 'none' }}
               id="file-input"
