@@ -104,3 +104,35 @@ a provisional baseline delta. Do not treat this fixture benchmark as final
 paper evidence.
 ```
 
+## Stage 3A - Controlled QIM Delta Calibration
+
+```text
+Purpose:
+Calibrate delta values 8, 16, 24, and 32 under the frozen Stage 2B
+train/validation grid and 369-parameter seed-aware decoder.
+
+Dataset:
+- First 500 sorted training images, two payloads each
+- First 100 sorted validation images, two payloads each
+- Full-factorial clean/JPEG/re-encoding exposure
+- Held-out test set not used
+
+Configuration held fixed:
+- Payload bits: 128
+- Coefficient seed: 42
+- Wavelet/DWT: Haar, level 2, symmetric mode
+- Subbands: LH2 and HL2
+- Decoder: fresh 369-parameter seed-aware Conv1D per delta
+
+Primary results:
+- Delta 16: six-attack macro BER 0.238236; PSNR 56.130 dB; SSIM 0.999161
+- Delta 24: six-attack macro BER 0.129232; PSNR 55.701 dB; SSIM 0.999033
+- Delta 32: six-attack macro BER 0.088359; PSNR 55.192 dB; SSIM 0.998860
+
+Decision:
+Delta 24 selected and frozen as the smallest delta meeting the predefined
+meaningful robustness-gain rule while retaining high visual fidelity. This is
+a validation-stage calibration choice, not a universal optimum. Next planned
+experiment: Stage 4A zero-shot resize evaluation with no training.
+```
+

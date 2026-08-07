@@ -12,8 +12,9 @@ on the Y luminance channel. A two-level Haar DWT is applied, with binary QIM in
 the LH2 and HL2 subbands. The payload is 128 bits, coefficient seed 42 is used
 for controlled experiments, and extraction is blind. There is no ECC.
 
-The current embedding strength is delta 16. This value remains provisional;
-final calibration has not yet occurred.
+The selected embedding strength is delta 24. It was frozen after Stage 3A for
+subsequent development experiments. This is a validation-stage calibration
+choice, not a claim that delta 24 is universally optimal.
 
 ## 3. Baseline Full-Map CNN
 
@@ -129,26 +130,93 @@ no improvement in moderate/severe JPEG recovery. Insufficient attack exposure
 is therefore unlikely to be the primary bottleneck. This does not prove formal
 information-theoretic loss.
 
-## 12. Current Working Hypothesis
+## 12. Stage 2C — Feature Separability Diagnostic
 
-The current evidence suggests that the single-coefficient representation
-reaches a practical ambiguity ceiling under moderate/severe JPEG compression.
-A sufficiently disturbed selected coefficient may cross QIM regions such that
-its attacked value alone no longer uniquely reveals the original embedded bit.
-This remains a hypothesis requiring Stage 2C validation.
+Stage 2C performed no CNN training and evaluated the delta-16 single-coefficient
+representation directly. At JPEG70, Stage 2B CNN BER was 0.349961, empirical
+lookup BER was 0.353086, and k-nearest-neighbor BER was 0.364766. At JPEG50,
+the corresponding values were 0.459414, 0.456914, and 0.461016. Phase overlap
+was 0.6674 for JPEG70 and 0.8937 for JPEG50.
 
-## 13. Next Planned Experiment
+At delta 16, these results supported a practical single-coefficient ambiguity
+ceiling. They did not prove absolute or information-theoretic loss.
 
-**Stage 2C — Feature Separability Diagnostic** will perform no CNN training. It
-will measure target-conditioned QIM phase overlap, compare bit-0 and bit-1
-feature distributions, evaluate empirical lookup/classical classifiers,
-measure contradictory or ambiguous feature regions, quantify clean-to-attacked
-coefficient displacement, and determine whether JPEG70/JPEG50 remain separable
-using the current single-coefficient features.
+## 13. Stage 2D — Local 3×3 Context
 
-Resize and crop training have **not** started yet.
+Stage 2D changed only the representation from one selected coefficient to a
+same-subband 3×3 neighborhood using a shared 601-parameter local decoder.
+Repeated Q85 re-encoding improved strongly, but JPEG70 improved only from
+0.349961 to 0.344609 and JPEG50 only from 0.459414 to 0.456758. Clean BER rose
+to 0.005234. The result was **PARTIAL**: local context contained useful evidence
+but did not resolve the primary JPEG70/JPEG50 limitation.
 
-## 14. Test-Set Status
+## 14. Stage 3A — QIM Delta Calibration
+
+Stage 3A tested delta values 8, 16, 24, and 32 while freezing the first 500
+training images, first 100 validation images, two payloads per image, payload
+seeds, coefficient seed 42, Haar level-2 LH2/HL2 embedding, seven-condition
+full-factorial exposure, attack definitions, and the 369-parameter seed-aware
+decoder. A fresh decoder was trained separately for each delta. These remain
+development/validation results; the held-out test set was not used.
+
+| Delta | Mean PSNR | Mean SSIM | Clean | JPEG90 | JPEG70 | JPEG50 | Reencode macro | Six-attack macro |
+|---:|---:|---:|---:|---:|---:|---:|---:|---:|
+| 8 | 56.429 | 0.999238 | 0.023203 | 0.264141 | 0.480234 | 0.499297 | 0.403503 | 0.409030 |
+| 16 | 56.130 | 0.999161 | 0.000352 | 0.054922 | 0.349805 | 0.459336 | 0.188451 | 0.238236 |
+| 24 | 55.701 | 0.999033 | 0.000195 | 0.024297 | 0.233750 | 0.365078 | 0.050755 | 0.129232 |
+| 32 | 55.192 | 0.998860 | 0.000234 | 0.012031 | 0.155938 | 0.274023 | 0.029388 | 0.088359 |
+
+At delta 24, detailed classical/CNN BER was:
+
+| Condition | Classical BER | CNN BER |
+|---|---:|---:|
+| Clean | 0.127852 | 0.000195 |
+| JPEG90 | 0.151758 | 0.024297 |
+| JPEG70 | 0.235078 | 0.233750 |
+| JPEG50 | 0.385820 | 0.365078 |
+| Reencode1 | 0.161328 | 0.040078 |
+| Reencode2 | 0.170273 | 0.053906 |
+| Reencode3 | 0.174297 | 0.058281 |
+
+Robustness improved monotonically and visual fidelity decreased monotonically
+as delta increased. Relative to delta 16, delta 24 reduced six-attack macro BER
+by 0.109004, reduced JPEG70 BER from 0.349805 to 0.233750, reduced JPEG50 BER
+from 0.459336 to 0.365078, and reduced re-encoding macro BER from 0.188451 to
+0.050755. Its paired fidelity cost was 0.428 dB PSNR and 0.000128 SSIM. No
+catastrophic LH2/HL2 imbalance occurred.
+
+The predefined rule selected the smallest delta providing a meaningful
+robustness gain while retaining high fidelity. Therefore **delta 24 was
+selected and frozen**. Delta 32 had lower BER, but selecting it solely for
+minimum BER would violate that predefined robustness/fidelity rule. Delta 24
+is the selected setting for subsequent experiments, not a universal optimum.
+
+Stage 3A also refines Stage 2C: JPEG50 was near-random for the delta-16
+single-coefficient representation, but stronger embedding substantially
+improved recovery. The ambiguity was therefore dependent on embedding strength,
+not an absolute compression limit. JPEG50 remains difficult, but a strict
+severe-JPEG ceiling is no longer supported.
+
+## 15. Current Working Configuration
+
+- Delta: **24**
+- Status: **FROZEN AFTER STAGE 3A**
+- Decoder: seed-aware 369-parameter shared Conv1D
+- Coefficient seed: 42
+- Payload: 128 raw bits, no ECC
+- Embedding: classical Haar DWT-QIM in LH2 and HL2
+
+## 16. Next Planned Experiment
+
+**Stage 4A — Zero-Shot Resize Robustness Evaluation**
+
+Purpose: evaluate the frozen delta-24 decoder under resize-only degradation
+before deciding whether resize-aware training is necessary.
+
+Planned conditions are Clean, Resize75, Resize50, and Resize25. Stage 4A will
+perform no training. Crop evaluation has not started.
+
+## 17. Test-Set Status
 
 > **THE 500-IMAGE HELD-OUT TEST SET HAS NOT BEEN USED FOR MODEL SELECTION OR
 > THESE DEVELOPMENT EXPERIMENTS.**
@@ -156,7 +224,7 @@ Resize and crop training have **not** started yet.
 Training and model development use train/validation only. The test set remains
 reserved for final frozen evaluation.
 
-## 15. Thesis Implications
+## 18. Thesis Implications
 
 - The original full-map CNN is retained as the documented baseline.
 - The seed-aware decoder is an experimentally justified architectural refinement.

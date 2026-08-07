@@ -1,0 +1,14 @@
+{
+  "training_images": 500,
+  "validation_images": 100,
+  "training_base_pairs": 1000,
+  "validation_base_pairs": 200,
+  "training_payload_fingerprints_match_run3b": true,
+  "validation_payload_fingerprints_match_run3b": true,
+  "validation_grid_matches_stage2b_for_all_deltas": true,
+  "validation_examples_per_delta": 1400,
+  "training_examples_per_delta": 7000,
+  "coefficient_seed": 42,
+  "test_set_used": false,
+  "nonfinite_feature_count": 0
+}

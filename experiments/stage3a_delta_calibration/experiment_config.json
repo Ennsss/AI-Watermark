@@ -1,0 +1,52 @@
+{
+  "experiment": "Stage 3A controlled QIM delta calibration",
+  "deltas": [
+    8,
+    16,
+    24,
+    32
+  ],
+  "training_examples_per_delta": 7000,
+  "validation_examples_per_delta": 1400,
+  "training_payload_seed": 20260810,
+  "validation_payload_seed": 20260809,
+  "shuffle_seeds": {
+    "8": 20260820,
+    "16": 20260821,
+    "24": 20260822,
+    "32": 20260823
+  },
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "conditions": [
+    "clean",
+    "jpeg90",
+    "jpeg70",
+    "jpeg50",
+    "reencode1",
+    "reencode2",
+    "reencode3"
+  ],
+  "model": "fresh 369-parameter Stage 2B seed-aware Conv1D per delta",
+  "features": [
+    "coefficient/delta",
+    "sin(pi*coefficient/delta)",
+    "cos(pi*coefficient/delta)",
+    "subband_id"
+  ],
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "batch_size": 32,
+  "maximum_epochs": 100,
+  "patience": 10,
+  "threshold": 0.5,
+  "checkpoint": "lowest seven-condition validation macro BER; validation BCE tie-break",
+  "fidelity": "full RGB uint8; skimage PSNR data_range=255; multichannel SSIM data_range=255 channel_axis=2",
+  "test_set_used": false
+}

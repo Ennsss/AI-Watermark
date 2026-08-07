@@ -234,10 +234,12 @@ Chapter 4 results and discussion.
 
 ## Current Thesis Status
 
-- Clean seed-aware decoder validated
-- Stage 2 JPEG/re-encoding robustness: partial
-- Stage 2B full-factorial exposure: only marginal additional improvement
-- Next: Stage 2C separability diagnostic
+- Seed-aware 369-parameter decoder validated for clean generalization
+- JPEG/re-encoding robustness analyzed through Stage 2D
+- Formal QIM delta calibration completed
+- Delta 24 selected and frozen using the predefined robustness/fidelity rule
+- Next: Stage 4A zero-shot resize evaluation
+- Crop evaluation has not started
 - Held-out test set remains untouched
 
 See [`EXPERIMENT_MILESTONE.md`](EXPERIMENT_MILESTONE.md) for the controlled

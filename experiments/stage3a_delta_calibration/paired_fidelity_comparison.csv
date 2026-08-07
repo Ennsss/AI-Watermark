@@ -1,0 +1,4 @@
+reference_delta,comparison_delta,mean_paired_psnr_difference_comparison_minus_reference_db,mean_paired_ssim_difference_comparison_minus_reference
+16,8,0.29894074945308113,7.740726745005977e-05
+16,24,-0.4284803557955657,-0.00012751879847990922
+16,32,-0.9377143218088011,-0.0003001840194908967

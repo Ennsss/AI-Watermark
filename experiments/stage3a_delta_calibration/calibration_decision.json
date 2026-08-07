@@ -1,0 +1,33 @@
+{
+  "selection_rule": "Select the smallest delta above 16 whose six-attack CNN macro BER improves by at least 0.01 absolute; otherwise retain 16. Report paired fidelity loss without inventing a cutoff.",
+  "selected_delta": 24,
+  "reason": "Delta 24 is the smallest value satisfying the fixed robustness rule.",
+  "delta16_reproducibility_max_condition_ber_difference": 0.0005859374999999944,
+  "delta16_reasonably_reproducible": true,
+  "jpeg50_practical_ceiling_across_tested_deltas": false,
+  "outcome_categories": [
+    "CALIBRATION SUCCESS",
+    "FIDELITY-LIMITED"
+  ],
+  "paired_fidelity_comparisons": [
+    {
+      "reference_delta": 16,
+      "comparison_delta": 8,
+      "mean_paired_psnr_difference_comparison_minus_reference_db": 0.29894074945308113,
+      "mean_paired_ssim_difference_comparison_minus_reference": 7.740726745005977e-05
+    },
+    {
+      "reference_delta": 16,
+      "comparison_delta": 24,
+      "mean_paired_psnr_difference_comparison_minus_reference_db": -0.4284803557955657,
+      "mean_paired_ssim_difference_comparison_minus_reference": -0.00012751879847990922
+    },
+    {
+      "reference_delta": 16,
+      "comparison_delta": 32,
+      "mean_paired_psnr_difference_comparison_minus_reference_db": -0.9377143218088011,
+      "mean_paired_ssim_difference_comparison_minus_reference": -0.0003001840194908967
+    }
+  ],
+  "test_set_used": false
+}
