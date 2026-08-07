@@ -1,0 +1,50 @@
+{
+  "experiment": "run2_seed_aware_overfit",
+  "hypothesis": "gathering seed-selected coefficients in payload order makes the clean task learnable",
+  "source_images": [
+    "5233584.png",
+    "5233614.png",
+    "5233676.png",
+    "5233692.png"
+  ],
+  "payload_sha256": "dc7449cbea3692e2fd2cec7f08ed7d3073b52676823b23bc5c60b05522681c3e",
+  "payload_rng_seed": 20260808,
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "attacks": [],
+  "input_shape": [
+    128,
+    4
+  ],
+  "features_in_order": [
+    "coefficient / delta",
+    "sin(pi * coefficient / delta)",
+    "cos(pi * coefficient / delta)",
+    "subband identifier (LH2=0, HL2=1)"
+  ],
+  "periodic_feature_rationale": "Production bit-0 states lie at c/delta=k and bit-1 states at k+1/2; sin(pi*c/delta) and cos(pi*c/delta) continuously encode this 2*delta-periodic phase.",
+  "model": [
+    "Conv1D(16, kernel_size=1, ReLU)",
+    "Conv1D(16, kernel_size=1, ReLU)",
+    "Conv1D(1, kernel_size=1, sigmoid)",
+    "Reshape(128)"
+  ],
+  "parameter_count": 369,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "loss": "binary_crossentropy",
+  "batch_size": 8,
+  "maximum_epochs": 500,
+  "epochs_actually_trained": 106,
+  "validation": null,
+  "pooling": false,
+  "dropout": false,
+  "stable_zero_epochs": 5
+}

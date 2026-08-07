@@ -1,0 +1,4 @@
+run,training_images,training_examples,validation_images,model_parameters,overall_validation_ber,lh2_ber,hl2_ber,perfect_recovery_rate,attacks,coefficient_seed,delta
+Run 2,4,32,N/A,369,N/A,N/A,N/A,1.0,none,42,16.0
+Run 3A,4,32,100,369,0.06953125,0.000234375,0.138828125,0.395,none,42,16.0
+Run 3B,500,1000,100,369,0.0001953125,0.000234375,0.00015625,0.975,none,42,16.0

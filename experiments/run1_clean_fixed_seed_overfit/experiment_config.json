@@ -1,0 +1,39 @@
+{
+  "experiment": "run1_clean_fixed_seed_overfit",
+  "source_images": [
+    "5233584.png",
+    "5233614.png",
+    "5233676.png",
+    "5233692.png"
+  ],
+  "candidate_images_screened": 9,
+  "source_image_count": 4,
+  "payloads_per_image": 8,
+  "payload_bits": 128,
+  "payload_rng_seed": 20260808,
+  "coefficient_seed": 42,
+  "model_initialization_seed": 42,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "attacks": [],
+  "dropout_rate": 0.0,
+  "batch_size": 8,
+  "learning_rate": 0.001,
+  "maximum_epochs": 500,
+  "stop_ber": 0.001,
+  "stable_zero_epochs": 5,
+  "epochs_actually_trained": 500,
+  "normalization_mean": [
+    -0.3347964286804199,
+    0.054776668548583984
+  ],
+  "normalization_std": [
+    47.804656982421875,
+    49.665489196777344
+  ]
+}

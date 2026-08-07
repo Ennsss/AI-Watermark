@@ -1,0 +1,3 @@
+run,images,examples,payloads_seen_during_training,mean_ber,perfect_recovery_rate,model_parameters,attacks,coefficient_seed,delta
+Run 2 memorization,4,32,True,0.0,1.0,369,none,42,16.0
+Run 3A validation transfer,100,200,False,0.06953125,0.395,369,none,42,16.0

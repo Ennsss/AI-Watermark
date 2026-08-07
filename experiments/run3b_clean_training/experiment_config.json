@@ -1,0 +1,40 @@
+{
+  "experiment": "run3b_clean_training",
+  "train_selection": "first 500 sorted PNG filenames from data/curated/train",
+  "validation_selection": "first 100 sorted PNG filenames from data/curated/val",
+  "training_payload_seed": 20260810,
+  "validation_payload_seed": 20260809,
+  "validation_payloads_reused_from_run3a": true,
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "attacks": [],
+  "features": [
+    "c/delta",
+    "sin(pi*c/delta)",
+    "cos(pi*c/delta)",
+    "subband_id"
+  ],
+  "architecture": [
+    "Conv1D(16,1,ReLU)",
+    "Conv1D(16,1,ReLU)",
+    "Conv1D(1,1,sigmoid)"
+  ],
+  "parameters": 369,
+  "fresh_model_initialization": true,
+  "model_seed": 42,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "loss": "binary_crossentropy",
+  "batch_size": 32,
+  "maximum_epochs": 100,
+  "patience": 10,
+  "checkpoint_selection": "lowest validation BER; validation BCE breaks BER ties",
+  "threshold": 0.5
+}

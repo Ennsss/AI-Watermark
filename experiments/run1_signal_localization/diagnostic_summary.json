@@ -1,0 +1,226 @@
+{
+  "configuration": {
+    "samples": 32,
+    "source_images": [
+      "5233584.png",
+      "5233614.png",
+      "5233676.png",
+      "5233692.png"
+    ],
+    "payload_seed": 20260808,
+    "coefficient_seed": 42,
+    "delta": 16.0,
+    "wavelet": "haar",
+    "dwt_level": 2,
+    "subbands": [
+      "LH2",
+      "HL2"
+    ],
+    "attacks": []
+  },
+  "normalization": {
+    "scope": "training-set channel-wise (one statistic per LH2/HL2 channel)",
+    "formula": "normalized = (coefficient - channel_mean) / channel_std",
+    "channel_means": [
+      -0.3347964286804199,
+      0.054776668548583984
+    ],
+    "channel_stds": [
+      47.804656982421875,
+      49.665489196777344
+    ],
+    "matches_saved_run1_statistics": true,
+    "pearson_raw_vs_normalized": {
+      "LH2": 1.0,
+      "HL2": 0.9999999999999993,
+      "combined": 0.9998088431694339
+    },
+    "nan_count": 0,
+    "inf_count": 0,
+    "dtype": "float32",
+    "clipping_rounding_or_quantization": false
+  },
+  "selected_signal": {
+    "raw_selected_coefficient_ber": 0.0,
+    "normalized_then_affine_inverted_ber": 0.0,
+    "coefficient_over_delta_target_0": {
+      "count": 2065,
+      "mean": -0.005379842615012117,
+      "std": 3.3074056297228727,
+      "min": -20.03125,
+      "median": 0.0,
+      "max": 14.890625
+    },
+    "coefficient_over_delta_target_1": {
+      "count": 2031,
+      "mean": 0.15181868537666174,
+      "std": 3.1590504094823904,
+      "min": -20.46875,
+      "median": 0.5,
+      "max": 14.40625
+    },
+    "normalized_coefficient_target_0": {
+      "count": 2065,
+      "mean": 0.0017543353957798304,
+      "std": 1.086215094149948,
+      "min": -6.454276084899902,
+      "median": 0.0017738110618665814,
+      "max": 4.990827560424805
+    },
+    "normalized_coefficient_target_1": {
+      "count": 2031,
+      "mean": 0.05318261069625777,
+      "std": 1.037065552855091,
+      "min": -6.595219135284424,
+      "median": 0.15997473895549774,
+      "max": 4.823479652404785
+    },
+    "decision_margin_target_0": {
+      "count": 2065,
+      "mean": 6.573607748184018,
+      "std": 1.2463625763815145,
+      "min": 3.5,
+      "median": 6.5,
+      "max": 8.0
+    },
+    "decision_margin_target_1": {
+      "count": 2031,
+      "mean": 6.580502215657312,
+      "std": 1.2377589474864372,
+      "min": 2.5,
+      "median": 6.5,
+      "max": 8.0
+    }
+  },
+  "pool1_collisions": {
+    "region_size": 2,
+    "unique_cells_occupied": 127,
+    "collision_cells": 1,
+    "selected_bits_sharing_a_cell": 2,
+    "collision_pairs": 1,
+    "mean_differing_target_collision_pairs_per_sample": 0.5,
+    "maximum_differing_target_collision_pairs_per_sample": 1
+  },
+  "pool2_collisions": {
+    "region_size": 4,
+    "unique_cells_occupied": 126,
+    "collision_cells": 2,
+    "selected_bits_sharing_a_cell": 4,
+    "collision_pairs": 2,
+    "mean_differing_target_collision_pairs_per_sample": 1.125,
+    "maximum_differing_target_collision_pairs_per_sample": 2
+  },
+  "direct_max_survival": [
+    {
+      "group": "overall",
+      "count": 4096,
+      "survive_2x2_count": 1578,
+      "survive_2x2_pct": 38.525390625,
+      "discarded_2x2_pct": 61.474609375,
+      "mean_rank_2x2": 2.232666015625,
+      "survive_4x4_count": 825,
+      "survive_4x4_pct": 20.1416015625,
+      "discarded_4x4_pct": 79.8583984375,
+      "mean_rank_4x4": 7.20263671875
+    },
+    {
+      "group": "subband=LH2",
+      "count": 2048,
+      "survive_2x2_count": 759,
+      "survive_2x2_pct": 37.060546875,
+      "discarded_2x2_pct": 62.939453125,
+      "mean_rank_2x2": 2.30126953125,
+      "survive_4x4_count": 402,
+      "survive_4x4_pct": 19.62890625,
+      "discarded_4x4_pct": 80.37109375,
+      "mean_rank_4x4": 7.58544921875
+    },
+    {
+      "group": "subband=HL2",
+      "count": 2048,
+      "survive_2x2_count": 819,
+      "survive_2x2_pct": 39.990234375,
+      "discarded_2x2_pct": 60.009765625,
+      "mean_rank_2x2": 2.1640625,
+      "survive_4x4_count": 423,
+      "survive_4x4_pct": 20.654296875,
+      "discarded_4x4_pct": 79.345703125,
+      "mean_rank_4x4": 6.81982421875
+    },
+    {
+      "group": "target_bit=0",
+      "count": 2065,
+      "survive_2x2_count": 696,
+      "survive_2x2_pct": 33.7046004842615,
+      "discarded_2x2_pct": 66.2953995157385,
+      "mean_rank_2x2": 2.269733656174334,
+      "survive_4x4_count": 330,
+      "survive_4x4_pct": 15.980629539951574,
+      "discarded_4x4_pct": 84.01937046004842,
+      "mean_rank_4x4": 7.398062953995157
+    },
+    {
+      "group": "target_bit=1",
+      "count": 2031,
+      "survive_2x2_count": 882,
+      "survive_2x2_pct": 43.42688330871492,
+      "discarded_2x2_pct": 56.57311669128509,
+      "mean_rank_2x2": 2.194977843426883,
+      "survive_4x4_count": 495,
+      "survive_4x4_pct": 24.372230428360414,
+      "discarded_4x4_pct": 75.62776957163959,
+      "mean_rank_4x4": 7.003938946331856
+    }
+  ],
+  "payload_dependence": {
+    "image_bit_groups_with_both_classes": 506,
+    "total_image_bit_groups": 512,
+    "mean_absolute_selected_one_minus_zero": 7.898715415019763,
+    "median_absolute_selected_one_minus_zero": 8.0,
+    "mean_absolute_nonselected_one_minus_zero": 0.0,
+    "median_absolute_nonselected_one_minus_zero": 0.0,
+    "mean_absolute_difference_ratio_selected_to_nonselected": null
+  },
+  "trained_model_activations": [
+    {
+      "status": "ok",
+      "layer_name": "conv2d",
+      "layer_type": "Conv2D",
+      "output_shape": "(128, 128, 32)",
+      "mean_payload_activation_variance": 5.966171434110055e-06,
+      "mean_pairwise_payload_rms_distance": 0.0036810163263773124,
+      "activation_std": 0.4186311960220337,
+      "normalized_pairwise_distance": 0.008792981415039052
+    },
+    {
+      "status": "ok",
+      "layer_name": "max_pooling2d",
+      "layer_type": "MaxPooling2D",
+      "output_shape": "(64, 64, 32)",
+      "mean_payload_activation_variance": 1.2459971505746784e-05,
+      "mean_pairwise_payload_rms_distance": 0.005268857858152156,
+      "activation_std": 0.6318199634552002,
+      "normalized_pairwise_distance": 0.008339175972437834
+    },
+    {
+      "status": "ok",
+      "layer_name": "conv2d_1",
+      "layer_type": "Conv2D",
+      "output_shape": "(64, 64, 64)",
+      "mean_payload_activation_variance": 0.0002193713674933637,
+      "mean_pairwise_payload_rms_distance": 0.014869135186333192,
+      "activation_std": 0.16252823173999786,
+      "normalized_pairwise_distance": 0.09148647608570473
+    },
+    {
+      "status": "ok",
+      "layer_name": "max_pooling2d_1",
+      "layer_type": "MaxPooling2D",
+      "output_shape": "(32, 32, 64)",
+      "mean_payload_activation_variance": 0.00014591549548423338,
+      "mean_pairwise_payload_rms_distance": 0.013800777000942871,
+      "activation_std": 0.24586783349514008,
+      "normalized_pairwise_distance": 0.05613087651506744
+    }
+  ]
+}

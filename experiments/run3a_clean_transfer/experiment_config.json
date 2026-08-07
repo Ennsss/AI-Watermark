@@ -1,0 +1,29 @@
+{
+  "experiment": "run3a_clean_zero_training_transfer",
+  "evaluation_only": true,
+  "checkpoint": "experiments\\run2_seed_aware_overfit\\seed_aware_overfit.keras",
+  "selection": "first 100 PNG files from data/curated/val in sorted filename order",
+  "image_count": 100,
+  "payloads_per_image": 2,
+  "examples": 200,
+  "payload_rng": "numpy.random.default_rng",
+  "payload_rng_seed": 20260809,
+  "payload_bits": 128,
+  "coefficient_seed": 42,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "attacks": [],
+  "threshold": 0.5,
+  "features_in_order": [
+    "coefficient / delta",
+    "sin(pi * coefficient / delta)",
+    "cos(pi * coefficient / delta)",
+    "subband identifier (LH2=0, HL2=1)"
+  ],
+  "training_or_fine_tuning_performed": false
+}

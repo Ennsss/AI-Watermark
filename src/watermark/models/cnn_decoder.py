@@ -7,6 +7,7 @@ def build_cnn_decoder(
     input_shape: tuple[int, int, int] = (128, 128, 2),
     output_bits: int = 128,
     learning_rate: float = 0.001,
+    dropout_rate: float = 0.30,
 ):
     """Build the paper-aligned baseline CNN decoder.
 
@@ -30,7 +31,7 @@ def build_cnn_decoder(
             keras.layers.MaxPooling2D((2, 2)),
             keras.layers.Flatten(),
             keras.layers.Dense(128, activation="relu"),
-            keras.layers.Dropout(0.30),
+            keras.layers.Dropout(dropout_rate),
             keras.layers.Dense(output_bits, activation="sigmoid"),
         ]
     )

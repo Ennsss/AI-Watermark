@@ -1,0 +1,43 @@
+{
+  "experiment": "stage2b_full_factorial_jpeg_reencode",
+  "hypothesis": "full-factorial attack exposure improves robustness without changing the model",
+  "base_training_pairs": 1000,
+  "conditions_per_pair": 7,
+  "training_examples": 7000,
+  "condition_counts": {
+    "clean": 1000,
+    "jpeg90": 1000,
+    "jpeg70": 1000,
+    "jpeg50": 1000,
+    "reencode1": 1000,
+    "reencode2": 1000,
+    "reencode3": 1000
+  },
+  "training_payload_seed": 20260810,
+  "validation_payload_seed": 20260809,
+  "shuffle_seed": 20260812,
+  "model_seed": 42,
+  "model_parameters": 369,
+  "features": [
+    "c/delta",
+    "sin(pi*c/delta)",
+    "cos(pi*c/delta)",
+    "subband_id"
+  ],
+  "coefficient_seed": 42,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "threshold": 0.5,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "batch_size": 32,
+  "maximum_epochs": 100,
+  "patience": 10,
+  "checkpoint": "lowest seven-condition macro validation BER; validation BCE tie-break",
+  "attack_parameters_unchanged_from_stage2": true
+}

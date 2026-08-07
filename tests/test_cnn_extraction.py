@@ -3,6 +3,7 @@
 import numpy as np
 
 from watermark.cnn_extraction import prepare_cnn_input_from_image, predict_payload_bits
+from watermark.models.cnn_decoder import build_cnn_decoder
 
 
 class DummyModel:
@@ -24,4 +25,10 @@ def test_predict_payload_bits_thresholds_sigmoid_outputs():
     bits = predict_payload_bits(DummyModel(), cnn_input)
     assert bits.shape == (128,)
     assert np.array_equal(bits[:4], np.array([0, 1, 0, 1], dtype=np.uint8))
+
+
+def test_cnn_decoder_allows_dropout_to_be_disabled():
+    model = build_cnn_decoder(input_shape=(16, 16, 2), output_bits=8, dropout_rate=0.0)
+    dropout = next(layer for layer in model.layers if layer.__class__.__name__ == "Dropout")
+    assert dropout.rate == 0.0
 

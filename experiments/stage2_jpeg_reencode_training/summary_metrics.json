@@ -1,0 +1,39 @@
+{
+  "classification": "PARTIAL",
+  "best_epoch": 45,
+  "epochs_trained": 55,
+  "best_validation_macro_ber": 0.20583705357142854,
+  "best_validation_bce_tiebreak": 0.46385863423347473,
+  "clean_retention": "Excellent retention",
+  "run3b_clean_ber": 0.0001953125,
+  "stage2_clean_ber": 0.00046875,
+  "macro_all_seven": {
+    "classical": 0.25571986607142855,
+    "cnn": 0.20583705357142854
+  },
+  "macro_attacks_only": {
+    "classical": 0.27703776041666667,
+    "cnn": 0.24006510416666663,
+    "absolute_improvement": 0.03697265625000004,
+    "relative_improvement": 0.13345710055695265
+  },
+  "worst_condition": {
+    "classical_condition": "jpeg50",
+    "classical_ber": 0.45890625,
+    "cnn_condition": "jpeg50",
+    "cnn_ber": 0.457421875
+  },
+  "checks": {
+    "no_random_collapse": true,
+    "no_subband_collapse": false,
+    "attacked_conditions_cnn_lower_count": 6
+  },
+  "payloads": {
+    "training_seed": 20260810,
+    "validation_seed": 20260809,
+    "training_fingerprints_match_run3b": true,
+    "validation_fingerprints_match_run3b": true,
+    "training_unique_payloads": 1000,
+    "training_one_frequency": 0.501140625
+  }
+}

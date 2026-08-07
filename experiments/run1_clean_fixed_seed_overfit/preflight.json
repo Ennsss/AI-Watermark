@@ -1,0 +1,33 @@
+{
+  "mean_classical_ber": 0.0,
+  "max_classical_ber": 0.0,
+  "perfect_classical_recoveries": 32,
+  "samples": 32,
+  "payload_shape": [
+    128
+  ],
+  "cnn_input_shape": [
+    128,
+    128,
+    2
+  ],
+  "dwt_subband_shape": [
+    128,
+    128
+  ],
+  "payload_bit_count": 128,
+  "lh2_selected_locations": 64,
+  "hl2_selected_locations": 64,
+  "coefficient_seed": 42,
+  "target_zeros": 2065,
+  "target_ones": 2031,
+  "target_one_proportion": 0.495849609375,
+  "unique_payloads": 32,
+  "candidate_images_screened": 9,
+  "selected_source_images": [
+    "5233584.png",
+    "5233614.png",
+    "5233676.png",
+    "5233692.png"
+  ]
+}

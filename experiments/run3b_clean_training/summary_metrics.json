@@ -1,0 +1,274 @@
+{
+  "classification": "STRONG PASS",
+  "best_epoch": 29,
+  "epochs_trained": 29,
+  "best_validation_ber_during_training": 0.0001953125,
+  "best_validation_bce_tiebreak": 0.004971274174749851,
+  "cnn_all_validation": {
+    "sample_count": 200,
+    "mean_ber": 0.0001953125,
+    "median_ber": 0.0,
+    "standard_deviation": 0.0012197261715621872,
+    "minimum_ber": 0.0,
+    "maximum_ber": 0.0078125,
+    "perfect_count": 195,
+    "perfect_rate": 0.975
+  },
+  "classical_all_validation": {
+    "sample_count": 200,
+    "mean_ber": 0.1278125,
+    "median_ber": 0.03125,
+    "standard_deviation": 0.15346152434120092,
+    "minimum_ber": 0.0,
+    "maximum_ber": 0.5234375,
+    "perfect_count": 79,
+    "perfect_rate": 0.395
+  },
+  "paired_counts_all": {
+    "cnn_better": 119,
+    "equal": 81,
+    "cnn_worse": 0
+  },
+  "subbands": {
+    "LH2": {
+      "cnn_mean_ber": 0.000234375,
+      "classical_mean_ber": 0.119375,
+      "zero_ber_output_positions": 61
+    },
+    "HL2": {
+      "cnn_mean_ber": 0.00015625,
+      "classical_mean_ber": 0.13625,
+      "zero_ber_output_positions": 63
+    }
+  },
+  "classically_clean_subset": {
+    "sample_count": 79,
+    "cnn_mean_ber": 0.0,
+    "cnn_perfect_recovery_rate": 1.0
+  },
+  "classically_impaired_subset": {
+    "sample_count": 121,
+    "classical_mean_ber": 0.2112603305785124,
+    "cnn_mean_ber": 0.0003228305785123967,
+    "cnn_better_count": 119,
+    "equal_count": 2,
+    "cnn_worse_count": 0
+  },
+  "payload_balance": {
+    "training_unique_payloads": 1000,
+    "training_zeros": 63854,
+    "training_ones": 64146,
+    "training_one_frequency": 0.501140625,
+    "validation_unique_payloads": 200,
+    "validation_payload_fingerprints_match_run3a": true,
+    "validation_one_frequency": 0.5062109375
+  },
+  "per_bit": {
+    "zero_ber_bits": 124,
+    "always_zero_outputs": 0,
+    "always_one_outputs": 0,
+    "overall_target_one_frequency": 0.5062109375,
+    "overall_predicted_one_frequency": 0.506328125,
+    "worst_10": [
+      {
+        "bit_index": 66,
+        "subband": "HL2",
+        "cnn_ber": 0.01,
+        "classical_ber": 0.15,
+        "target_one_frequency": 0.5,
+        "predicted_one_frequency": 0.51
+      },
+      {
+        "bit_index": 15,
+        "subband": "LH2",
+        "cnn_ber": 0.005,
+        "classical_ber": 0.19,
+        "target_one_frequency": 0.5,
+        "predicted_one_frequency": 0.495
+      },
+      {
+        "bit_index": 41,
+        "subband": "LH2",
+        "cnn_ber": 0.005,
+        "classical_ber": 0.04,
+        "target_one_frequency": 0.5,
+        "predicted_one_frequency": 0.505
+      },
+      {
+        "bit_index": 46,
+        "subband": "LH2",
+        "cnn_ber": 0.005,
+        "classical_ber": 0.035,
+        "target_one_frequency": 0.415,
+        "predicted_one_frequency": 0.42
+      },
+      {
+        "bit_index": 0,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.14,
+        "target_one_frequency": 0.525,
+        "predicted_one_frequency": 0.525
+      },
+      {
+        "bit_index": 1,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.215,
+        "target_one_frequency": 0.45,
+        "predicted_one_frequency": 0.45
+      },
+      {
+        "bit_index": 2,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.215,
+        "target_one_frequency": 0.54,
+        "predicted_one_frequency": 0.54
+      },
+      {
+        "bit_index": 3,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.145,
+        "target_one_frequency": 0.53,
+        "predicted_one_frequency": 0.53
+      },
+      {
+        "bit_index": 4,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.11,
+        "target_one_frequency": 0.5,
+        "predicted_one_frequency": 0.5
+      },
+      {
+        "bit_index": 5,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.095,
+        "target_one_frequency": 0.525,
+        "predicted_one_frequency": 0.525
+      }
+    ],
+    "best_10": [
+      {
+        "bit_index": 0,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.14,
+        "target_one_frequency": 0.525,
+        "predicted_one_frequency": 0.525
+      },
+      {
+        "bit_index": 1,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.215,
+        "target_one_frequency": 0.45,
+        "predicted_one_frequency": 0.45
+      },
+      {
+        "bit_index": 2,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.215,
+        "target_one_frequency": 0.54,
+        "predicted_one_frequency": 0.54
+      },
+      {
+        "bit_index": 3,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.145,
+        "target_one_frequency": 0.53,
+        "predicted_one_frequency": 0.53
+      },
+      {
+        "bit_index": 4,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.11,
+        "target_one_frequency": 0.5,
+        "predicted_one_frequency": 0.5
+      },
+      {
+        "bit_index": 5,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.095,
+        "target_one_frequency": 0.525,
+        "predicted_one_frequency": 0.525
+      },
+      {
+        "bit_index": 6,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.25,
+        "target_one_frequency": 0.52,
+        "predicted_one_frequency": 0.52
+      },
+      {
+        "bit_index": 7,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.12,
+        "target_one_frequency": 0.52,
+        "predicted_one_frequency": 0.52
+      },
+      {
+        "bit_index": 8,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.09,
+        "target_one_frequency": 0.495,
+        "predicted_one_frequency": 0.495
+      },
+      {
+        "bit_index": 9,
+        "subband": "LH2",
+        "cnn_ber": 0.0,
+        "classical_ber": 0.205,
+        "target_one_frequency": 0.57,
+        "predicted_one_frequency": 0.57
+      }
+    ]
+  },
+  "probability_diagnostics": {
+    "all_probabilities": {
+      "count": 25600,
+      "minimum": 0.00016367383068427444,
+      "maximum": 0.9999160766601562,
+      "mean": 0.5055906176567078,
+      "standard_deviation": 0.4954928755760193,
+      "median": 0.9828831553459167
+    },
+    "fraction_0.45_to_0.55": 7.8125e-05,
+    "all_confidences": {
+      "count": 25600,
+      "minimum": 0.03805965185165405,
+      "maximum": 0.9998321533203125,
+      "mean": 0.9906166195869446,
+      "standard_deviation": 0.029262876138091087,
+      "median": 0.9975197315216064
+    },
+    "incorrect_probabilities": {
+      "count": 5,
+      "minimum": 0.480970174074173,
+      "maximum": 0.8265507221221924,
+      "mean": 0.6520334482192993,
+      "standard_deviation": 0.12114743143320084,
+      "median": 0.6985976696014404
+    },
+    "incorrect_confidences": {
+      "count": 5,
+      "minimum": 0.03805965185165405,
+      "maximum": 0.6531014442443848,
+      "mean": 0.31929081678390503,
+      "standard_deviation": 0.22184880077838898,
+      "median": 0.39719533920288086
+    },
+    "incorrect_target_zero_count": 4,
+    "incorrect_target_one_count": 1
+  }
+}

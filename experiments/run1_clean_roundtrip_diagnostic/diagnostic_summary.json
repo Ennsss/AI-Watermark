@@ -1,0 +1,98 @@
+{
+  "configuration": {
+    "source_images": [
+      "5233499.png",
+      "5233584.png",
+      "5233614.png",
+      "5233629.png"
+    ],
+    "payloads_per_image": 8,
+    "samples": 32,
+    "payload_rng_seed": 20260808,
+    "coefficient_seed": 42,
+    "wavelet": "haar",
+    "dwt_level": 2,
+    "subbands": [
+      "LH2",
+      "HL2"
+    ],
+    "payload_bits": 128,
+    "deltas": [
+      8.0,
+      16.0,
+      24.0,
+      32.0
+    ],
+    "attacks": []
+  },
+  "first_error_stage_delta16": "ber_c_after_y_clipping",
+  "delta_comparison": [
+    {
+      "delta": 8,
+      "mean_clean_ber": 0.01953125,
+      "median_clean_ber": 0.00390625,
+      "maximum_clean_ber": 0.09375,
+      "perfect_recoveries": 16,
+      "samples": 32,
+      "average_clipped_y_pixels": 28023.40625,
+      "maximum_clipped_y_pixels": 107954,
+      "average_abs_y_reconstruction_error": 0.003864765167309622,
+      "mean_psnr": 54.51194655711186,
+      "mean_ssim": 0.9992177831595719
+    },
+    {
+      "delta": 16,
+      "mean_clean_ber": 0.038330078125,
+      "median_clean_ber": 0.0,
+      "maximum_clean_ber": 0.1875,
+      "perfect_recoveries": 19,
+      "samples": 32,
+      "average_clipped_y_pixels": 28029.71875,
+      "maximum_clipped_y_pixels": 107967,
+      "average_abs_y_reconstruction_error": 0.00783205032355962,
+      "mean_psnr": 54.3535676796901,
+      "mean_ssim": 0.9991758156044159
+    },
+    {
+      "delta": 24,
+      "mean_clean_ber": 0.038330078125,
+      "median_clean_ber": 0.0,
+      "maximum_clean_ber": 0.1875,
+      "perfect_recoveries": 19,
+      "samples": 32,
+      "average_clipped_y_pixels": 28031.3125,
+      "maximum_clipped_y_pixels": 107961,
+      "average_abs_y_reconstruction_error": 0.011687755584790066,
+      "mean_psnr": 54.107696869610436,
+      "mean_ssim": 0.9991071890943766
+    },
+    {
+      "delta": 32,
+      "mean_clean_ber": 0.038330078125,
+      "median_clean_ber": 0.0,
+      "maximum_clean_ber": 0.1875,
+      "perfect_recoveries": 19,
+      "samples": 32,
+      "average_clipped_y_pixels": 28035.875,
+      "maximum_clipped_y_pixels": 107971,
+      "average_abs_y_reconstruction_error": 0.01571559906013186,
+      "mean_psnr": 53.76741833312603,
+      "mean_ssim": 0.9990123094894654
+    }
+  ],
+  "float_variant": {
+    "delta": 16,
+    "existing_mean_ber": 0.038330078125,
+    "existing_perfect_recoveries": 19,
+    "float_variant_mean_ber": 0.038330078125,
+    "float_variant_median_ber": 0.0,
+    "float_variant_maximum_ber": 0.1875,
+    "float_variant_perfect_recoveries": 19,
+    "mean_existing_psnr": 54.3535676796901,
+    "mean_float_variant_psnr": 54.37425981057416,
+    "mean_existing_ssim": 0.9991758156044159,
+    "mean_float_variant_ssim": 0.9991809037807966,
+    "all_variant_outputs_valid_uint8_rgb": true
+  },
+  "configurations_reaching_32_of_32": []
+}

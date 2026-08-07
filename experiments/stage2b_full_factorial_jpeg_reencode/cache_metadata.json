@@ -1,0 +1,29 @@
+{
+  "cache_type": "in-memory precomputed feature tensors",
+  "training_feature_shape": [
+    7000,
+    128,
+    4
+  ],
+  "training_target_shape": [
+    7000,
+    128
+  ],
+  "training_condition_shape": [
+    7000
+  ],
+  "validation_feature_shape": [
+    1400,
+    128,
+    4
+  ],
+  "validation_target_shape": [
+    1400,
+    128
+  ],
+  "training_nan_count": 0,
+  "training_inf_count": 0,
+  "validation_nan_count": 0,
+  "validation_inf_count": 0,
+  "shuffle_seed": 20260812
+}

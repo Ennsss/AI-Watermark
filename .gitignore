@@ -8,6 +8,7 @@ venv/
 dist/
 build/
 .pytest_cache/
+.tmp/
 *.csv
 *.png
 *.jpg
@@ -15,6 +16,8 @@ build/
 !tests/fixtures/*
 .env
 evaluation_output/
+# The failed full-map Run 1 checkpoint is ~101 MB; compact metrics reproduce its result.
+experiments/run1_clean_fixed_seed_overfit/baseline_cnn_overfit.keras
 # Dataset manifests + reproducibility record are small and SHOULD be tracked so
 # teammates can rebuild the identical corpus; the 512 PNGs stay ignored via *.png.
 !data/manifests/*.csv

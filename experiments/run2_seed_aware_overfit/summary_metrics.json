@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "mean_training_ber": 0.0,
+  "median_training_ber": 0.0,
+  "maximum_sample_ber": 0.0,
+  "minimum_sample_ber": 0.0,
+  "perfect_payloads": 32,
+  "samples": 32,
+  "output_bits_with_ber_zero": 128,
+  "overall_target_one_frequency": 0.495849609375,
+  "overall_predicted_one_frequency": 0.495849609375,
+  "probabilities": {
+    "minimum": 0.0049550714902579784,
+    "maximum": 0.9937918782234192,
+    "mean": 0.49781906604766846,
+    "standard_deviation": 0.47229650616645813,
+    "fraction_0.45_to_0.55": 0.0
+  },
+  "epochs_trained": 106,
+  "final_bce_loss": 0.030513137578964233,
+  "parameter_count": 369
+}

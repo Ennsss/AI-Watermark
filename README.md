@@ -232,6 +232,17 @@ Use [`docs/experiment_log.md`](docs/experiment_log.md) to record benchmark,
 calibration, CNN training, and final evaluation runs. These notes should feed
 Chapter 4 results and discussion.
 
+## Current Thesis Status
+
+- Clean seed-aware decoder validated
+- Stage 2 JPEG/re-encoding robustness: partial
+- Stage 2B full-factorial exposure: only marginal additional improvement
+- Next: Stage 2C separability diagnostic
+- Held-out test set remains untouched
+
+See [`EXPERIMENT_MILESTONE.md`](EXPERIMENT_MILESTONE.md) for the controlled
+experimental record and current interpretation.
+
 ## Codebase Guide
 
 Use [`docs/codebase_guide.md`](docs/codebase_guide.md) for a module-by-module

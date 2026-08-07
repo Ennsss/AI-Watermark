@@ -1,0 +1,15 @@
+split,condition,sample_count,fraction
+training,clean,143,0.143
+training,jpeg90,143,0.143
+training,jpeg70,143,0.143
+training,jpeg50,143,0.143
+training,reencode1,143,0.143
+training,reencode2,143,0.143
+training,reencode3,142,0.142
+validation,clean,200,0.14285714285714285
+validation,jpeg90,200,0.14285714285714285
+validation,jpeg70,200,0.14285714285714285
+validation,jpeg50,200,0.14285714285714285
+validation,reencode1,200,0.14285714285714285
+validation,reencode2,200,0.14285714285714285
+validation,reencode3,200,0.14285714285714285

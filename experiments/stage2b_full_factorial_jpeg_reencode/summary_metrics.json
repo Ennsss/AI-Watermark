@@ -1,0 +1,27 @@
+{
+  "classification": "PARTIAL",
+  "best_epoch": 30,
+  "epochs_trained": 40,
+  "best_macro_validation_ber": 0.20445312499999999,
+  "best_validation_bce_tiebreak": 0.46360334753990173,
+  "clean_retention": "Excellent",
+  "macro_all_seven": {
+    "classical": 0.25571986607142855,
+    "stage2": 0.20583705357142854,
+    "stage2b": 0.20445312499999999
+  },
+  "macro_attacks_only": {
+    "classical": 0.27703776041666667,
+    "stage2": 0.24006510416666663,
+    "stage2b": 0.2384635416666667,
+    "stage2b_absolute_improvement_vs_stage2": 0.0016015624999999312,
+    "stage2b_relative_improvement_vs_stage2": 0.006671367359114538,
+    "stage2b_absolute_improvement_vs_classical": 0.03857421874999997,
+    "stage2b_relative_improvement_vs_classical": 0.13923812657156948
+  },
+  "checks": {
+    "material_macro_improvement_threshold_gt_0.01": false,
+    "moderate_or_reencode_clear_improvement_gt_0.01": false,
+    "no_new_subband_failure": true
+  }
+}

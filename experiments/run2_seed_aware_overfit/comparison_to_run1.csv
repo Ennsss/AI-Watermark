@@ -1,0 +1,3 @@
+run,input_representation,parameter_count,final_bce,final_mean_ber,perfect_payloads,epochs,pooling_used,seed_locations_explicit
+Run 1 full-map CNN,128x128x2 full LH2/HL2 maps,8424352,0.5737847089767456,0.322021484375,0/32,500,True,False
+Run 2 seed-aware CNN,128x4 selected-coefficient features in payload order,369,0.030513137578964233,0.0,32/32,106,False,True

@@ -1,0 +1,46 @@
+{
+  "status": "FAIL",
+  "mean_training_ber": 0.322021484375,
+  "median_training_ber": 0.31640625,
+  "max_training_ber": 0.46875,
+  "perfect_recoveries": 0,
+  "samples": 32,
+  "epochs_trained": 500,
+  "final_bce_loss": 0.5737847089767456,
+  "probabilities": {
+    "count": 4096,
+    "min": 4.039119733123542e-11,
+    "max": 1.0,
+    "mean": 0.49498841166496277,
+    "std": 0.21707789599895477,
+    "proportion_0.45_to_0.55": 0.267578125
+  },
+  "correct_prediction_probabilities": {
+    "count": 2777,
+    "min": 4.039119733123542e-11,
+    "max": 1.0,
+    "mean": 0.4925398528575897,
+    "std": 0.24679236114025116
+  },
+  "incorrect_prediction_probabilities": {
+    "count": 1319,
+    "min": 0.11224987357854843,
+    "max": 0.8746381998062134,
+    "mean": 0.5001435279846191,
+    "std": 0.13440145552158356
+  },
+  "target_zero_probabilities": {
+    "count": 2065,
+    "min": 4.039119733123542e-11,
+    "max": 0.8746381998062134,
+    "mean": 0.3989133834838867,
+    "std": 0.19585394859313965
+  },
+  "target_one_probabilities": {
+    "count": 2031,
+    "min": 0.11224987357854843,
+    "max": 1.0,
+    "mean": 0.5926717519760132,
+    "std": 0.19263075292110443
+  }
+}
