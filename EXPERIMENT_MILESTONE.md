@@ -285,3 +285,21 @@ reserved for final frozen evaluation.
 - Development experiments should later be separated from final Chapter IV test
   results.
 - Failed and partial experiments will be documented as ablations rather than hidden.
+
+# Final Methodology Frozen
+
+The development milestone at commit `f08204a36f2872d62ab695253e018ca0dff0eb06`
+and tag `milestone-development-complete` is complete. Delta 24 remains frozen,
+and the Stage 3A 369-parameter seed-aware decoder is the final primary CNN; the
+Stage 4B local model remains an ablation.
+
+The fixed balanced ownership payload, complete 13-condition suite, fair paired
+attack rule, primary and diagnostic metrics, computational timing boundaries,
+two-sided paired Wilcoxon tests, Holm adjustment, and rank-biserial effect size
+are now specified in `FINAL_METHODOLOGY_FREEZE.md` and
+`configs/final_methodology_freeze.json`.
+
+The held-out test set remains untouched. No further development, model
+selection, parameter tuning, payload changes, attack changes, or statistical
+changes are permitted in response to final test outcomes. Final results do not
+yet exist.
