@@ -303,3 +303,26 @@ The held-out test set remains untouched. No further development, model
 selection, parameter tuning, payload changes, attack changes, or statistical
 changes are permitted in response to final test outcomes. Final results do not
 yet exist.
+
+# Final Held-Out Benchmark Complete
+
+The methodology was frozen before test access at commit
+`d0de087ddc39706deeddfd2ff8425468ddf7ba58` and tag
+`final-method-freeze`. The confirmatory benchmark used 500 held-out images,
+13 conditions, and 6,500 paired classical/CNN rows with delta 24, coefficient
+seed 42, and the frozen 369-parameter Stage 3A CNN.
+
+- Classical 12-attack macro BER: **0.270757**
+- CNN 12-attack macro BER: **0.245167**
+- Relative CNN BER reduction: **9.45%**
+- Clean CNN BER: **0.000188**
+- Mean embedding fidelity: approximately **55.797 dB PSNR** and **0.999110 SSIM**
+- Resize25 remains a severe limitation for both branches.
+- Crop remains a synchronization limitation caused by shape-dependent coefficient selection.
+- No post-test training, tuning, model selection, or methodology change occurred.
+
+The first execution attempt was terminated by the execution host after
+approximately 1,200.3 seconds and generated no result files or observable
+benchmark results. The benchmark was restarted from image 1 using the identical
+frozen command and completed successfully. This was one completed benchmark,
+not a comparison between multiple completed runs.

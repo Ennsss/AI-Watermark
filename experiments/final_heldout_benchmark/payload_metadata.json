@@ -1,0 +1,10 @@
+{
+  "policy": "one fixed ownership payload for all 500 final test images and all conditions",
+  "generation": "concatenate 64 uint8 zeros and 64 uint8 ones, then index by numpy.random.default_rng(seed).permutation(128)",
+  "rng": "numpy.random.default_rng (PCG64)",
+  "seed": 20260901,
+  "bit_string": "00101110110011110111000110000110001011001110010001011100100010110010010000010011110100111111010001111111010001010010110011100100",
+  "zeros": 64,
+  "ones": 64,
+  "sha256_uint8_bytes": "edff34535f98e69d9803126e441910b6e3807db3a9dedd1a2b6dbba1b843925d"
+}
