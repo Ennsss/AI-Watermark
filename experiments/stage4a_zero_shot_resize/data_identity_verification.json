@@ -1,0 +1,23 @@
+{
+  "validation_images": 100,
+  "payloads_per_image": 2,
+  "base_pairs": 200,
+  "validation_grid_examples": 800,
+  "image_filenames_match_stage3a": true,
+  "payload_fingerprints_match_stage3a": true,
+  "payload_seed": 20260809,
+  "coefficient_seed": 42,
+  "delta": 24.0,
+  "payload_bits": 128,
+  "selected_locations": 128,
+  "lh2_locations": 64,
+  "hl2_locations": 64,
+  "features_shape": [
+    800,
+    128,
+    4
+  ],
+  "nan_count": 0,
+  "inf_count": 0,
+  "test_directory_accessed": false
+}

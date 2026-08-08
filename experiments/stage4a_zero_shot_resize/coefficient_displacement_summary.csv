@@ -1,0 +1,5 @@
+condition,count,median_absolute_coefficient_displacement,mean_absolute_coefficient_displacement,p90_absolute_coefficient_displacement,fraction_displacement_gt_delta_over_4,fraction_displacement_gt_delta_over_2,median_circular_phase_displacement,mean_circular_phase_displacement,p90_circular_phase_displacement,classical_decision_flip_rate_vs_clean
+clean,25600,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+resize75,25600,1.25,3.0520410537719727,6.5,0.105625,0.0506640625,0.04166674613952637,0.08625692129135132,0.22916662693023682,0.0978125
+resize50,25600,2.0,3.2176756858825684,7.5,0.120625,0.0540234375,0.0833333283662796,0.09826578199863434,0.25,0.1090625
+resize25,25600,6.75,15.74715805053711,37.5,0.5187109375,0.31109375,0.24999994039535522,0.22033894062042236,0.4583335220813751,0.387890625

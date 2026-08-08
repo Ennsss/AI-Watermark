@@ -234,13 +234,13 @@ Chapter 4 results and discussion.
 
 ## Current Thesis Status
 
-- Seed-aware 369-parameter decoder validated for clean generalization
-- JPEG/re-encoding robustness analyzed through Stage 2D
-- Formal QIM delta calibration completed
-- Delta 24 selected and frozen using the predefined robustness/fidelity rule
-- Next: Stage 4A zero-shot resize evaluation
-- Crop evaluation has not started
-- Held-out test set remains untouched
+- Development experiments through crop robustness are complete.
+- Delta 24 is calibrated and frozen using the predefined robustness/fidelity rule.
+- The seed-aware 369-parameter decoder remains the primary learned decoder.
+- Severe 25% resize is a current blind-decoding limitation.
+- Crop failure is dominated by coefficient synchronization loss.
+- Final methodology freeze and held-out test evaluation remain pending.
+- The held-out test set remains untouched.
 
 See [`EXPERIMENT_MILESTONE.md`](EXPERIMENT_MILESTONE.md) for the controlled
 experimental record and current interpretation.

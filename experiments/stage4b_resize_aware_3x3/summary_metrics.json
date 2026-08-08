@@ -1,0 +1,17 @@
+{
+  "best_epoch": 69,
+  "epochs_trained": 79,
+  "best_validation_bce": 0.3978082537651062,
+  "parameter_count": 601,
+  "stage4a_macro_ber": 0.17833984375,
+  "stage4b_macro_ber": 0.17283203125,
+  "classical_macro_ber": 0.273828125,
+  "stage4b_absolute_improvement_over_stage4a_macro": 0.005507812500000014,
+  "stage4b_relative_improvement_over_stage4a_macro": 0.030883802431278144,
+  "stage4b_absolute_improvement_over_classical_macro": 0.10099609374999999,
+  "stage4b_relative_improvement_over_classical_macro": 0.368830242510699,
+  "resize25_absolute_improvement": 0.001953125,
+  "resize25_relative_improvement": 0.0038663779771110425,
+  "classification": "PARTIAL",
+  "test_set_used": false
+}

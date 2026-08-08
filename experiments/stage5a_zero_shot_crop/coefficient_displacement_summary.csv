@@ -1,0 +1,5 @@
+condition,mean_absolute_coefficient_displacement,median_absolute_coefficient_displacement,p90_absolute_coefficient_displacement,fraction_gt_delta_over_4,fraction_gt_delta_over_2,median_circular_phase_displacement,mean_circular_phase_displacement
+clean,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+mild,27.75530242919922,10.75,79.5,0.5935546875,0.4287890625,0.25,0.2245674580335617
+moderate,27.642744064331055,10.5,78.5,0.590234375,0.4235546875,0.24999994039535522,0.22369426488876343
+severe,28.273008346557617,11.0,81.25,0.6001171875,0.438046875,0.23958349227905273,0.22461587190628052

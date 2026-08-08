@@ -1,0 +1,60 @@
+{
+  "functions": [
+    "attacks.suite.crop_severity",
+    "attacks.suite.random_crop"
+  ],
+  "library": "NumPy slicing",
+  "severity_ranges": {
+    "mild": [
+      0.05,
+      0.1
+    ],
+    "moderate": [
+      0.2,
+      0.3
+    ],
+    "severe": [
+      0.4,
+      0.5
+    ]
+  },
+  "seed": 0,
+  "placement": "independent deterministic top/bottom/left/right edge removal",
+  "restoration": false,
+  "interpolation": null,
+  "exact_geometry": {
+    "mild": {
+      "severity": "mild",
+      "sampled_area_ratio": 0.08184808436607272,
+      "linear_factor": 0.04179756020247616,
+      "top": 13,
+      "bottom": 5,
+      "left": 0,
+      "right": 0,
+      "retained_height": 494,
+      "retained_width": 512
+    },
+    "moderate": {
+      "severity": "moderate",
+      "sampled_area_ratio": 0.2636961687321454,
+      "linear_factor": 0.1419185171163203,
+      "top": 46,
+      "bottom": 19,
+      "left": 2,
+      "right": 1,
+      "retained_height": 447,
+      "retained_width": 509
+    },
+    "severe": {
+      "severity": "severe",
+      "sampled_area_ratio": 0.4636961687321454,
+      "linear_factor": 0.2676723197448737,
+      "top": 87,
+      "bottom": 36,
+      "left": 5,
+      "right": 2,
+      "retained_height": 389,
+      "retained_width": 505
+    }
+  }
+}

@@ -1,0 +1,9 @@
+split,condition,count
+training,clean,1000
+training,resize75,1000
+training,resize50,1000
+training,resize25,1000
+validation,clean,200
+validation,resize75,200
+validation,resize50,200
+validation,resize25,200

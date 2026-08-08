@@ -1,0 +1,18 @@
+{
+  "condition_classifications": {
+    "mild": "NEAR RANDOM",
+    "moderate": "NEAR RANDOM",
+    "severe": "NEAR RANDOM"
+  },
+  "failure_mechanisms": {
+    "mild": "SEVERE SYNCHRONIZATION LOSS",
+    "moderate": "SEVERE SYNCHRONIZATION LOSS",
+    "severe": "SEVERE SYNCHRONIZATION LOSS"
+  },
+  "crop_aware_bit_decision_training_justified": false,
+  "synchronization_is_main_limitation": true,
+  "local_oracle_triggered": true,
+  "training_performed": false,
+  "delta": 24,
+  "test_set_used": false
+}

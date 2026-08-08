@@ -1,0 +1,24 @@
+{
+  "overall_outcome": "SEVERE RESIZE LIMITATION",
+  "condition_classifications": {
+    "resize75": "PARTIAL ZERO-SHOT",
+    "resize50": "PARTIAL ZERO-SHOT",
+    "resize25": "NEAR RANDOM"
+  },
+  "classical_ber_monotonically_increases_with_severity": true,
+  "cnn_ber_monotonically_increases_with_severity": true,
+  "stage4b_resize_training_justified": false,
+  "decision_reason": "Resize25 is near random for both branches; diagnose alignment/information effects before training.",
+  "clean_reproducibility": {
+    "stage3a_delta24_cnn_clean_ber": 0.0001953125,
+    "stage4a_cnn_clean_ber": 0.0001953125,
+    "cnn_absolute_difference": 0.0,
+    "stage3a_delta24_classical_clean_ber": 0.1278515625,
+    "stage4a_classical_clean_ber": 0.1278515625,
+    "classical_absolute_difference": 0.0,
+    "material_difference_threshold": 0.001,
+    "reproducible": true
+  },
+  "training_performed": false,
+  "test_set_used": false
+}

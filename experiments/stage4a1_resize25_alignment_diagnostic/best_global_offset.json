@@ -1,0 +1,42 @@
+{
+  "resize25": {
+    "LH2": {
+      "selected_using": "training BER only",
+      "offset": [
+        -1,
+        -1
+      ],
+      "training_ber": 0.49615625,
+      "validation_ber": 0.501171875
+    },
+    "HL2": {
+      "selected_using": "training BER only",
+      "offset": [
+        1,
+        -1
+      ],
+      "training_ber": 0.500140625,
+      "validation_ber": 0.508359375
+    }
+  },
+  "resize50": {
+    "LH2": {
+      "selected_using": "training BER only",
+      "offset": [
+        0,
+        0
+      ],
+      "training_ber": 0.200734375,
+      "validation_ber": 0.22296875
+    },
+    "HL2": {
+      "selected_using": "training BER only",
+      "offset": [
+        0,
+        0
+      ],
+      "training_ber": 0.222203125,
+      "validation_ber": 0.249765625
+    }
+  }
+}

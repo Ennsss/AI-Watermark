@@ -1,0 +1,7 @@
+{
+  "jpeg70_classification": "C. STRONGLY AMBIGUOUS",
+  "jpeg50_classification": "D. NEAR INFORMATION LOSS",
+  "practical_single_coefficient_ceiling": true,
+  "interpretation": "Fixed empirical lookup and k-nearest-neighbor rules do not materially outperform the Stage 2B CNN for JPEG70 or JPEG50. Target-conditioned phase overlap and contradictory rounded feature bins are substantial. This is practical separability evidence, not a formal information-theoretic proof.",
+  "recommended_next_action": "Run one controlled local-spatial-context experiment using a fixed small neighborhood around each selected coefficient, with embedding, delta, seed, attacks, train/validation identities, and evaluation grid unchanged."
+}

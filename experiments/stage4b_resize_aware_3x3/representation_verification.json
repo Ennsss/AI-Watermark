@@ -1,0 +1,34 @@
+{
+  "training_patch_shape": [
+    4000,
+    128,
+    3,
+    3,
+    3
+  ],
+  "validation_patch_shape": [
+    800,
+    128,
+    3,
+    3,
+    3
+  ],
+  "training_subband_shape": [
+    4000,
+    128,
+    1
+  ],
+  "validation_subband_shape": [
+    800,
+    128,
+    1
+  ],
+  "payload_positions": 128,
+  "lh2_centers": 64,
+  "hl2_centers": 64,
+  "same_subband_patch_only": true,
+  "symmetric_padding": true,
+  "nan_count": 0,
+  "inf_count": 0,
+  "model_parameters": 601
+}

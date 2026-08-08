@@ -1,0 +1,43 @@
+{
+  "experiment": "Stage 4B controlled resize-aware 3x3 training",
+  "conditions": [
+    "clean",
+    "resize75",
+    "resize50",
+    "resize25"
+  ],
+  "condition_examples": {
+    "clean": 1000,
+    "resize75": 1000,
+    "resize50": 1000,
+    "resize25": 1000
+  },
+  "validation_condition_examples": {
+    "clean": 200,
+    "resize75": 200,
+    "resize50": 200,
+    "resize25": 200
+  },
+  "delta": 24.0,
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "features": [
+    "coefficient/24",
+    "sin(pi*coefficient/24)",
+    "cos(pi*coefficient/24)"
+  ],
+  "subband_id": {
+    "LH2": 0,
+    "HL2": 1
+  },
+  "padding": "symmetric",
+  "shuffle_seed": 20260830,
+  "model_seed": 20260830,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "batch_size": 32,
+  "maximum_epochs": 100,
+  "patience": 10,
+  "threshold": 0.5,
+  "checkpoint": "lowest four-condition validation macro BER; BCE tie-break"
+}

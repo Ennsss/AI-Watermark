@@ -1,0 +1,16 @@
+{
+  "experiment": "Stage 5A zero-shot crop",
+  "evaluation_only": true,
+  "conditions": [
+    "clean",
+    "mild",
+    "moderate",
+    "severe"
+  ],
+  "crop_seed": 0,
+  "delta": 24,
+  "coefficient_seed": 42,
+  "checkpoint": "experiments/stage3a_delta_calibration/delta_24/best_seed_aware_delta24.keras",
+  "threshold": 0.5,
+  "test_set_used": false
+}

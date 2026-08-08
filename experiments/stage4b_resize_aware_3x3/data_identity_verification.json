@@ -1,0 +1,16 @@
+{
+  "training_images": 500,
+  "training_base_pairs": 1000,
+  "validation_images": 100,
+  "validation_base_pairs": 200,
+  "training_payload_fingerprints_match_run3b": true,
+  "validation_payload_fingerprints_match_run3b": true,
+  "validation_grid_matches_stage4a": true,
+  "classical_ber_reproduction": {
+    "clean": 0.1278515625,
+    "resize75": 0.2253515625,
+    "resize50": 0.2355078125,
+    "resize25": 0.5066015625
+  },
+  "test_set_used": false
+}

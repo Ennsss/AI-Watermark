@@ -1,0 +1,2 @@
+condition,center_classical_ber,best_fixed_3x3_validation_ber,oracle_clean_reference_3x3_ber,center_phase_overlap,best_fixed_phase_overlap,oracle_phase_overlap
+resize50,0.2363671875,0.2363671875,0.1369140625,0.22966906288805466,0.22966906288805466,0.01386617157399635

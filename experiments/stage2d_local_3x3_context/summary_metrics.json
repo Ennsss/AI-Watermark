@@ -1,0 +1,44 @@
+{
+  "classification": "PARTIAL",
+  "best_epoch": 77,
+  "epochs_trained": 77,
+  "model_parameters": 601,
+  "best_validation_macro_ber": 0.16662388392857141,
+  "best_validation_bce_tiebreak": 0.40707001090049744,
+  "attack_macro": {
+    "stage2b": 0.2384635416666667,
+    "stage2d": 0.19352213541666666,
+    "absolute_improvement": 0.04494140625000004
+  },
+  "jpeg70": {
+    "stage2b_ber": 0.3499609375,
+    "stage2d_ber": 0.344609375,
+    "absolute_improvement": 0.005351562500000018,
+    "relative_improvement": 0.015291885255050838
+  },
+  "jpeg50": {
+    "stage2b_ber": 0.4594140625,
+    "stage2d_ber": 0.4567578125,
+    "absolute_improvement": 0.002656249999999971
+  },
+  "clean": {
+    "stage2d_ber": 0.005234375,
+    "classification": "Regression concern"
+  },
+  "context_ablation": {
+    "jpeg70": {
+      "condition": "jpeg70",
+      "full_3x3_ber": 0.344609375,
+      "center_only_masked_ber": 0.3783203125,
+      "center_only_minus_full": 0.03371093749999998
+    },
+    "jpeg50": {
+      "condition": "jpeg50",
+      "full_3x3_ber": 0.4567578125,
+      "center_only_masked_ber": 0.458125,
+      "center_only_minus_full": 0.0013671874999999778
+    }
+  },
+  "no_catastrophic_subband_failure": true,
+  "test_set_used": false
+}

@@ -1,0 +1,4 @@
+condition,oracle_clean_reference_3x3_ber,target_aware_any_correct_rate,largest_oracle_offset_frequency
+mild,0.25734375,0.7693359375,0.4084765625
+moderate,0.25859375,0.7658984375,0.406484375
+severe,0.242578125,0.78734375,0.3690625

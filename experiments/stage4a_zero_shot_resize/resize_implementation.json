@@ -1,0 +1,30 @@
+{
+  "function": "attacks.suite.resize_scale",
+  "library": "OpenCV cv2.resize",
+  "color_handling": "RGB to BGR before resize; BGR to RGB after restore",
+  "dimension_rule": "max(1, int(round(original_dimension * scale)))",
+  "downscale_interpolation": "cv2.INTER_AREA",
+  "upscale_interpolation": "cv2.INTER_LANCZOS4",
+  "original_dimensions": [
+    512,
+    512
+  ],
+  "intermediate_dimensions": {
+    "resize75": [
+      384,
+      384
+    ],
+    "resize50": [
+      256,
+      256
+    ],
+    "resize25": [
+      128,
+      128
+    ]
+  },
+  "restored_dimensions": [
+    512,
+    512
+  ]
+}

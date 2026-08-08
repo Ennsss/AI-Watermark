@@ -1,0 +1,24 @@
+{
+  "experiment": "Stage 4A.1 non-training Resize25 local alignment/information diagnostic",
+  "delta": 24.0,
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "padding": "numpy symmetric",
+  "windows": [
+    "3x3",
+    "5x5"
+  ],
+  "phase": "(coefficient/delta) mod 1",
+  "phase_histogram_bins": 64,
+  "best_fixed_offset_selection": "minimum training classical-style BER separately for LH2 and HL2",
+  "oracle_selection": "minimum circular phase distance to clean watermarked center; coefficient distance 1e-7 tie-break",
+  "resize": "existing resize_scale: 25%/50% INTER_AREA down, INTER_LANCZOS4 restore",
+  "training_performed": false,
+  "test_set_used": false
+}

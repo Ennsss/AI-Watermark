@@ -1,0 +1,13 @@
+{
+  "resize25_classification": "B. LOCALLY RECOVERABLE BUT NON-SYSTEMATIC",
+  "stage4b_resize_aware_training_justified": true,
+  "decision": "One controlled local-context resize-aware training experiment is justified.",
+  "center_classical_ber": 0.5066015625,
+  "best_fixed_offset_validation_ber": 0.504765625,
+  "oracle_clean_reference_3x3_ber": 0.2303515625,
+  "oracle_clean_reference_5x5_ber": 0.188828125,
+  "largest_oracle_3x3_offset_frequency": 0.363515625,
+  "systematic_shift_detected": false,
+  "training_performed": false,
+  "test_set_used": false
+}

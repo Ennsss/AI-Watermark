@@ -197,26 +197,77 @@ improved recovery. The ambiguity was therefore dependent on embedding strength,
 not an absolute compression limit. JPEG50 remains difficult, but a strict
 severe-JPEG ceiling is no longer supported.
 
-## 15. Current Working Configuration
+# Development Complete — Pre-Final-Test Milestone
 
-- Delta: **24**
-- Status: **FROZEN AFTER STAGE 3A**
-- Decoder: seed-aware 369-parameter shared Conv1D
-- Coefficient seed: 42
-- Payload: 128 raw bits, no ECC
-- Embedding: classical Haar DWT-QIM in LH2 and HL2
+## Frozen watermark configuration currently established
 
-## 16. Next Planned Experiment
+- Input: 512×512 RGB, converted to YCbCr for Y-channel processing
+- Transform: two-level Haar DWT with symmetric boundary handling
+- Embedding subbands: LH2 and HL2
+- Payload: 128 raw bits, split across 64 LH2 and 64 HL2 coefficients
+- Deterministic coefficient seed: 42
+- Embedding rule: binary QIM
+- Delta: **24, frozen after Stage 3A**
+- ECC: none in the core experiment
 
-**Stage 4A — Zero-Shot Resize Robustness Evaluation**
+Delta 24 was selected by the predefined robustness/fidelity rule. Its
+six-attack CNN macro BER was approximately 0.129232, compared with 0.213092
+for classical extraction, while mean embedding fidelity remained approximately
+55.701 dB PSNR and 0.999033 SSIM.
 
-Purpose: evaluate the frozen delta-24 decoder under resize-only degradation
-before deciding whether resize-aware training is necessary.
+## Primary learned decoder
 
-Planned conditions are Clean, Resize75, Resize50, and Resize25. Stage 4A will
-perform no training. Crop evaluation has not started.
+The primary decoder gathers the 128 seed-selected coefficients in payload
+order. For each coefficient `c`, its input is:
 
-## 17. Test-Set Status
+1. `c / 24`
+2. `sin(pi * c / 24)`
+3. `cos(pi * c / 24)`
+4. subband ID (`LH2 = 0`, `HL2 = 1`)
+
+Its architecture is Conv1D(16, kernel 1, ReLU), Conv1D(16, kernel 1, ReLU),
+and Conv1D(1, kernel 1, sigmoid), with 369 parameters. This is the main decoder
+currently intended for the final classical-versus-neural comparison unless the
+formal methodology-freeze step explicitly determines otherwise.
+
+## Development conclusions
+
+### Compression
+
+Delta 24 materially improved JPEG and repeated-re-encoding robustness while
+retaining very high visual fidelity. JPEG50 remains difficult, but Stage 3A
+showed that the earlier delta-16 ambiguity depended on embedding strength.
+
+### Resize
+
+The frozen CNN transferred meaningfully to Resize75 (BER 0.094609) and
+Resize50 (BER 0.113398), but Resize25 was near random (BER 0.505156). Stage
+4A.1 found locally surviving but non-systematically placed evidence, with no
+useful fixed offset. Stage 4B's controlled 601-parameter 3×3 decoder retained
+clean recovery and modestly improved moderate resizing, but Resize25 remained
+approximately 0.503203. Severe 25% resize is therefore accepted as a limitation
+of the current blind framework.
+
+### Crop
+
+Stage 5A found near-random classical and neural BER at every crop severity.
+Cropping changes the DWT dimensions and thus the shape-dependent seeded
+coefficient permutation, causing extraction from unrelated locations. The
+dominant failure is synchronization loss, so ordinary crop-aware bit-decision
+training is not justified within the current method.
+
+## Important methodological status
+
+> **DEVELOPMENT IS NOW CLOSED.**
+
+> **THE HELD-OUT TEST SET HAS NOT BEEN ACCESSED.**
+
+- Stage 5A is the final development-stage attack experiment.
+- A separate final-methodology-freeze step must occur before the test benchmark.
+- No further parameter or model tuning may occur based on final test results.
+- Final thesis test results are not yet known or claimed in this milestone.
+
+## Test-Set Status
 
 > **THE 500-IMAGE HELD-OUT TEST SET HAS NOT BEEN USED FOR MODEL SELECTION OR
 > THESE DEVELOPMENT EXPERIMENTS.**
@@ -224,7 +275,7 @@ perform no training. Crop evaluation has not started.
 Training and model development use train/validation only. The test set remains
 reserved for final frozen evaluation.
 
-## 18. Thesis Implications
+## Thesis Implications
 
 - The original full-map CNN is retained as the documented baseline.
 - The seed-aware decoder is an experimentally justified architectural refinement.

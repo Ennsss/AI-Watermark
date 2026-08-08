@@ -1,0 +1,19 @@
+{
+  "validation_images": 100,
+  "base_pairs": 200,
+  "evaluation_rows": 800,
+  "filenames_match_stage3a": true,
+  "payload_fingerprints_match_stage3a": true,
+  "model_parameters": 369,
+  "model_input_shape": [
+    null,
+    128,
+    4
+  ],
+  "locations_per_image": 128,
+  "lh2": 64,
+  "hl2": 64,
+  "nan_count": 0,
+  "inf_count": 0,
+  "test_set_used": false
+}

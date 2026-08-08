@@ -1,0 +1,37 @@
+{
+  "experiment": "Stage 4A zero-shot resize robustness evaluation",
+  "evaluation_only": true,
+  "training_performed": false,
+  "checkpoint": "experiments/stage3a_delta_calibration/delta_24/best_seed_aware_delta24.keras",
+  "model_parameters": 369,
+  "delta": 24.0,
+  "coefficient_seed": 42,
+  "payload_bits": 128,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "subbands": [
+    "LH2",
+    "HL2"
+  ],
+  "representation": [
+    "coefficient/delta",
+    "sin(pi*coefficient/delta)",
+    "cos(pi*coefficient/delta)",
+    "subband_id"
+  ],
+  "threshold": 0.5,
+  "conditions": [
+    "clean",
+    "resize75",
+    "resize50",
+    "resize25"
+  ],
+  "excluded": [
+    "training",
+    "fine-tuning",
+    "JPEG",
+    "crop",
+    "combined attacks",
+    "test set"
+  ]
+}

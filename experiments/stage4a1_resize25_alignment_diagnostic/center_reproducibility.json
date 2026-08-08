@@ -1,0 +1,9 @@
+{
+  "resize25_classical_ber": 0.5066015625,
+  "stage4a_resize25_classical_ber": 0.5066015625,
+  "classical_absolute_difference": 0.0,
+  "resize25_cnn_ber": 0.50515625,
+  "stage4a_resize25_cnn_ber": 0.50515625,
+  "cnn_absolute_difference": 0.0,
+  "reproduced": true
+}

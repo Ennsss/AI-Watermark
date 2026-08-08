@@ -1,0 +1,4 @@
+condition,severity,sampled_area_ratio,linear_factor,top,bottom,left,right,retained_height,retained_width,attacked_dwt_shape,approx_fraction_original_selected_centers_removed,approx_mean_regenerated_center_mapping_distance_pixels,approx_median_regenerated_center_mapping_distance_pixels,approx_fraction_regenerated_centers_within_4px_original
+mild,mild,0.08184808436607272,0.04179756020247616,13,5,0,0,494,512,"[124, 128]",0.03125,190.43937673998005,172.19986883099153,0.0
+moderate,moderate,0.2636961687321454,0.1419185171163203,46,19,2,1,447,509,"[112, 128]",0.1015625,173.30542079011855,149.30067393304074,0.0
+severe,severe,0.4636961687321454,0.2676723197448737,87,36,5,2,389,505,"[98, 127]",0.1875,166.9975881813642,123.62004365747356,0.0

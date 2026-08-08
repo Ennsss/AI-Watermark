@@ -1,0 +1,3 @@
+condition,full_3x3_ber,center_only_masked_ber
+resize50,0.0998046875,0.1034765625
+resize25,0.503203125,0.504921875

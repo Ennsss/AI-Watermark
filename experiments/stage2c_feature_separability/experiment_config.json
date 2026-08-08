@@ -1,0 +1,41 @@
+{
+  "experiment": "Stage 2C non-training feature separability diagnostic",
+  "training_performed": false,
+  "source": "Regenerated exact Stage 2B train/validation identities in memory",
+  "train_images": 500,
+  "train_image_payload_pairs": 1000,
+  "validation_images": 100,
+  "validation_image_payload_pairs": 200,
+  "conditions": [
+    "clean",
+    "jpeg90",
+    "jpeg70",
+    "jpeg50",
+    "reencode1",
+    "reencode3"
+  ],
+  "payload_bits": 128,
+  "coefficient_seed": 42,
+  "delta": 16.0,
+  "train_payload_seed": 20260810,
+  "validation_payload_seed": 20260809,
+  "qim_phase_definition": "(coefficient / delta) mod 1",
+  "qim_period_in_scaled_units": 1.0,
+  "lookup": {
+    "phase_bins": 64,
+    "raw_quantile_bins": 32
+  },
+  "lightweight_classifier": {
+    "name": "standardized k-nearest neighbors",
+    "k": 31
+  },
+  "ambiguous_bin_phase_round_decimals": [
+    2,
+    3,
+    4,
+    6
+  ],
+  "test_set_used": false,
+  "cnn_loaded_or_trained": false,
+  "oracle_note": "Uses clean watermarked coefficient phase for analysis only; non-deployable."
+}

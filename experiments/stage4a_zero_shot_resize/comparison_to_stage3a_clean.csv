@@ -1,0 +1,2 @@
+stage3a_delta24_cnn_clean_ber,stage4a_cnn_clean_ber,cnn_absolute_difference,stage3a_delta24_classical_clean_ber,stage4a_classical_clean_ber,classical_absolute_difference,material_difference_threshold,reproducible
+0.0001953125,0.0001953125,0.0,0.1278515625,0.1278515625,0.0,0.001,True

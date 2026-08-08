@@ -1,0 +1,25 @@
+{
+  "diagnostic_only": true,
+  "dwt_support_approximation": "Each level-2 coefficient center approximated as center of a 4x4 image region; boundary/wavelet support effects omitted.",
+  "production_behavior": "Seeded locations are regenerated on each cropped DWT shape without coordinate correction.",
+  "conditions": {
+    "mild": {
+      "expected_coordinates_remain_aligned": false,
+      "shape_dependent_seed_permutation_changes": true,
+      "restoration_performed": false,
+      "finding": "Cropped DWT shape changes the seed permutation; regenerated selected locations generally represent different original content."
+    },
+    "moderate": {
+      "expected_coordinates_remain_aligned": false,
+      "shape_dependent_seed_permutation_changes": true,
+      "restoration_performed": false,
+      "finding": "Cropped DWT shape changes the seed permutation; regenerated selected locations generally represent different original content."
+    },
+    "severe": {
+      "expected_coordinates_remain_aligned": false,
+      "shape_dependent_seed_permutation_changes": true,
+      "restoration_performed": false,
+      "finding": "Cropped DWT shape changes the seed permutation; regenerated selected locations generally represent different original content."
+    }
+  }
+}

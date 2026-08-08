@@ -1,0 +1,40 @@
+{
+  "training_patch_shape": [
+    7000,
+    128,
+    3,
+    3,
+    3
+  ],
+  "training_subband_shape": [
+    7000,
+    128,
+    1
+  ],
+  "validation_patch_shape": [
+    1400,
+    128,
+    3,
+    3,
+    3
+  ],
+  "validation_subband_shape": [
+    1400,
+    128,
+    1
+  ],
+  "payload_positions": 128,
+  "lh2_centers": 64,
+  "hl2_centers": 64,
+  "bit_order_exact": true,
+  "centers_match_stage2b_location_regeneration": true,
+  "same_subband_patch_only": true,
+  "padding": "symmetric",
+  "all_patches_full_3x3": true,
+  "training_payload_fingerprints_match": true,
+  "validation_payload_fingerprints_match": true,
+  "validation_grid_matches_stage2b": true,
+  "nan_count": 0,
+  "inf_count": 0,
+  "test_set_used": false
+}

@@ -1,0 +1,40 @@
+{
+  "experiment": "Stage 2D controlled 3x3 local spatial-context decoding",
+  "only_changed_variable": "single selected coefficient to same-subband 3x3 local patch",
+  "patch_features_per_coefficient": [
+    "coefficient/delta",
+    "sin(pi*coefficient/delta)",
+    "cos(pi*coefficient/delta)"
+  ],
+  "center_subband_identifier": {
+    "LH2": 0,
+    "HL2": 1
+  },
+  "padding": "numpy.pad mode='symmetric', one coefficient on each spatial side",
+  "model": "shared TimeDistributed Conv2D(16,3x3,valid)->Flatten->concat subband->Dense(8)->Dense(1,sigmoid)",
+  "model_parameters": 601,
+  "training_examples": 7000,
+  "validation_examples": 1400,
+  "conditions": [
+    "clean",
+    "jpeg90",
+    "jpeg70",
+    "jpeg50",
+    "reencode1",
+    "reencode2",
+    "reencode3"
+  ],
+  "coefficient_seed": 42,
+  "delta": 16.0,
+  "wavelet": "haar",
+  "dwt_level": 2,
+  "payload_bits": 128,
+  "threshold": 0.5,
+  "optimizer": "Adam",
+  "learning_rate": 0.001,
+  "batch_size": 32,
+  "maximum_epochs": 100,
+  "patience": 10,
+  "checkpoint": "lowest seven-condition validation macro BER; validation BCE tie-break",
+  "test_set_used": false
+}

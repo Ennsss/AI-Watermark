@@ -1,0 +1,17 @@
+{
+  "training_images": 500,
+  "training_pairs": 1000,
+  "validation_images": 100,
+  "validation_pairs": 200,
+  "payload_fingerprints_match_stage3a": true,
+  "resize_implementation_matches_stage4a": true,
+  "coefficient_seed": 42,
+  "delta": 24.0,
+  "locations": 128,
+  "lh2_locations": 64,
+  "hl2_locations": 64,
+  "symmetric_padding": true,
+  "nonfinite_count": 0,
+  "test_set_used": false,
+  "training_performed": false
+}
