@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<title>Fidelity and computational measurements</title><rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#17324D}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#64748B}.axis{font-size:14px;fill:#64748B}.label{font-size:16px}.small{font-size:13px;fill:#64748B}.value{font-size:14px;font-weight:700}</style>
+<text x="55.0" y="86.0" class="sub" text-anchor="start" >Held-out benchmark summary; fidelity measures compare original and clean watermarked images.</text>
+<rect x="70" y="155" width="245" height="155" rx="16" fill="#F8FAFC" stroke="#3B82F6" stroke-width="3"/>
+<text x="192.0" y="195.0" class="small" text-anchor="middle" >Mean PSNR</text>
+<text x="192.0" y="245.0" class="label" text-anchor="middle" font-size="21" font-weight="700">55.80 dB</text>
+<text x="192.0" y="280.0" class="small" text-anchor="middle" >Higher indicates lower pixel error</text>
+<rect x="350" y="155" width="245" height="155" rx="16" fill="#F8FAFC" stroke="#0F766E" stroke-width="3"/>
+<text x="472.0" y="195.0" class="small" text-anchor="middle" >Mean SSIM</text>
+<text x="472.0" y="245.0" class="label" text-anchor="middle" font-size="21" font-weight="700">0.999110</text>
+<text x="472.0" y="280.0" class="small" text-anchor="middle" >Closer to 1 indicates higher similarity</text>
+<rect x="630" y="155" width="245" height="155" rx="16" fill="#F8FAFC" stroke="#F59E0B" stroke-width="3"/>
+<text x="752.0" y="195.0" class="small" text-anchor="middle" >Latency</text>
+<text x="752.0" y="245.0" class="label" text-anchor="middle" font-size="21" font-weight="700">3.45× slower</text>
+<text x="752.0" y="280.0" class="small" text-anchor="middle" >Per-image Keras calls; our implementation</text>
+<rect x="910" y="155" width="245" height="155" rx="16" fill="#F8FAFC" stroke="#17324D" stroke-width="3"/>
+<text x="1032.0" y="195.0" class="small" text-anchor="middle" >Model size</text>
+<text x="1032.0" y="245.0" class="label" text-anchor="middle" font-size="21" font-weight="700">369 parameters</text>
+<text x="1032.0" y="280.0" class="small" text-anchor="middle" >CNN-assisted decoder</text>
+<text x="100.0" y="422.0" class="label" text-anchor="start" >Classical</text>
+<rect x="260" y="400" width="163.7" height="32" rx="6" fill="#3B82F6"/>
+<text x="435.7" y="422.0" class="value" text-anchor="start" >27.63 ms</text>
+<text x="100.0" y="492.0" class="label" text-anchor="start" >CNN</text>
+<rect x="260" y="470" width="565.2" height="32" rx="6" fill="#F59E0B"/>
+<text x="837.2" y="492.0" class="value" text-anchor="start" >95.39 ms</text>
+<text x="100.0" y="570.0" class="small" text-anchor="start" >Mean peak Python allocation: 14.22 MB classical; 14.22 MB CNN.</text>
+<text x="100.0" y="605.0" class="small" text-anchor="start" >Mean recorded CPU utilization: 6.6% classical; 6.7% CNN. Interpret cautiously for short operations.</text></svg>

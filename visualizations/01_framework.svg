@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="700" viewBox="0 0 1200 700">
+<title>Experimental framework</title><rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#17324D}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#64748B}.axis{font-size:14px;fill:#64748B}.label{font-size:16px}.small{font-size:13px;fill:#64748B}.value{font-size:14px;font-weight:700}</style>
+<defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#64748B"/></marker></defs>
+<text x="50.0" y="55.0" class="title" text-anchor="start" >Experimental framework</text>
+<text x="50.0" y="84.0" class="sub" text-anchor="start" >The extractor decision is the comparison; embedding and attacked inputs are shared.</text>
+<rect x="45" y="190" width="190" height="120" rx="14" fill="#F4F8FB" stroke="#17324D" stroke-width="2"/>
+<text x="140.0" y="227.0" class="label" text-anchor="middle" font-weight="700">Illustration</text>
+<text x="140.0" y="259.0" class="small" text-anchor="middle" >512 × 512 RGB</text>
+<rect x="285" y="190" width="190" height="120" rx="14" fill="#F4F8FB" stroke="#17324D" stroke-width="2"/>
+<text x="380.0" y="227.0" class="label" text-anchor="middle" font-weight="700">Embed payload</text>
+<text x="380.0" y="259.0" class="small" text-anchor="middle" >Y channel → 2-level Haar DWT</text>
+<text x="380.0" y="281.0" class="small" text-anchor="middle" >LH2 / HL2 → QIM, Δ=24</text>
+<rect x="525" y="190" width="190" height="120" rx="14" fill="#F4F8FB" stroke="#17324D" stroke-width="2"/>
+<text x="620.0" y="227.0" class="label" text-anchor="middle" font-weight="700">Degradation</text>
+<text x="620.0" y="259.0" class="small" text-anchor="middle" >JPEG · resize · crop</text>
+<text x="620.0" y="281.0" class="small" text-anchor="middle" >Repeated JPEG Q85</text>
+<rect x="765" y="100" width="190" height="120" rx="14" fill="#F4F8FB" stroke="#17324D" stroke-width="2"/>
+<text x="860.0" y="137.0" class="label" text-anchor="middle" font-weight="700">Classical path</text>
+<text x="860.0" y="169.0" class="small" text-anchor="middle" >DWT + analytical</text>
+<text x="860.0" y="191.0" class="small" text-anchor="middle" >QIM bit decision</text>
+<rect x="765" y="280" width="190" height="120" rx="14" fill="#F4F8FB" stroke="#3B82F6" stroke-width="2"/>
+<text x="860.0" y="317.0" class="label" text-anchor="middle" font-weight="700">CNN-assisted path</text>
+<text x="860.0" y="349.0" class="small" text-anchor="middle" >Same selected coefficients</text>
+<text x="860.0" y="371.0" class="small" text-anchor="middle" >CNN bit decision · 369 params</text>
+<rect x="1005" y="190" width="160" height="120" rx="14" fill="#F4F8FB" stroke="#17324D" stroke-width="2"/>
+<text x="1085.0" y="227.0" class="label" text-anchor="middle" font-weight="700">Compare</text>
+<text x="1085.0" y="259.0" class="small" text-anchor="middle" >BER · perfect recovery</text>
+<text x="1085.0" y="281.0" class="small" text-anchor="middle" >Fidelity · compute</text>
+<path d="M235 250 L285 250" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M475 250 L525 250" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M715 235 L765 160" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M715 265 L765 340" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M955 160 L1005 225" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<path d="M955 340 L1005 275" fill="none" stroke="#64748B" stroke-width="3" marker-end="url(#arrow)"/>
+<text x="50.0" y="520.0" class="label" text-anchor="start" >Held-out comparison: 500 test images × 13 conditions = 6,500 image-condition pairs</text>
+<text x="50.0" y="555.0" class="small" text-anchor="start" >Degradations are evaluated separately; clean plus 12 attack conditions.</text></svg>

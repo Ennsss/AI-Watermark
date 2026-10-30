@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+<title>Paired statistical comparison</title><rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#17324D}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#64748B}.axis{font-size:14px;fill:#64748B}.label{font-size:16px}.small{font-size:13px;fill:#64748B}.value{font-size:14px;font-weight:700}</style>
+<text x="55.0" y="84.0" class="sub" text-anchor="start" >Wilcoxon signed-rank tests on paired image-level BER; Holm correction across attack conditions.</text>
+<rect x="60" y="120" width="1080" height="95" rx="14" fill="#F4F8FB" stroke="#0F766E" stroke-width="2"/>
+<text x="90.0" y="158.0" class="label" text-anchor="start" font-weight="700">Aggregate attack-only comparison</text>
+<text x="90.0" y="190.0" class="small" text-anchor="start" >n = 500 images · p = 1.24 × 10⁻¹⁸ · rank-biserial r = 0.459 · mean BER improvement = 0.0256</text>
+<text x="90.0" y="265.0" class="label" text-anchor="start" font-weight="700">Condition</text>
+<text x="390.0" y="265.0" class="label" text-anchor="start" font-weight="700">Raw p</text>
+<text x="610.0" y="265.0" class="label" text-anchor="start" font-weight="700">Holm-adjusted p</text>
+<text x="870.0" y="265.0" class="label" text-anchor="start" font-weight="700">Effect size r</text>
+<text x="1000.0" y="265.0" class="label" text-anchor="start" font-weight="700">Result</text>
+<line x1="75" y1="322" x2="1135" y2="322" stroke="#E8EEF4"/>
+<text x="90.0" y="305.0" class="small" text-anchor="start" >JPEG90</text>
+<text x="390.0" y="305.0" class="small" text-anchor="start" >4.13 × 10⁻²²</text>
+<text x="610.0" y="305.0" class="small" text-anchor="start" >3.72 × 10⁻²¹</text>
+<text x="870.0" y="305.0" class="small" text-anchor="start" >+0.536</text>
+<text x="1000.0" y="305.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<rect x="75" y="322" width="1060" height="28" rx="5" fill="#FFF4D6"/>
+<line x1="75" y1="359" x2="1135" y2="359" stroke="#E8EEF4"/>
+<text x="90.0" y="342.0" class="small" text-anchor="start" font-weight="700">JPEG70</text>
+<text x="390.0" y="342.0" class="small" text-anchor="start" font-weight="700">0.023</text>
+<text x="610.0" y="342.0" class="small" text-anchor="start" font-weight="700">0.113</text>
+<text x="870.0" y="342.0" class="small" text-anchor="start" font-weight="700">-0.124</text>
+<text x="1000.0" y="342.0" class="small" text-anchor="start" fill="#64748B" font-weight="700">Not significant</text>
+<line x1="75" y1="396" x2="1135" y2="396" stroke="#E8EEF4"/>
+<text x="90.0" y="379.0" class="small" text-anchor="start" >JPEG50</text>
+<text x="390.0" y="379.0" class="small" text-anchor="start" >1.01 × 10⁻³⁰</text>
+<text x="610.0" y="379.0" class="small" text-anchor="start" >1.21 × 10⁻²⁹</text>
+<text x="870.0" y="379.0" class="small" text-anchor="start" >+0.628</text>
+<text x="1000.0" y="379.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<line x1="75" y1="433" x2="1135" y2="433" stroke="#E8EEF4"/>
+<text x="90.0" y="416.0" class="small" text-anchor="start" >Resize75</text>
+<text x="390.0" y="416.0" class="small" text-anchor="start" >8.28 × 10⁻²⁵</text>
+<text x="610.0" y="416.0" class="small" text-anchor="start" >9.10 × 10⁻²⁴</text>
+<text x="870.0" y="416.0" class="small" text-anchor="start" >+0.558</text>
+<text x="1000.0" y="416.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<line x1="75" y1="470" x2="1135" y2="470" stroke="#E8EEF4"/>
+<text x="90.0" y="453.0" class="small" text-anchor="start" >Resize50</text>
+<text x="390.0" y="453.0" class="small" text-anchor="start" >2.24 × 10⁻²²</text>
+<text x="610.0" y="453.0" class="small" text-anchor="start" >2.24 × 10⁻²¹</text>
+<text x="870.0" y="453.0" class="small" text-anchor="start" >+0.530</text>
+<text x="1000.0" y="453.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<line x1="75" y1="507" x2="1135" y2="507" stroke="#E8EEF4"/>
+<text x="90.0" y="490.0" class="small" text-anchor="start" >Resize25</text>
+<text x="390.0" y="490.0" class="small" text-anchor="start" >0.952</text>
+<text x="610.0" y="490.0" class="small" text-anchor="start" >1.000</text>
+<text x="870.0" y="490.0" class="small" text-anchor="start" >-0.003</text>
+<text x="1000.0" y="490.0" class="small" text-anchor="start" fill="#64748B" >Not significant</text>
+<line x1="75" y1="544" x2="1135" y2="544" stroke="#E8EEF4"/>
+<text x="90.0" y="527.0" class="small" text-anchor="start" >Crop mild</text>
+<text x="390.0" y="527.0" class="small" text-anchor="start" >0.768</text>
+<text x="610.0" y="527.0" class="small" text-anchor="start" >1.000</text>
+<text x="870.0" y="527.0" class="small" text-anchor="start" >+0.016</text>
+<text x="1000.0" y="527.0" class="small" text-anchor="start" fill="#64748B" >Not significant</text>
+<line x1="75" y1="581" x2="1135" y2="581" stroke="#E8EEF4"/>
+<text x="90.0" y="564.0" class="small" text-anchor="start" >Crop mod.</text>
+<text x="390.0" y="564.0" class="small" text-anchor="start" >0.504</text>
+<text x="610.0" y="564.0" class="small" text-anchor="start" >1.000</text>
+<text x="870.0" y="564.0" class="small" text-anchor="start" >+0.038</text>
+<text x="1000.0" y="564.0" class="small" text-anchor="start" fill="#64748B" >Not significant</text>
+<line x1="75" y1="618" x2="1135" y2="618" stroke="#E8EEF4"/>
+<text x="90.0" y="601.0" class="small" text-anchor="start" >Crop severe</text>
+<text x="390.0" y="601.0" class="small" text-anchor="start" >0.351</text>
+<text x="610.0" y="601.0" class="small" text-anchor="start" >1.000</text>
+<text x="870.0" y="601.0" class="small" text-anchor="start" >+0.051</text>
+<text x="1000.0" y="601.0" class="small" text-anchor="start" fill="#64748B" >Not significant</text>
+<line x1="75" y1="655" x2="1135" y2="655" stroke="#E8EEF4"/>
+<text x="90.0" y="638.0" class="small" text-anchor="start" >JPEG Q85 ×1</text>
+<text x="390.0" y="638.0" class="small" text-anchor="start" >6.52 × 10⁻¹⁰</text>
+<text x="610.0" y="638.0" class="small" text-anchor="start" >4.57 × 10⁻⁹</text>
+<text x="870.0" y="638.0" class="small" text-anchor="start" >+0.331</text>
+<text x="1000.0" y="638.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<line x1="75" y1="692" x2="1135" y2="692" stroke="#E8EEF4"/>
+<text x="90.0" y="675.0" class="small" text-anchor="start" >JPEG Q85 ×2</text>
+<text x="390.0" y="675.0" class="small" text-anchor="start" >7.29 × 10⁻¹⁰</text>
+<text x="610.0" y="675.0" class="small" text-anchor="start" >4.57 × 10⁻⁹</text>
+<text x="870.0" y="675.0" class="small" text-anchor="start" >+0.330</text>
+<text x="1000.0" y="675.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<line x1="75" y1="729" x2="1135" y2="729" stroke="#E8EEF4"/>
+<text x="90.0" y="712.0" class="small" text-anchor="start" >JPEG Q85 ×3</text>
+<text x="390.0" y="712.0" class="small" text-anchor="start" >2.64 × 10⁻¹⁰</text>
+<text x="610.0" y="712.0" class="small" text-anchor="start" >2.11 × 10⁻⁹</text>
+<text x="870.0" y="712.0" class="small" text-anchor="start" >+0.340</text>
+<text x="1000.0" y="712.0" class="small" text-anchor="start" fill="#0F766E" >Significant</text>
+<text x="75.0" y="770.0" class="small" text-anchor="start" >Negative r = leans toward classical.</text></svg>

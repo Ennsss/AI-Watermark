@@ -1,0 +1,47 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="720" viewBox="0 0 1200 720">
+<title>Perfect 128-bit payload recovery</title><rect width="100%" height="100%" fill="#FFFFFF"/>
+<style>text{font-family:Arial,Helvetica,sans-serif;fill:#17324D}.title{font-size:30px;font-weight:700}.sub{font-size:16px;fill:#64748B}.axis{font-size:14px;fill:#64748B}.label{font-size:16px}.small{font-size:13px;fill:#64748B}.value{font-size:14px;font-weight:700}</style>
+<text x="55.0" y="82.0" class="sub" text-anchor="start" >Share of 500 test images with BER = 0; selected conditions.</text>
+<line x1="105" y1="555.0" x2="1165" y2="555.0" stroke="#E8EEF4"/>
+<text x="90.0" y="560.0" class="axis" text-anchor="end" >0%</text>
+<line x1="105" y1="473.0" x2="1165" y2="473.0" stroke="#E8EEF4"/>
+<text x="90.0" y="478.0" class="axis" text-anchor="end" >20%</text>
+<line x1="105" y1="391.0" x2="1165" y2="391.0" stroke="#E8EEF4"/>
+<text x="90.0" y="396.0" class="axis" text-anchor="end" >40%</text>
+<line x1="105" y1="309.0" x2="1165" y2="309.0" stroke="#E8EEF4"/>
+<text x="90.0" y="314.0" class="axis" text-anchor="end" >60%</text>
+<line x1="105" y1="227.0" x2="1165" y2="227.0" stroke="#E8EEF4"/>
+<text x="90.0" y="232.0" class="axis" text-anchor="end" >80%</text>
+<line x1="105" y1="145.0" x2="1165" y2="145.0" stroke="#E8EEF4"/>
+<text x="90.0" y="150.0" class="axis" text-anchor="end" >100%</text>
+<rect x="177.7" y="322.1" width="29.0" height="232.9" rx="3" fill="#3B82F6"/>
+<rect x="215.3" y="154.8" width="29.0" height="400.2" rx="3" fill="#F59E0B"/>
+<text x="211.0" y="580.0" class="small" text-anchor="middle" font-size="12px">Clean</text>
+<text x="192.2" y="315.1" class="small" text-anchor="middle" font-size="12px" fill="#17324D">56.8%</text>
+<text x="229.8" y="148.0" class="small" text-anchor="middle" font-size="12px" fill="#17324D">97.6%</text>
+<rect x="389.6" y="458.2" width="29.0" height="96.8" rx="3" fill="#3B82F6"/>
+<rect x="427.4" y="507.4" width="29.0" height="47.6" rx="3" fill="#F59E0B"/>
+<text x="423.0" y="580.0" class="small" text-anchor="middle" font-size="12px">JPEG90</text>
+<text x="404.1" y="451.2" class="small" text-anchor="middle" font-size="12px" fill="#17324D">23.6%</text>
+<text x="441.9" y="500.4" class="small" text-anchor="middle" font-size="12px" fill="#17324D">11.6%</text>
+<rect x="601.6" y="530.4" width="29.0" height="24.6" rx="3" fill="#3B82F6"/>
+<rect x="639.4" y="549.3" width="29.0" height="5.7" rx="3" fill="#F59E0B"/>
+<text x="635.0" y="580.0" class="small" text-anchor="middle" font-size="12px">JPEG Q85 ×1</text>
+<text x="616.1" y="523.4" class="small" text-anchor="middle" font-size="12px" fill="#17324D">6.0%</text>
+<text x="653.9" y="542.3" class="small" text-anchor="middle" font-size="12px" fill="#17324D">1.4%</text>
+<rect x="813.6" y="534.5" width="29.0" height="20.5" rx="3" fill="#3B82F6"/>
+<rect x="851.4" y="549.3" width="29.0" height="5.7" rx="3" fill="#F59E0B"/>
+<text x="847.0" y="580.0" class="small" text-anchor="middle" font-size="12px">JPEG Q85 ×2</text>
+<text x="828.1" y="527.5" class="small" text-anchor="middle" font-size="12px" fill="#17324D">5.0%</text>
+<text x="865.9" y="542.3" class="small" text-anchor="middle" font-size="12px" fill="#17324D">1.4%</text>
+<rect x="1025.7" y="539.4" width="29.0" height="15.6" rx="3" fill="#3B82F6"/>
+<rect x="1063.3" y="550.1" width="29.0" height="4.9" rx="3" fill="#F59E0B"/>
+<text x="1059.0" y="580.0" class="small" text-anchor="middle" font-size="12px">JPEG Q85 ×3</text>
+<text x="1040.2" y="532.4" class="small" text-anchor="middle" font-size="12px" fill="#17324D">3.8%</text>
+<text x="1077.8" y="543.1" class="small" text-anchor="middle" font-size="12px" fill="#17324D">1.2%</text>
+<rect x="435" y="620" width="18" height="18" fill="#3B82F6"/>
+<text x="460.0" y="635.0" class="small" text-anchor="start" >Classical QIM</text>
+<rect x="590" y="620" width="18" height="18" fill="#F59E0B"/>
+<text x="615.0" y="635.0" class="small" text-anchor="start" >CNN-assisted</text>
+<text x="55.0" y="665.0" class="small" text-anchor="start" >Clean: Classical 284/500 (56.8%) vs CNN 488/500 (97.6%).</text>
+<text x="55.0" y="685.0" class="small" text-anchor="start" >Other 8 attack conditions: 0% perfect recovery for both methods.</text></svg>
